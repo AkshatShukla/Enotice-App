@@ -1,0 +1,14 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.idea/workspace.xml___jb_old___
+app/src/main/res/layout/signup.xml
+app/src/main/res/layout/signup.xml
+app/src/main/res/layout/signup.xml
+app/src/main/res/layout/signup.xml

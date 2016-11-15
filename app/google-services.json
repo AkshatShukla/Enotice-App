@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "998245420612",
+    "firebase_url": "https://e-notice-board-83d16.firebaseio.com",
+    "project_id": "e-notice-board-83d16",
+    "storage_bucket": "e-notice-board-83d16.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998245420612:android:cfc9000cc6b80da3",
+        "android_client_info": {
+          "package_name": "com.rcoem.enotice.enotice_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998245420612-nuudtbs9lj0tro89q9q6pmk1m3dsnlje.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rcoem.enotice.enotice_app",
+            "certificate_hash": "8D17DF36ECC7D007F73AD531E6CB2B7006E75233"
+          }
+        },
+        {
+          "client_id": "998245420612-k36uok8jnjs3eg5afo9bq0n180e5jtqn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-3fvLCENFFr3P2MjZOv0R04IHB7tMqjo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998245420612-k36uok8jnjs3eg5afo9bq0n180e5jtqn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

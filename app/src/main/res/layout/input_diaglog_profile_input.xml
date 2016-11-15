@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+
+    <EditText
+        android:id="@+id/editTextDialogUserInput"
+        android:layout_width="match_parent"
+        android:background="@drawable/txt_back"
+        android:layout_marginTop="10dp"
+        android:layout_height="40dp"
+        android:text=""
+        android:hint="Enter here..">
+
+        <requestFocus />
+
+    </EditText>
+
+</LinearLayout>
