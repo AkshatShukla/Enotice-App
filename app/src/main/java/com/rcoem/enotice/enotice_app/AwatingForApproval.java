@@ -1,5 +1,7 @@
 package com.rcoem.enotice.enotice_app;
 
+import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,8 +22,10 @@ public class AwatingForApproval extends AppCompatActivity {
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(AwatingForApproval.this,"Not successfully Uploaded", Toast.LENGTH_LONG).show();
+                Toast.makeText(AwatingForApproval.this,"Not Approved yet, signing out.", Toast.LENGTH_LONG).show();
                 mAuth.signOut();
+                //Toast.makeText(AccountActivity.this, R.string.sign_out, Toast.LENGTH_LONG).show();
+                startActivity(new Intent(AwatingForApproval.this, MainActivity.class));
             }
         });
     }
