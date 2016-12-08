@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,10 +48,11 @@ public class AddNoticeActivityUser extends AppCompatActivity {
     private Uri mImageUri = null;
     private static final int Gallery_Request = 1;
     private ProgressDialog mprogress;
-
+    private TextView textUid;
     private StorageReference mStoarge;
     private DatabaseReference mData;
     private DatabaseReference mDataUser;
+    private DatabaseReference mDataUser1;
     private DatabaseReference mDataBaseDepartment;
     private DatabaseReference mDatabase;
 
@@ -73,6 +75,7 @@ public class AddNoticeActivityUser extends AppCompatActivity {
         mCurrentUser = mAuth.getCurrentUser();
 
 
+
         mDataBaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
 
@@ -88,12 +91,16 @@ public class AddNoticeActivityUser extends AppCompatActivity {
             }
         });
         //  mData = FirebaseDatabase.getInstance().getReference().child("posts");
+
         mDataUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
+        mDataUser1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
+
 
         mPostTitle = (EditText) findViewById(R.id.Edit_Title_field) ;
         mPostDesc = (EditText) findViewById(R.id.Edit_description_field);
 
         mSubmitButton = (Button) findViewById(R.id.Submit_button);
+
 
         mProgress  = new ProgressDialog(this);
 
@@ -111,8 +118,24 @@ public class AddNoticeActivityUser extends AppCompatActivity {
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDataUser1.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String block = dataSnapshot.child("block").getValue().toString().trim();
+                        if(block.equals("No")){
+                            startPosting();
+                        }
+                        else{
+                            Toast.makeText(AddNoticeActivityUser.this,"Contact HOD of Your Dept ", Toast.LENGTH_LONG).show();
+                        }
+                    }
 
-                startPosting();
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                // startPosting();
 
             }
         });

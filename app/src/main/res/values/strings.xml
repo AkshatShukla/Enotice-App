@@ -55,7 +55,7 @@
     <!-- Card Strings -->
     <string name="prof_name">Prof. Name</string>
     <string name="date_n_time">24 Sep 11:00am</string>
-    <string name="notice_title">The title or description of the notice goes here.</string>
+    <string name="notice_title">The title or description.</string>
     <string name="department">Computer Science and Engineering</string>
 
 
@@ -69,6 +69,7 @@
     <string name="nav_profile">Profile</string>
     <string name="nav_approve">Pending Approval</string>
     <string name="nav_logout">Logout</string>
+    <string name="nav_User">View Users</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_about_us">About Us</string>
 

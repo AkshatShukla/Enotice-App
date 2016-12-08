@@ -83,7 +83,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
     DrawerLayout di;
     long back_pressed;
 
-String my_dept = "";
+    String my_dept = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,7 +152,7 @@ String my_dept = "";
                     @Override
                     protected void populateViewHolder(BlogViewHolder viewHolder, BlogModel model, final int position) {
 
-                           final String Post_Key = getRef(position).toString();
+                        final String Post_Key = getRef(position).toString();
                         //   Intent intent = getIntent();
                         //   final String str = intent.getStringExtra("location");
                         viewHolder.setTitle(model.getTitle());
@@ -349,6 +349,10 @@ String my_dept = "";
         } else if (id == R.id.nav_about_us) {
             Intent intent = new Intent(getApplicationContext(),PdfUpload.class);
             startActivity(intent);
+        }
+        else if (id == R.id.ViewUsers) {
+            //  Toast.makeText(AccountActivityAdmin.this, R.string.sign_out, Toast.LENGTH_LONG).show();
+            startActivity(new Intent(AccountActivityAdmin.this,BlockUserPlanel.class));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
         drawer.closeDrawer(GravityCompat.START);
