@@ -66,6 +66,25 @@ public class Single_Post extends AppCompatActivity {
             }
         });
 
+        //To view image fullscreen
+        mViewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
+                        viewImage(imageUrl);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
         Approved = (Button) findViewById(R.id.Approve_button);
         process = true;
         Approved.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +99,7 @@ public class Single_Post extends AppCompatActivity {
                             process = false;
 
                             Toast.makeText(Single_Post.this, "Your post is approved", Toast.LENGTH_LONG).show();
+                            //mDatabase.child(str).removeValue();
                             Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
                             startActivity(intent);
                             finish();
@@ -106,6 +126,7 @@ public class Single_Post extends AppCompatActivity {
                             process = false;
 
                             Toast.makeText(Single_Post.this, "Your post is Rejected", Toast.LENGTH_LONG).show();
+                            //mDatabase.child(str).removeValue();
                             Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
                             startActivity(intent);
                             finish();
@@ -121,5 +142,12 @@ public class Single_Post extends AppCompatActivity {
         });
 
 
+    }
+
+    private void viewImage(String imageUrl) {
+        // Toast.makeText(AdminSinglePost.this,imageUrl, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(Single_Post.this,fullScreenImage.class);
+        intent.putExtra("imageUrl",imageUrl);
+        startActivity(intent);
     }
 }
