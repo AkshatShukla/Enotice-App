@@ -58,7 +58,7 @@ public class UserSinglePost extends AppCompatActivity {
                 mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
                 String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
                 Picasso.with(UserSinglePost.this).load(imageUrl).into(mViewImage);
-
+                mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
             }
 
             @Override

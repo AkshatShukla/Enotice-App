@@ -38,7 +38,7 @@ public class AdminSinglePost extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_single_post);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("Post");
+
         Intent intent = getIntent();
         final String str = intent.getStringExtra("postkey");
         mPostTitle = (TextView) findViewById(R.id.Post_title_Admin) ;
@@ -56,7 +56,7 @@ public class AdminSinglePost extends AppCompatActivity {
                 mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
                 String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
                 Picasso.with(AdminSinglePost.this).load(imageUrl).into(mViewImage);
-
+                mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
             }
 
             @Override
