@@ -96,6 +96,8 @@ public class RetriverData extends AppCompatActivity {
 
                         viewHolder.setDesc(model.getUsername());
 
+                        viewHolder.setTime(model.getTime());
+
                         //firebaseRecyclerAdapter.getRef(position).remove();
 
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -118,10 +120,6 @@ public class RetriverData extends AppCompatActivity {
         mBlogList.setAdapter(firebaseRecyclerAdapter);
     }
 
-    public void onClick(View view)
-    {
-        Toast.makeText(RetriverData.this,"ABCDE",Toast.LENGTH_LONG).show();
-    }
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder {
 
@@ -153,6 +151,12 @@ public class RetriverData extends AppCompatActivity {
             ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
             Picasso.with(context).load(image).into(post_image);
 
+        }
+
+        public void setTime(String time){
+
+            TextView post_Desc = (TextView) mView.findViewById(R.id.card_timestamp);
+            post_Desc.setText(time);
         }
 
 

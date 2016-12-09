@@ -54,6 +54,9 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
     private DatabaseReference mCurrentUser;
 
     FloatingActionButton fabplus;
+    com.getbase.floatingactionbutton.FloatingActionButton addNotice;
+    com.getbase.floatingactionbutton.FloatingActionButton addDocument;
+
 
 
     private int count = 0;
@@ -74,7 +77,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         setContentView(R.layout.activity_account_user);
         mAuth = FirebaseAuth.getInstance();
 
-       // swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        // swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
@@ -127,6 +130,8 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
                         viewHolder.setDesc(model.getUsername());
 
+                        viewHolder.setTime(model.getTime());
+
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -154,8 +159,25 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        /*
+        addNotice = (com.getbase.floatingactionbutton.FloatingActionButton)findViewById(R.id.fab_addnotice);
+        addNotice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //To add new notice code and shift control to AddNoticeActivityAdmin.
+                Intent intent = new Intent(AccountActivityUser.this, AddNoticeActivityAdmin.class);
+                startActivity(intent);
+            }
+        });
 
-
+        addDocument = (com.getbase.floatingactionbutton.FloatingActionButton)findViewById(R.id.fab_adddocument);
+        addDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AccountActivityUser.this,PdfUpload.class);
+                startActivity(intent);
+            }
+        });*/
 
         fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
         fabplus.setOnClickListener(new View.OnClickListener() {
@@ -261,6 +283,12 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
             Picasso.with(context).load(image).into(post_image);
 
+        }
+
+        public void setTime(String time){
+
+            TextView post_Desc = (TextView) mView.findViewById(R.id.card_timestamp);
+            post_Desc.setText(time);
         }
 
 

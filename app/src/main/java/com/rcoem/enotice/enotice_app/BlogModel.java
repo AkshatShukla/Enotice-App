@@ -12,19 +12,20 @@ public class BlogModel {
     private String images;
     private String name;
     private String username;
-
+    private String time;
 
 
     public BlogModel() {
     }
 
-    public BlogModel(String image, String desc,String username, String title,String approved,String nsme) {
+    public BlogModel(String image, String desc,String username, String title,String approved,String nsme,String time) {
         this.images = image;
         this.Desc = desc;
         this.approved = approved;
         this.title = title;
         this.username=username;
         this.name = name;
+        this.time=time;
 
     }
 
@@ -71,4 +72,11 @@ public class BlogModel {
 
     public void setName(String name) {this.name = name;}
 
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 }
