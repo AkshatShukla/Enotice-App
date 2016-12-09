@@ -14,10 +14,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,6 +37,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.util.Calendar;
 
 
 public class AddNoticeActivityAdmin extends AppCompatActivity {
@@ -54,6 +58,10 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
     private DatabaseReference mDataBaseDepartment;
     private DatabaseReference mDatabase;
 
+    private DatePicker datePicker;
+    private Calendar calendar;
+    private TextView dateView;
+    private int year, month, day;
     private String Department;
 
     private ProgressDialog mProgress;
@@ -121,6 +129,13 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
         final String title_value =  mPostTitle.getText().toString().trim();
         final String desc_value = mPostDesc.getText().toString().trim();
         final String user_id =  mAuth.getCurrentUser().getUid();
+        calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+        final String currentDate = day + "/" + month + "/" + year;
 
         mProgress.setMessage("Uploading Notice...");
 
@@ -144,7 +159,9 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                             newPost.child("approved").setValue("true");  //No Authentication is Required.
+                            newPost.child("removed").setValue(0);        //Not removed initially.
                             newPost.child("title").setValue(title_value);
+                            newPost.child("time").setValue(currentDate);
                             newPost.child("Desc").setValue(desc_value);
                             newPost.child("images").setValue(downloadUrl.toString());
                             newPost.child("username").setValue(dataSnapshot.child("name").getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {

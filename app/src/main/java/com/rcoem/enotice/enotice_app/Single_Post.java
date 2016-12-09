@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +39,7 @@ public class Single_Post extends AppCompatActivity {
     private StorageReference mStoarge;
     private boolean process;
     RelativeLayout ri;
+    Toolbar mActionBarToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class Single_Post extends AppCompatActivity {
         mStoarge = FirebaseStorage.getInstance().getReference();
         mPostDesc.setText(str);
 
+        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+
 
         final AlertDialog.Builder builder1 = new AlertDialog.Builder(Single_Post.this);
         builder1.setMessage("Do yo want to remove this Notice?");
@@ -66,9 +70,9 @@ public class Single_Post extends AppCompatActivity {
                         if(dataSnapshot.hasChildren()) {
                             mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
                             mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
-
                             String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
                             Picasso.with(Single_Post.this).load(imageUrl).into(mViewImage);
+                            mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                         }
                     else {
                             finish();
@@ -79,6 +83,24 @@ public class Single_Post extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
+        });
+
+        mViewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
+                        viewImage(imageUrl);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
         });
 
         Approved = (Button) findViewById(R.id.Approve_button);
@@ -164,5 +186,12 @@ public class Single_Post extends AppCompatActivity {
                 });
 
 
+    }
+
+    private void viewImage(String imageUrl) {
+        // Toast.makeText(AdminSinglePost.this,imageUrl, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(Single_Post.this,fullScreenImage.class);
+        intent.putExtra("imageUrl",imageUrl);
+        startActivity(intent);
     }
 }

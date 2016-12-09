@@ -38,6 +38,8 @@ public class RetriverData extends AppCompatActivity {
 
     private ImageView mBlogThree;
 
+    Toolbar mActionBarToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,8 @@ public class RetriverData extends AppCompatActivity {
         getSupportActionBar().setTitle("Pending Approval");
 
         mAuth = FirebaseAuth.getInstance();
+        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(R.string.pending_approvals);
         mDataBaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
@@ -111,6 +115,8 @@ public class RetriverData extends AppCompatActivity {
 
                         viewHolder.setDesc(model.getUsername());
 
+                        viewHolder.setTime(model.getTime());
+
                         //firebaseRecyclerAdapter.getRef(position).remove();
 
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -133,10 +139,6 @@ public class RetriverData extends AppCompatActivity {
         mBlogList.setAdapter(firebaseRecyclerAdapter);
     }
 
-    public void onClick(View view)
-    {
-        Toast.makeText(RetriverData.this,"ABCDE",Toast.LENGTH_LONG).show();
-    }
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder {
 
@@ -168,6 +170,12 @@ public class RetriverData extends AppCompatActivity {
             ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
             Picasso.with(context).load(image).into(post_image);
 
+        }
+
+        public void setTime(String time){
+
+            TextView post_Desc = (TextView) mView.findViewById(R.id.card_timestamp);
+            post_Desc.setText(time);
         }
 
 

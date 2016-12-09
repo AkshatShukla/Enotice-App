@@ -34,6 +34,9 @@ import java.util.ArrayList;
 public class PdfUpload extends AppCompatActivity {
     private File root;
     private ArrayList<File> fileList = new ArrayList<File>();
+
+    private ArrayList<String> fileList12 = new ArrayList<String>();
+
     private LinearLayout view;
     private ProgressDialog mProgress;
     private DatabaseReference mDataUser;
@@ -69,6 +72,7 @@ public class PdfUpload extends AppCompatActivity {
 
 
     }
+    //fvgfjdkghfjgfdsgfkgfdgfd
 
     private void valuemal(String string) {
         mData = FirebaseDatabase.getInstance().getReference().child("posts").child(string).child("Document");
@@ -78,11 +82,15 @@ public class PdfUpload extends AppCompatActivity {
                 .getAbsolutePath());
 
         final ArrayList<File> arr =   getfile(root);
+        //   final ArrayList<String> arr1 =   getfile1(root);
+
         ListView lv = (ListView) findViewById(R.id.listViewAnimals);
         ArrayAdapter<File> arrayAdapter = new ArrayAdapter<File>(
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
                 arr );
+                fileList12 );
 
         lv.setAdapter(arrayAdapter);
 
@@ -95,6 +103,7 @@ public class PdfUpload extends AppCompatActivity {
             {
                 String selectedmovie=arr.get(position).toString();
                 String okk = selectedmovie.substring(selectedmovie.lastIndexOf("/")+1,selectedmovie.length());
+                final String okk = selectedmovie.substring(selectedmovie.lastIndexOf("/")+1,selectedmovie.length());
                 Toast.makeText(getApplicationContext(), okk,   Toast.LENGTH_LONG).show();
 //Uri mImageUri = Uri.parse(selectedmovie);
                 Uri mImageUri = Uri.fromFile(new File(selectedmovie));
@@ -139,6 +148,7 @@ riversRef.putFile(file)
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
                                 newPost.child("link").setValue(downloadUrl.toString());
+                                newPost.child("title").setValue(okk);
                                 newPost.child("username").setValue(dataSnapshot.child("name").getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -194,6 +204,7 @@ riversRef.putFile(file)
                         String ab = listFile[i].toString();
                         String bbb = ab.substring(ab.lastIndexOf("/")+1,ab.length());
                         fileList.add(listFile[i]);
+                        fileList12.add(bbb);
                     }
                 }
 
@@ -201,4 +212,7 @@ riversRef.putFile(file)
         }
         return fileList;
     }
+
+
+
 }
