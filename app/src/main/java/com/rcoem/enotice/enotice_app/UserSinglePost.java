@@ -53,12 +53,16 @@ public class UserSinglePost extends AppCompatActivity {
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
-                mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
-                mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
-                String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
-                Picasso.with(UserSinglePost.this).load(imageUrl).into(mViewImage);
-                mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                if(dataSnapshot.hasChildren()) {
+                    mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
+                    mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
+                    mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
+                    String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
+                    Picasso.with(UserSinglePost.this).load(imageUrl).into(mViewImage);
+                    mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                } else {
+                    finish();
+                }
             }
 
             @Override
