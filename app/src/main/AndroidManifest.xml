@@ -51,7 +51,6 @@
         <activity android:name=".BlockContactsPanel" />
         <activity android:name=".CrossDept" />
         <activity android:name=".AccountCrossDept" />
-        <activity android:name=".RemoveActivity"></activity>
     </application>
 
 </manifest>

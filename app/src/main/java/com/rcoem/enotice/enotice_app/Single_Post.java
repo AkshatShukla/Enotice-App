@@ -1,8 +1,10 @@
 package com.rcoem.enotice.enotice_app;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +38,7 @@ public class Single_Post extends AppCompatActivity {
     private StorageReference mStoarge;
     private boolean process;
     RelativeLayout ri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,39 +54,31 @@ public class Single_Post extends AppCompatActivity {
         mPostDesc.setText(str);
 
 
+        final AlertDialog.Builder builder1 = new AlertDialog.Builder(Single_Post.this);
+        builder1.setMessage("Do yo want to remove this Notice?");
+        builder1.setCancelable(true);
+
+
         mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
-                mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
-                Picasso.with(Single_Post.this).load(imageUrl).into(mViewImage);
-            }
+                        if(dataSnapshot.hasChildren()) {
+                            mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
+                            mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                            String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
+                            Picasso.with(Single_Post.this).load(imageUrl).into(mViewImage);
+                        }
+                    else {
+                            finish();
+                        }
+                }
 
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-        //To view image fullscreen
-        mViewImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDatabase.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
-                        viewImage(imageUrl);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
+                }
         });
 
         Approved = (Button) findViewById(R.id.Approve_button);
@@ -98,8 +94,7 @@ public class Single_Post extends AppCompatActivity {
                             mDatabase.child("approved").setValue("true");
                             process = false;
 
-                            Toast.makeText(Single_Post.this, "Your post is approved", Toast.LENGTH_LONG).show();
-                            //mDatabase.child(str).removeValue();
+                            Toast.makeText(Single_Post.this, "The notice has been Approved", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
                             startActivity(intent);
                             finish();
@@ -123,31 +118,51 @@ public class Single_Post extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(process) {
                             mDatabase.child("approved").setValue("false");
+                            mDatabase.child("removed").setValue(1);
                             process = false;
 
-                            Toast.makeText(Single_Post.this, "Your post is Rejected", Toast.LENGTH_LONG).show();
-                            //mDatabase.child(str).removeValue();
-                            Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
-                            startActivity(intent);
-                            finish();
+                            Toast.makeText(Single_Post.this, "The notice has been Rejected", Toast.LENGTH_LONG).show();
+
+
+                            AlertDialog alert11 = builder1.create();
+                            alert11.show();
+                            //Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
+                            // startActivity(intent);
+                            //finish();
                         }
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
+
             }
         });
 
 
-    }
+        builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Toast.makeText(Single_Post.this, "Your post is Rejected", Toast.LENGTH_LONG).show();
+                Toast.makeText(Single_Post.this, "Removed", Toast.LENGTH_LONG).show();
+                mDatabase.removeValue();
+                Intent intent = new Intent(Single_Post.this, RetriverData.class);
+                startActivity(intent);
 
-    private void viewImage(String imageUrl) {
-        // Toast.makeText(AdminSinglePost.this,imageUrl, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(Single_Post.this,fullScreenImage.class);
-        intent.putExtra("imageUrl",imageUrl);
-        startActivity(intent);
+            }
+        });
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        Intent intent = new Intent(Single_Post.this, RetriverData.class);
+                        startActivity(intent);
+
+                    }
+                });
+
+
     }
 }

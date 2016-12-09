@@ -35,6 +35,8 @@ public class RetriverData extends AppCompatActivity {
 
     private DatabaseReference mDataBaseDepartment;
 
+    private ImageView mBlogThree;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +71,11 @@ public class RetriverData extends AppCompatActivity {
         mBlogList = (RecyclerView) findViewById(R.id.blog_recylView_list);
         mBlogList.setHasFixedSize(true);
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
+        mBlogThree = (ImageView) findViewById(R.id.overflow_card);
+
         //  mProgress.setMessage("Uploading Details");
         //   mProgress.show();
-        FirebaseRecyclerAdapter<BlogModel,BlogViewHolder> firebaseRecyclerAdapter =new
+        final FirebaseRecyclerAdapter<BlogModel,BlogViewHolder> firebaseRecyclerAdapter =new
                 FirebaseRecyclerAdapter<BlogModel, BlogViewHolder>(
 
                         BlogModel.class,
@@ -92,18 +96,20 @@ public class RetriverData extends AppCompatActivity {
 
                         viewHolder.setDesc(model.getUsername());
 
+                        //firebaseRecyclerAdapter.getRef(position).remove();
+
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 
+                                    Toast.makeText(RetriverData.this,Post_Key,Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(RetriverData.this, Single_Post.class);
+                                    intent.putExtra("postkey", Post_Key);
+                                    startActivity(intent);
 
-                                Toast.makeText(RetriverData.this,Post_Key,Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(RetriverData.this,Single_Post.class);
-                                intent.putExtra("postkey",Post_Key);
-                                startActivity(intent);
+
                                 //intent.putExtra("Post_key",str);
-                                //  startActivity(intent);
-
+                                //startActivity(intent);
                             }
                         });
                     }
@@ -112,6 +118,10 @@ public class RetriverData extends AppCompatActivity {
         mBlogList.setAdapter(firebaseRecyclerAdapter);
     }
 
+    public void onClick(View view)
+    {
+        Toast.makeText(RetriverData.this,"ABCDE",Toast.LENGTH_LONG).show();
+    }
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder {
 
