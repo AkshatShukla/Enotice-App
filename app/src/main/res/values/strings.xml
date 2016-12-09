@@ -68,11 +68,12 @@
     <string name="nav_home">Home</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_approve">Pending Approval</string>
+    <string name="nav_documents">New Documents</string>
     <string name="nav_logout">Logout</string>
     <string name="nav_User">View Users</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_about_us">About Us</string>
-    <string name="nav_other">Other Depart</string>
+    <string name="nav_other">Other Department</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
@@ -92,4 +93,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!-- FAB Strings -->
+    <string name="fab_add_notice">Add a Notice</string>
+    <string name="fab_add_document">Add a Document</string>
 </resources>

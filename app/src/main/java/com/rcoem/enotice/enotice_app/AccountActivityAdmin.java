@@ -8,6 +8,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -66,9 +68,17 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
     // private  String Dept;
     FloatingActionButton fabplus;
-    com.getbase.floatingactionbutton.FloatingActionButton addNotice;
-    com.getbase.floatingactionbutton.FloatingActionButton addDocument;
+    FloatingActionButton fabaddNotice;
+    FloatingActionButton fabaddDocument;
+    TextView textaddNotice;
+    TextView textaddDocument;
 
+    Animation open;
+    Animation close;
+    Animation rClock;
+    Animation rAntiClock;
+
+    Boolean isOpen = false;
 
     private int count = 0;
 
@@ -118,7 +128,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
 
     private void viewNotices(String dept) {
-        Toast.makeText(AccountActivityAdmin.this,dept,Toast.LENGTH_LONG).show();
+        //Toast.makeText(AccountActivityAdmin.this,dept,Toast.LENGTH_LONG).show();
         /*if (dept == "Mech") {
             Snackbar snackbar = Snackbar
                     .make(di, R.string.welcome_mech, Snackbar.LENGTH_LONG);
@@ -172,7 +182,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
 
 
-                                Toast.makeText(AccountActivityAdmin.this,Post_Key,Toast.LENGTH_LONG).show();
+                               // Toast.makeText(AccountActivityAdmin.this,Post_Key,Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(AccountActivityAdmin.this,AdminSinglePost.class);
                                 intent.putExtra("postkey",Post_Key);
                                 startActivity(intent);
@@ -187,7 +197,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
         di = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -214,13 +224,63 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         });*/
 
         fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
+        fabaddNotice = (FloatingActionButton) findViewById(R.id.add_notice_fab);
+        fabaddDocument = (FloatingActionButton) findViewById(R.id.add_document_fab);
+
+        textaddNotice = (TextView) findViewById(R.id.add_notice_text);
+        textaddDocument = (TextView) findViewById(R.id.add_document_text);
+
+        open = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_open);
+        close=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
+        rClock=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
+        rAntiClock=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_anticlockwise);
+
         fabplus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //To add new notice code and shift control to AddNoticeActivityAdmin.
-                Intent intent = new Intent(AccountActivityAdmin.this, AddNoticeActivityAdmin.class);
-                startActivity(intent);
+                if(isOpen){
+                    fabaddNotice.startAnimation(close);
+                    fabaddDocument.startAnimation(close);
+                    textaddNotice.startAnimation(close);
+                    textaddDocument.setAnimation(close);
+
+                    fabplus.startAnimation(rAntiClock);
+
+                    fabaddDocument.setClickable(false);
+                    fabaddNotice.setClickable(false);
+
+                    isOpen = false;
+                }
+                else{
+                    fabaddNotice.startAnimation(open);
+                    fabaddDocument.startAnimation(open);
+                    textaddNotice.startAnimation(open);
+                    textaddDocument.setAnimation(open);
+
+                    fabplus.startAnimation(rClock);
+
+                    fabaddDocument.setClickable(true);
+                    fabaddDocument.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getApplicationContext(),PdfUpload.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                    fabaddNotice.setClickable(true);
+                    fabaddNotice.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //To add new notice code and shift control to AddNoticeActivityAdmin.
+                            Intent intent = new Intent(AccountActivityAdmin.this, AddNoticeActivityAdmin.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                    isOpen = true;
+                }
             }
         });
 
@@ -322,7 +382,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                 .into(imgProfile);
 
         // showing dot next to notifications label
-        navigationView.getMenu().getItem(2).setActionView(R.layout.menu_dot);
+       // navigationView.getMenu().getItem(2).setActionView(R.layout.menu_dot);
     }
 
     @Override
@@ -352,8 +412,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            //Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getApplicationContext(),pdfview.class));
+
 
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(getApplicationContext(),EditViewProfile.class));
@@ -361,7 +420,11 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         } else if (id == R.id.nav_approval) {
             startActivity(new Intent(AccountActivityAdmin.this,RetriverData.class));
             // Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
-        } else if (id == R.id.nav_logout) {
+        } else if(id == R.id.nav_documents){
+            //Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getApplicationContext(),pdfview.class));
+        }
+        else if (id == R.id.nav_logout) {
             mAuth.signOut();
             Snackbar snackbar = Snackbar
                     .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);
@@ -369,8 +432,9 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             //Toast.makeText(AccountActivity.this, R.string.sign_out, Toast.LENGTH_LONG).show();
             startActivity(new Intent(AccountActivityAdmin.this, MainActivity.class));
         } else if (id == R.id.nav_about_us) {
-            Intent intent = new Intent(getApplicationContext(),PdfUpload.class);
-            startActivity(intent);
+            Snackbar snackbar = Snackbar
+                    .make(di, "Developed by CSE, RCOEM", Snackbar.LENGTH_LONG);
+            snackbar.show();
         }
         else if (id == R.id.ViewUsers) {
             //  Toast.makeText(AccountActivityAdmin.this, R.string.sign_out, Toast.LENGTH_LONG).show();
@@ -397,7 +461,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                 if(resultCode==RESULT_OK){
                     String FilePath = data.getData().getPath();
                     //textFile.setText(FilePath);
-                    Toast.makeText(this,FilePath.toString(),Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(this,FilePath.toString(),Toast.LENGTH_LONG).show();
                 }
                 break;
 

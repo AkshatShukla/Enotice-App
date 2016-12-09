@@ -16,8 +16,66 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="26dp"
         android:layout_marginBottom="26dp"
+        android:src="@drawable/ic_action_plus"
+        app:pressedTranslationZ="12dp"/>
 
-        android:src="@drawable/ic_action_plus" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_document_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="102dp"
+        android:src="@drawable/ic_picture_as_pdf_white_24dp"
+        app:pressedTranslationZ="12dp"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/add_document_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fab_add_document"
+        android:background="@drawable/rounded_corner"
+        android:textColor="#FFFFFF"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="82dp"
+        android:layout_marginBottom="108dp"
+        android:elevation="6dp"
+        android:visibility="invisible"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_notice_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="158dp"
+        android:src="@drawable/ic_action_image"
+        app:pressedTranslationZ="12dp"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/add_notice_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fab_add_notice"
+        android:background="@drawable/rounded_corner"
+        android:textColor="#FFFFFF"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="82dp"
+        android:layout_marginBottom="164dp"
+        android:elevation="6dp"
+        android:visibility="invisible"/>
 
 
     <LinearLayout

@@ -18,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,6 +56,18 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
     private DatabaseReference mCurrentUser;
 
     FloatingActionButton fabplus;
+    FloatingActionButton fabaddNotice;
+    FloatingActionButton fabaddDocument;
+    TextView textaddNotice;
+    TextView textaddDocument;
+
+    Animation open;
+    Animation close;
+    Animation rClock;
+    Animation rAntiClock;
+
+    Boolean isOpen = false;
+
 
 
     private int count = 0;
@@ -131,7 +145,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
                             @Override
                             public void onClick(View view) {
 
-                                Toast.makeText(AccountActivityUser.this,Post_Key,Toast.LENGTH_LONG).show();
+                              //  Toast.makeText(AccountActivityUser.this,Post_Key,Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(AccountActivityUser.this,UserSinglePost.class);
                                 intent.putExtra("postkey",Post_Key);
                                 startActivity(intent);
@@ -158,13 +172,63 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
 
         fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
+        fabaddNotice = (FloatingActionButton) findViewById(R.id.add_notice_fab);
+        fabaddDocument = (FloatingActionButton) findViewById(R.id.add_document_fab);
+
+        textaddNotice = (TextView) findViewById(R.id.add_notice_text);
+        textaddDocument = (TextView) findViewById(R.id.add_document_text);
+
+        open = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_open);
+        close=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
+        rClock=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
+        rAntiClock=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_anticlockwise);
+
         fabplus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //To add new notice code and shift control to AddNoticeActivityUser.
-                startActivity(new Intent(getApplicationContext(),AddNoticeActivityUser.class));
-                //To add new notice code
+                if(isOpen){
+                    fabaddNotice.startAnimation(close);
+                    fabaddDocument.startAnimation(close);
+                    textaddNotice.startAnimation(close);
+                    textaddDocument.setAnimation(close);
+
+                    fabplus.startAnimation(rAntiClock);
+
+                    fabaddDocument.setClickable(false);
+                    fabaddNotice.setClickable(false);
+
+                    isOpen = false;
+                }
+                else{
+                    fabaddNotice.startAnimation(open);
+                    fabaddDocument.startAnimation(open);
+                    textaddNotice.startAnimation(open);
+                    textaddDocument.setAnimation(open);
+
+                    fabplus.startAnimation(rClock);
+
+                    fabaddDocument.setClickable(true);
+                    fabaddDocument.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getApplicationContext(),PdfUpload.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                    fabaddNotice.setClickable(true);
+                    fabaddNotice.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //To add new notice code and shift control to AddNoticeActivityAdmin.
+                            Intent intent = new Intent(AccountActivityUser.this, AddNoticeActivityAdmin.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                    isOpen = true;
+                }
             }
         });
 
@@ -328,7 +392,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
+            //Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
             startActivity(new Intent(AccountActivityUser.this, UserNoticeStatus.class));
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(getApplicationContext(),EditViewProfile.class));
