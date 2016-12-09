@@ -397,6 +397,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         final String user_id = firebaseAuth.getCurrentUser().getUid();
         mDatabase1.child(user_id).child("name").setValue(Name);
 
+        mDatabase1.child(user_id).child("block").setValue("No");
 
         //Validate designation
 
