@@ -39,14 +39,14 @@
             android:id="@+id/radioMale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter the CSE Department"
+            android:text="Send to CSE Department"
             android:checked="true" />
 
         <RadioButton
             android:id="@+id/radioFemale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter the Mech Department" />
+            android:text="Send to Mech Department" />
 
     </RadioGroup>
 

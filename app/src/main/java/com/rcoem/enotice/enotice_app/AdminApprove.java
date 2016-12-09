@@ -55,7 +55,7 @@ public class AdminApprove extends AppCompatActivity {
                             mDatabase.child("level").setValue(2);
                             process = false;
 
-                            Toast.makeText(AdminApprove.this, "Your post is approved", Toast.LENGTH_LONG).show();
+                            Toast.makeText(AdminApprove.this, "HOD", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(AdminApprove.this, AccountAdminPanel.class);
                             startActivity(intent);
                             finish();
@@ -81,7 +81,7 @@ public class AdminApprove extends AppCompatActivity {
                             mDatabase.child("level").setValue(1);
                             process = false;
 
-                            Toast.makeText(AdminApprove.this, "Your post is approved", Toast.LENGTH_LONG).show();
+                            Toast.makeText(AdminApprove.this, "Assistant Professor", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(AdminApprove.this, AccountAdminPanel.class);
                             startActivity(intent);
                             finish();

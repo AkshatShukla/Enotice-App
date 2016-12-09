@@ -59,7 +59,7 @@ public class Single_Post extends AppCompatActivity {
 
 
         final AlertDialog.Builder builder1 = new AlertDialog.Builder(Single_Post.this);
-        builder1.setMessage("Do yo want to remove this Notice?");
+        builder1.setMessage("Do yo want to reject and remove this Notice?");
         builder1.setCancelable(true);
 
 
@@ -72,7 +72,7 @@ public class Single_Post extends AppCompatActivity {
                             mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
                             String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
                             Picasso.with(Single_Post.this).load(imageUrl).into(mViewImage);
-                            mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                            //mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                         }
                     else {
                             finish();
@@ -143,7 +143,7 @@ public class Single_Post extends AppCompatActivity {
                             mDatabase.child("removed").setValue(1);
                             process = false;
 
-                            Toast.makeText(Single_Post.this, "The notice has been Rejected", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(Single_Post.this, "The notice has been Rejected", Toast.LENGTH_LONG).show();
 
 
                             AlertDialog alert11 = builder1.create();
@@ -167,7 +167,7 @@ public class Single_Post extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Toast.makeText(Single_Post.this, "Your post is Rejected", Toast.LENGTH_LONG).show();
-                Toast.makeText(Single_Post.this, "Removed", Toast.LENGTH_LONG).show();
+                Toast.makeText(Single_Post.this, "The notice has been Rejected and Removed", Toast.LENGTH_LONG).show();
                 mDatabase.removeValue();
                 Intent intent = new Intent(Single_Post.this, RetriverData.class);
                 startActivity(intent);

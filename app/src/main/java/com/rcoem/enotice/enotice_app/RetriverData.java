@@ -123,7 +123,7 @@ public class RetriverData extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
 
-                                    Toast.makeText(RetriverData.this,Post_Key,Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(RetriverData.this,Post_Key,Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(RetriverData.this, Single_Post.class);
                                     intent.putExtra("postkey", Post_Key);
                                     startActivity(intent);
