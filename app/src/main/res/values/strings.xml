@@ -51,7 +51,8 @@
 
     <string name="label_activity_finish">Nothing here…\n…just a demo how to create a splash screen intro.</string>
 
-
+    <string name="pending_approvals">Pending Notice Approvals</string>
+    <string name="nav_cross">Cross Department Portal</string>
     <!-- Card Strings -->
     <string name="prof_name">Prof. Name</string>
     <string name="date_n_time">24 Sep 11:00am</string>

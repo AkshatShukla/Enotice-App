@@ -141,6 +141,8 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
                         viewHolder.setDesc(model.getUsername());
 
+                        viewHolder.setTime(model.getTime());
+
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -325,6 +327,12 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
             Picasso.with(context).load(image).into(post_image);
 
+        }
+
+        public void setTime(String time){
+
+            TextView post_Desc = (TextView) mView.findViewById(R.id.card_timestamp);
+            post_Desc.setText(time);
         }
 
 
