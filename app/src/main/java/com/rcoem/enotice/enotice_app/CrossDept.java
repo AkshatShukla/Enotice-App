@@ -17,13 +17,24 @@ public class CrossDept extends AppCompatActivity {
     private Button btnDisplay;
     private ImageButton nextClick;
 
-    Toolbar mActionBarToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cross_dept);
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle(R.string.nav_cross);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        getSupportActionBar().setTitle(R.string.nav_cross);
+
         addListenerOnButton();
     }
     public void addListenerOnButton() {
@@ -43,14 +54,14 @@ public class CrossDept extends AppCompatActivity {
                 radioButton = (RadioButton) findViewById(selectedId);
 
 
-                if(radioButton.getText().toString().equals("Enter the CSE Department")) {
+                if(radioButton.getText().toString().equals("Send to CSE Department")) {
                     Toast.makeText(CrossDept.this,
                             "cse", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(CrossDept.this,AccountCrossDept.class);
                     intent.putExtra("postkey","CSE");
                     startActivity(intent);
                 }
-                if(radioButton.getText().toString().equals("Enter the Mech Department")) {
+                if(radioButton.getText().toString().equals("Send to Mech Department")) {
                     Toast.makeText(CrossDept.this,
                             "Mech", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(CrossDept.this,AccountCrossDept.class);

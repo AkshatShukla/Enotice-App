@@ -192,11 +192,11 @@ public class AddNoticeActivityUser extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Toast.makeText(AddNoticeActivityUser.this,"uploaded successfully", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(AddNoticeActivityUser.this,"Uploaded Successfully", Toast.LENGTH_LONG).show();
                                     }
                                     else
                                     {
-                                        Toast.makeText(AddNoticeActivityUser.this,"Not successfully Uploaded", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(AddNoticeActivityUser.this,"Not Successfully Uploaded", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });

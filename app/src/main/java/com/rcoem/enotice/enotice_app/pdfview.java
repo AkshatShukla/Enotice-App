@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -53,6 +54,20 @@ public class pdfview extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retriver_data);
         mAuth = FirebaseAuth.getInstance();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        getSupportActionBar().setTitle(R.string.new_docs);
+
         mDataBaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         mprogress = new ProgressDialog(this);
         mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
@@ -117,7 +132,8 @@ public class pdfview extends AppCompatActivity {
                                 //intent.putExtra("Post_key",str);
                                 //  startActivity(intent);
                                 mDatabase1 = FirebaseDatabase.getInstance().getReferenceFromUrl(Post_Key);
-                                Toast.makeText(pdfview.this,mDatabase1.toString(),Toast.LENGTH_LONG).show();
+
+                                //Toast.makeText(pdfview.this,mDatabase1.toString(),Toast.LENGTH_LONG).show();
 
                                 mDatabase1.addValueEventListener(new ValueEventListener() {
                                     @Override
@@ -125,7 +141,7 @@ public class pdfview extends AppCompatActivity {
                                         pdf_link=  dataSnapshot.child("link").getValue().toString().trim();
 
 
-                                        Toast.makeText(pdfview.this,pdf_link,Toast.LENGTH_LONG).show();
+                                        //Toast.makeText(pdfview.this,pdf_link,Toast.LENGTH_LONG).show();
                                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(pdf_link));
                                         startActivity(browserIntent);
                                         /*

@@ -19,18 +19,18 @@
     <string name="welcome_cse">Welcome to the Computer Science Department</string>
 
     //Intro Strings
-    <string name="title_material_metaphor">Material is the metaphor</string>
-    <string name="title_material_bold">Bold, graphic, intentional</string>
-    <string name="title_material_motion">Motion provides meaning</string>
-    <string name="title_material_shadow">Light and shadow</string>
+    <string name="title_material_metaphor">Authentic Material is the metaphor</string>
+    <string name="title_material_bold">Bold, Consistent, Intentional, Real-time</string>
+    <string name="title_material_motion">All Departments Connected</string>
+    <string name="title_material_shadow">Light and Shadow, Online and Offline</string>
 
-    <string name="description_material_metaphor">A material metaphor is the unifying theory of a rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic.</string>
-    <string name="description_material_bold">The foundational elements of print-based design – typography, grids, space, scale, color, and use of imagery – guide visual treatments.</string>
-    <string name="description_material_motion">Motion respects and reinforces the user as the prime mover. Primary user actions are inflection points that initiate motion, transforming the whole design.</string>
-    <string name="description_material_shadow">Within the material environment, virtual lights illuminate the scene. Key lights create directional shadows, while ambient light creates soft shadows from all angles.</string>
+    <string name="description_material_metaphor">All new SCALABLE Authentication Levels. Secure access to respective accounts without conflicts in priority levels.</string>
+    <string name="description_material_bold">Always On-the-go with REAL-TIME notice sync and consistent communication between Android Application, Web Application and LED Displays spread across the campus.</string>
+    <string name="description_material_motion">Motion of Notices from one department to another on same priority level using CROSS-DEPARTMENT PORTAL.</string>
+    <string name="description_material_shadow">Within the material environment, virtual lights illuminate the scene. OFFLINE-STORAGE Capabilities coming soon!</string>
 
-    <string name="title_permissions">Requesting permissions was never easier.</string>
-    <string name="description_permissions">This app needs the camera and storage permission.\nIt\'s only to show how permission requests work in this library and we won\'t do anything with the granted permissions.</string>
+    <string name="title_permissions">Requesting Permissions</string>
+    <string name="description_permissions">This app needs the CAMERA and STORAGE permissions.</string>
     <string name="label_grant_permissions">Please grant the permissions before proceeding.</string>
 
     <string name="label_button_cta">Click me!</string>
@@ -51,8 +51,12 @@
 
     <string name="label_activity_finish">Nothing here…\n…just a demo how to create a splash screen intro.</string>
 
+    <!-- Activity Titles -->
     <string name="pending_approvals">Pending Notice Approvals</string>
     <string name="nav_cross">Cross Department Portal</string>
+    <string name="new_docs">New Document Notices</string>
+    <string name="check_notice_status">Notice Status</string>
+
     <!-- Card Strings -->
     <string name="prof_name">Prof. Name</string>
     <string name="date_n_time">24 Sep 11:00am</string>
@@ -69,6 +73,7 @@
     <string name="nav_home">Home</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_approve">Pending Approval</string>
+    <string name="nav_checkstatus">Check Notice Status</string>
     <string name="nav_documents">New Documents</string>
     <string name="nav_logout">Logout</string>
     <string name="nav_User">View Users</string>

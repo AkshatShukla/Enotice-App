@@ -86,7 +86,6 @@ public class BlockUserPlanel extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        getSupportActionBar().setTitle("All Users in Department");
 
         //swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
@@ -98,7 +97,7 @@ public class BlockUserPlanel extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String Str = dataSnapshot.child("department").getValue().toString();
                 viewNotice(Str);
-
+                getSupportActionBar().setTitle("All Users in ".concat(Str));
             }
 
             @Override
