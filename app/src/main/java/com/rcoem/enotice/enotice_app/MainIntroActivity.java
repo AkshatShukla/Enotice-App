@@ -74,6 +74,17 @@ public class MainIntroActivity extends IntroActivity {
                 .background(R.color.color_material_metaphor)
                 .backgroundDark(R.color.color_dark_material_metaphor)
                 .scrollable(scrollable)
+                .buttonCtaLabel("Next")
+                .buttonCtaClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Toast toast = Toast.makeText(MainIntroActivity.this, R.string.toast_button_cta, Toast.LENGTH_SHORT);
+                        //toast.setGravity(Gravity.CENTER, 0, 0);
+                        //toast.show();
+
+                        nextSlide();
+                    }
+                })
                 .build());
 
         addSlide(new SimpleSlide.Builder()
@@ -83,13 +94,13 @@ public class MainIntroActivity extends IntroActivity {
                 .background(R.color.color_material_bold)
                 .backgroundDark(R.color.color_dark_material_bold)
                 .scrollable(scrollable)
-                .buttonCtaLabel("Hello")
+                .buttonCtaLabel("Next")
                 .buttonCtaClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast toast = Toast.makeText(MainIntroActivity.this, R.string.toast_button_cta, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
+                        //Toast toast = Toast.makeText(MainIntroActivity.this, R.string.toast_button_cta, Toast.LENGTH_SHORT);
+                        //toast.setGravity(Gravity.CENTER, 0, 0);
+                        //toast.show();
 
                         nextSlide();
                     }
@@ -103,6 +114,17 @@ public class MainIntroActivity extends IntroActivity {
                 .background(R.color.color_material_motion)
                 .backgroundDark(R.color.color_dark_material_motion)
                 .scrollable(scrollable)
+                .buttonCtaLabel("Next")
+                .buttonCtaClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Toast toast = Toast.makeText(MainIntroActivity.this, R.string.toast_button_cta, Toast.LENGTH_SHORT);
+                        //toast.setGravity(Gravity.CENTER, 0, 0);
+                        //toast.show();
+
+                        nextSlide();
+                    }
+                })
                 .build());
 
         addSlide(new SimpleSlide.Builder()
@@ -112,6 +134,17 @@ public class MainIntroActivity extends IntroActivity {
                 .background(R.color.color_material_shadow)
                 .backgroundDark(R.color.color_dark_material_shadow)
                 .scrollable(scrollable)
+                .buttonCtaLabel("Next")
+                .buttonCtaClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Toast toast = Toast.makeText(MainIntroActivity.this, R.string.toast_button_cta, Toast.LENGTH_SHORT);
+                        //toast.setGravity(Gravity.CENTER, 0, 0);
+                        //toast.show();
+
+                        nextSlide();
+                    }
+                })
                 .build());
 
         final Slide permissionsSlide;
