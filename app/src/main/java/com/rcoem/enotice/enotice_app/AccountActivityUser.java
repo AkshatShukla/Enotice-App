@@ -365,7 +365,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
                 .into(imgNavHeaderBg);
 
         // Loading profile image
-        Glide.with(this).load(R.drawable.prof)
+        Glide.with(this).load(R.drawable.user)
                 .crossFade()
                 .thumbnail(0.5f)
                 .bitmapTransform(new CircleTransform(this))
@@ -400,12 +400,17 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            //Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(AccountActivityUser.this, UserNoticeStatus.class));
+
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(getApplicationContext(),EditViewProfile.class));
             //  Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
-        }  else if (id == R.id.nav_logout) {
+        } else if(id == R.id.nav_checkstatus){
+            //Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getApplicationContext(),UserNoticeStatus.class));
+        } else if(id == R.id.nav_documents){
+            //Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getApplicationContext(),pdfview.class));
+        } else if (id == R.id.nav_logout) {
             mAuth.signOut();
             Snackbar snackbar = Snackbar
                     .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);
@@ -414,7 +419,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             startActivity(new Intent(AccountActivityUser.this, MainActivity.class));
         } else if (id == R.id.nav_about_us) {
             Snackbar snackbar = Snackbar
-                    .make(di, "Developed by CSE, RCOEM", Snackbar.LENGTH_LONG);
+                    .make(di, "Coded with love by CSE, RCOEM", Snackbar.LENGTH_LONG);
             snackbar.show();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_user);

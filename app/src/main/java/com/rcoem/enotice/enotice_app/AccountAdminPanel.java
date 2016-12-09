@@ -302,7 +302,7 @@ public class AccountAdminPanel extends AppCompatActivity implements  NavigationV
                 .into(imgNavHeaderBg);
 
         // Loading profile image
-        Glide.with(this).load(R.drawable.prof)
+        Glide.with(this).load(R.drawable.user)
                 .crossFade()
                 .thumbnail(0.5f)
                 .bitmapTransform(new CircleTransform(this))

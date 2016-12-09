@@ -383,7 +383,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                 .into(imgNavHeaderBg);
 
         // Loading profile image
-        Glide.with(this).load(R.drawable.prof)
+        Glide.with(this).load(R.drawable.user)
                 .crossFade()
                 .thumbnail(0.5f)
                 .bitmapTransform(new CircleTransform(this))
@@ -441,7 +441,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             startActivity(new Intent(AccountActivityAdmin.this, MainActivity.class));
         } else if (id == R.id.nav_about_us) {
             Snackbar snackbar = Snackbar
-                    .make(di, "Developed by CSE, RCOEM", Snackbar.LENGTH_LONG);
+                    .make(di, "Coded with love by CSE, RCOEM", Snackbar.LENGTH_LONG);
             snackbar.show();
         }
         else if (id == R.id.ViewUsers) {

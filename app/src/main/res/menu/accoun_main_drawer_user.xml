@@ -8,12 +8,22 @@
             android:title="@string/nav_home" />
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_photo_library_black_24dp"
+            android:icon="@drawable/ic_account_circle_black_24dp"
             android:title="@string/nav_profile" />
 
         <item
+            android:id="@+id/nav_checkstatus"
+            android:icon="@drawable/checkstatus"
+            android:title="@string/nav_checkstatus" />
+
+        <item
+            android:id="@+id/nav_documents"
+            android:icon="@drawable/document48"
+            android:title="@string/nav_documents" />
+
+        <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_settings_black_24dp"
+            android:icon="@drawable/logout"
             android:title="@string/nav_logout" />
     </group>
 
@@ -22,9 +32,6 @@
             <item
                 android:id="@+id/nav_about_us"
                 android:title="@string/nav_about_us" />
-            <item
-                android:id="@+id/nav_privacy_policy"
-                android:title="@string/privacy_policy" />
         </menu>
     </item>
 
