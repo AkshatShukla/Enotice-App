@@ -85,11 +85,9 @@ public class PdfUpload extends AppCompatActivity {
         //   final ArrayList<String> arr1 =   getfile1(root);
 
         ListView lv = (ListView) findViewById(R.id.listViewAnimals);
-        ArrayAdapter<File> arrayAdapter = new ArrayAdapter<File>(
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
-                arr );
                 fileList12 );
 
         lv.setAdapter(arrayAdapter);
@@ -102,7 +100,6 @@ public class PdfUpload extends AppCompatActivity {
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3)
             {
                 String selectedmovie=arr.get(position).toString();
-                String okk = selectedmovie.substring(selectedmovie.lastIndexOf("/")+1,selectedmovie.length());
                 final String okk = selectedmovie.substring(selectedmovie.lastIndexOf("/")+1,selectedmovie.length());
                 Toast.makeText(getApplicationContext(), okk,   Toast.LENGTH_LONG).show();
 //Uri mImageUri = Uri.parse(selectedmovie);
@@ -111,13 +108,6 @@ public class PdfUpload extends AppCompatActivity {
                 mProgress.show();
 
                 /*
-
-
-
-                Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
-StorageReference riversRef = storageRef.child("images/rivers.jpg");
-
-riversRef.putFile(file)
     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
         @Override
         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

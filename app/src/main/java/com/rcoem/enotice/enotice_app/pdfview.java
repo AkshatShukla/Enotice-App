@@ -11,7 +11,6 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -53,23 +52,9 @@ public class pdfview extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retriver_data);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        getSupportActionBar().setTitle("New Documents");
-
         mAuth = FirebaseAuth.getInstance();
         mDataBaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-mprogress = new ProgressDialog(this);
+        mprogress = new ProgressDialog(this);
         mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -113,10 +98,10 @@ mprogress = new ProgressDialog(this);
                         final String Post_Key = getRef(position).toString();
                         Intent intent = getIntent();
                         final String str = intent.getStringExtra("location");
-                     //   viewHolder.setTitle(model.getTitle());
-                      //  viewHolder.setDesc(model.getDesc());
+                        viewHolder.setTitle(model.getTitle());
+                        //  viewHolder.setDesc(model.getDesc());
 
-                      //  viewHolder.setImage(getApplicationContext(), model.getImages());
+                        //  viewHolder.setImage(getApplicationContext(), model.getImages());
 
                         viewHolder.setDesc(model.getUsername());
 
@@ -126,9 +111,9 @@ mprogress = new ProgressDialog(this);
 
 
                                 //Toast.makeText(pdfview.this,Post_Key,Toast.LENGTH_LONG).show();
-                              //  Intent intent = new Intent(pdfview.this,PdfDownload.class);
-                               // intent.putExtra("postkey",Post_Key);
-                               // startActivity(intent);
+                                //  Intent intent = new Intent(pdfview.this,PdfDownload.class);
+                                // intent.putExtra("postkey",Post_Key);
+                                // startActivity(intent);
                                 //intent.putExtra("Post_key",str);
                                 //  startActivity(intent);
                                 mDatabase1 = FirebaseDatabase.getInstance().getReferenceFromUrl(Post_Key);
@@ -137,7 +122,7 @@ mprogress = new ProgressDialog(this);
                                 mDatabase1.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                       pdf_link=  dataSnapshot.child("link").getValue().toString().trim();
+                                        pdf_link=  dataSnapshot.child("link").getValue().toString().trim();
 
 
                                         Toast.makeText(pdfview.this,pdf_link,Toast.LENGTH_LONG).show();
@@ -174,7 +159,7 @@ mprogress = new ProgressDialog(this);
 
                             }
 
-                             class Callback extends WebViewClient {
+                            class Callback extends WebViewClient {
                                 @Override
                                 public boolean shouldOverrideUrlLoading(
                                         WebView view, String url) {
