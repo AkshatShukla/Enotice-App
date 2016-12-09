@@ -74,7 +74,6 @@ public class BlockUserPlanel extends AppCompatActivity {
         setContentView(R.layout.activity_block_user_planel);
         mAuth = FirebaseAuth.getInstance();
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("All Users in Department");
 
         //swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
@@ -86,7 +85,8 @@ public class BlockUserPlanel extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String Str = dataSnapshot.child("department").getValue().toString();
                 viewNotice(Str);
-
+                String title = "All Users of ";
+                mActionBarToolbar.setTitle(title.concat(Str));
             }
 
             @Override

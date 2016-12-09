@@ -3,6 +3,7 @@ package com.rcoem.enotice.enotice_app;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,10 +16,14 @@ public class CrossDept extends AppCompatActivity {
     private RadioButton radioButton;
     private Button btnDisplay;
     private ImageButton nextClick;
+
+    Toolbar mActionBarToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cross_dept);
+        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle(R.string.nav_cross);
         addListenerOnButton();
     }
     public void addListenerOnButton() {
