@@ -46,9 +46,12 @@
         <activity android:name=".AdminApprove" />
         <activity android:name=".PdfUpload" />
         <activity android:name=".pdfview" />
-        <activity android:name=".PdfDownload"></activity>
-        <activity android:name=".BlockUserPlanel"></activity>
-        <activity android:name=".BlockContactsPanel"></activity>
+        <activity android:name=".PdfDownload" />
+        <activity android:name=".BlockUserPlanel" />
+        <activity android:name=".BlockContactsPanel" />
+        <activity android:name=".CrossDept" />
+        <activity android:name=".AccountCrossDept" />
+        <activity android:name=".RemoveActivity"></activity>
     </application>
 
 </manifest>

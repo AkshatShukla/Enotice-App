@@ -23,6 +23,10 @@
             android:id="@+id/ViewUsers"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/nav_User" />
+        <item
+            android:id="@+id/nav_otherDept"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/nav_other" />
     </group>
 
     <item android:title="Other">

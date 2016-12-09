@@ -66,6 +66,8 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
     // private  String Dept;
     FloatingActionButton fabplus;
+    com.getbase.floatingactionbutton.FloatingActionButton addNotice;
+    com.getbase.floatingactionbutton.FloatingActionButton addDocument;
 
 
     private int count = 0;
@@ -191,6 +193,26 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
         //Floating Action Button Functionality
         //Generate New Notice
+        /*
+        addNotice = (com.getbase.floatingactionbutton.FloatingActionButton)findViewById(R.id.fab_addnotice);
+        addNotice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //To add new notice code and shift control to AddNoticeActivityAdmin.
+                Intent intent = new Intent(AccountActivityAdmin.this, AddNoticeActivityAdmin.class);
+                startActivity(intent);
+            }
+        });
+
+        addDocument = (com.getbase.floatingactionbutton.FloatingActionButton)findViewById(R.id.fab_adddocument);
+        addDocument.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AccountActivityAdmin.this,PdfUpload.class);
+                startActivity(intent);
+            }
+        });*/
+
         fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
         fabplus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -353,6 +375,10 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         else if (id == R.id.ViewUsers) {
             //  Toast.makeText(AccountActivityAdmin.this, R.string.sign_out, Toast.LENGTH_LONG).show();
             startActivity(new Intent(AccountActivityAdmin.this,BlockUserPlanel.class));
+        }
+        else if (id == R.id.nav_otherDept) {
+            //  Toast.makeText(AccountActivityAdmin.this, R.string.sign_out, Toast.LENGTH_LONG).show();
+            startActivity(new Intent(AccountActivityAdmin.this,CrossDept.class));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
         drawer.closeDrawer(GravityCompat.START);
