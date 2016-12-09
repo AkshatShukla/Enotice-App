@@ -63,14 +63,18 @@ public class BlockUserPlanel extends AppCompatActivity {
     FirebaseAuth mAuth;
 
     DrawerLayout di;
+
+    Toolbar mActionBarToolbar;
     private DatabaseReference mDatabaseValidContent;
     Query mquery;
     long back_pressed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account_admin_panel);
+        setContentView(R.layout.activity_block_user_planel);
         mAuth = FirebaseAuth.getInstance();
+        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActionBarToolbar.setTitle("All Users in Department");
 
         //swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
@@ -150,26 +154,7 @@ public class BlockUserPlanel extends AppCompatActivity {
 
 
 
-        di = (DrawerLayout) findViewById(R.id.drawer_layout_user);
 
-        //  recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        // swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-
-        fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
-        fabplus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //To add new notice code and shift control to AddNoticeActivityUser.
-                startActivity(new Intent(getApplicationContext(),AddNoticeActivityUser.class));
-                //To add new notice code
-            }
-        });
 
         //  randomListing = new ArrayList<NoticeCard>();
         // adapter = new NoticeCardAdapter(this, randomListing);

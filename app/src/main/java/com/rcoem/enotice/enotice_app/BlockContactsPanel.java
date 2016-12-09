@@ -55,7 +55,7 @@ public class BlockContactsPanel extends AppCompatActivity {
                             mDatabase.child("block").setValue("Yes");
                             process = false;
 
-                            Toast.makeText(BlockContactsPanel.this, "User Has been Unblocked", Toast.LENGTH_LONG).show();
+                            Toast.makeText(BlockContactsPanel.this, "User Has been Blocked", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(BlockContactsPanel.this, BlockUserPlanel.class);
                             startActivity(intent);
                             finish();
