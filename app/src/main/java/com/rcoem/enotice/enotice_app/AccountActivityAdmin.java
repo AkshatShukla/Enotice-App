@@ -66,8 +66,8 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
     // private  String Dept;
     FloatingActionButton fabplus;
-    com.getbase.floatingactionbutton.FloatingActionButton addNotice;
-    com.getbase.floatingactionbutton.FloatingActionButton addDocument;
+    //com.getbase.floatingactionbutton.FloatingActionButton addNotice;
+    //com.getbase.floatingactionbutton.FloatingActionButton addDocument;
 
 
     private int count = 0;

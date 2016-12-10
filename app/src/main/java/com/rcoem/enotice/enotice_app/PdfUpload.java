@@ -100,7 +100,7 @@ public class PdfUpload extends AppCompatActivity {
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3)
             {
                 String selectedmovie=arr.get(position).toString();
-                String okk = selectedmovie.substring(selectedmovie.lastIndexOf("/")+1,selectedmovie.length());
+                final String okk = selectedmovie.substring(selectedmovie.lastIndexOf("/")+1,selectedmovie.length());
                 Toast.makeText(getApplicationContext(), okk,   Toast.LENGTH_LONG).show();
 //Uri mImageUri = Uri.parse(selectedmovie);
                 Uri mImageUri = Uri.fromFile(new File(selectedmovie));
@@ -141,6 +141,7 @@ public class PdfUpload extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
                                 newPost.child("link").setValue(downloadUrl.toString());
+                                newPost.child("title").setValue(okk);
                                 newPost.child("username").setValue(dataSnapshot.child("name").getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
