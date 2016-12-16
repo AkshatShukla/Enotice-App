@@ -156,7 +156,7 @@ public class AddNoticeActivityUser extends AppCompatActivity {
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
 
-        month = calendar.get(Calendar.MONTH);
+        month = calendar.get(Calendar.MONTH) + 1;   //Month in Calendar API start with 0.
         day = calendar.get(Calendar.DAY_OF_MONTH);
         Toast.makeText(AddNoticeActivityUser.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
         final String currentDate = day + "/" + month + "/" + year;

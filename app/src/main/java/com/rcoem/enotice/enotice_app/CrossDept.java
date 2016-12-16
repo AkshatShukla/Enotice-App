@@ -56,7 +56,7 @@ public class CrossDept extends AppCompatActivity {
 
                 if(radioButton.getText().toString().equals("Send to CSE Department")) {
                     Toast.makeText(CrossDept.this,
-                            "cse", Toast.LENGTH_SHORT).show();
+                            "CSE", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(CrossDept.this,AccountCrossDept.class);
                     intent.putExtra("postkey","CSE");
                     startActivity(intent);
