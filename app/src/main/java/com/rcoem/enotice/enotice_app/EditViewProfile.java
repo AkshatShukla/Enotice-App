@@ -46,6 +46,7 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,8 +78,12 @@ public class EditViewProfile extends AppCompatActivity {
         mStorage = FirebaseStorage.getInstance().getReference();
         //   Bitmap bm = BitmapFactory.decodeResource(getResources(),
         //    R.drawable.profile_pic);
+        final ImageView mImage = (ImageView) findViewById(R.id.imageView);
+
         mprogress =  new ProgressDialog(this);
         //  mprogress.setMessage("loading");
+       final TextView txt_name = (TextView)findViewById(R.id.name_input);
+
         //// mprogress.show();
         String path  ="photos/"+mAuth.getCurrentUser().getUid().toString();
 //mprogress.setMessage("loading");
@@ -86,21 +91,19 @@ public class EditViewProfile extends AppCompatActivity {
         // Create a reference with an initial file path and name
         //StorageReference path = mStorage.child("images/stars.jpg");
         //StorageReference islandRef = mStorage.child(path);
-        try {
-            final File localFile ;
-
-            localFile = File.createTempFile("images", "jpg");
-            //  mprogress.setMessage("loading");
-            // mprogress.show();
-            //Toast.makeText(getApplicationContext(),mDatabase1.toString(),Toast.LENGTH_LONG).show();
-
+        mprogress.setMessage("loading");
+        mprogress.show();
             mDatabase1.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    String imageUrl = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("images").getValue().toString().trim();
+                    Picasso.with(EditViewProfile.this).load(imageUrl).into(mImage);
+
                     // txt_desig.setText(dataSnapshot.getValue().toString());
                     // Toast.makeText(getApplicationContext(),dataSnapshot.getValue().toString(),Toast.LENGTH_LONG).show();
                     String chk = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("level").getValue().toString().trim();
                     dept_disp.setText(dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("department").getValue().toString().trim());
+                    txt_name.setText(dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("name").getValue().toString().trim());
                     if(chk.equalsIgnoreCase("2"))
                     {
                         txt_desig.setText("Head of Dept.");
@@ -112,7 +115,7 @@ public class EditViewProfile extends AppCompatActivity {
                         txt_desig.setText("Assistant professor");
 
                     }
-                    //     mprogress.dismiss();
+                       mprogress.dismiss();
                 }
                 // mprogress.dismiss();
 
@@ -140,15 +143,13 @@ public class EditViewProfile extends AppCompatActivity {
 
                 //   Toast.makeText(getApplicationContext(),photoUrl.toString(),Toast.LENGTH_LONG).show();
 
-                TextView txt_name = (TextView)findViewById(R.id.name_input);
-                txt_name.setText(name);
+
 //                //txt_desig.setText(use);
 
                 TextView txt_email = (TextView)findViewById(R.id.email_input);
                 txt_email.setText(user.getEmail());
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUrl);
-                ImageView mImage = (ImageView) findViewById(R.id.imageView);
-                mImage.setImageBitmap(bitmap);
+                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUrl);
+             //   mImage.setImageBitmap(bitmap);
 
                 //  mprogress.dismiss();
                 final String user_id = mAuth.getCurrentUser().getUid();
@@ -209,11 +210,7 @@ public class EditViewProfile extends AppCompatActivity {
 
 
 
-        }catch (Exception e)
 
-        {
-            //   Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-        }
 /*
         Button des_edit = (Button)findViewById(R.id.des_edit);
         des_edit.setOnClickListener(new View.OnClickListener() {
@@ -554,7 +551,7 @@ final String dadada=uri.toString();
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    mDatabase1.child(user_id1).child("image").setValue(downloadUrl.toString());
+                    mDatabase1.child(user_id1).child("images").setValue(downloadUrl.toString());
 
                     Toast.makeText(getApplicationContext(),"successfully uploaded",Toast.LENGTH_LONG).show();
                     mprogress.dismiss();
