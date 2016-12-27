@@ -89,7 +89,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         setContentView(R.layout.activity_account_user);
         mAuth = FirebaseAuth.getInstance();
 
-       swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

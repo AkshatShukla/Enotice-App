@@ -2,6 +2,7 @@ package com.rcoem.enotice.enotice_app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -87,7 +88,22 @@ public class BlockUserPlanel extends AppCompatActivity {
             }
         });
 
-        //swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                Handler handler = new Handler();
+                (new Handler()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+
+                    }
+                },1000);
+            }
+        });
 
 
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
@@ -142,8 +158,7 @@ public class BlockUserPlanel extends AppCompatActivity {
 
                         //  viewHolder.setTitle(model.getTitle());
                         //   viewHolder.setDesc(model.getDesc());
-
-                        //    viewHolder.setImage(getApplicationContext(), model.getImages());
+                        viewHolder.setImage(getApplicationContext(), model.getImages());
 
                         //    viewHolder.setDesc(model.getUsername());
 
@@ -151,7 +166,7 @@ public class BlockUserPlanel extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
 
-                                Toast.makeText(BlockUserPlanel.this,Post_Key,Toast.LENGTH_LONG).show();
+                                //Toast.makeText(BlockUserPlanel.this,Post_Key,Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(BlockUserPlanel.this,BlockContactsPanel.class);
                                 intent.putExtra("postkey",Post_Key);
                                 startActivity(intent);
