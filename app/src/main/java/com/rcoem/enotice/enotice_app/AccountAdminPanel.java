@@ -141,7 +141,7 @@ public class AccountAdminPanel extends AppCompatActivity implements  NavigationV
                         final String str = intent.getStringExtra("location");
                         viewHolder.setTitle(model.getName() +" waiting for your approval");
                         viewHolder.setName(model.getName());
-
+                        viewHolder.setTime(model.getTime());
                         //  viewHolder.setTitle(model.getTitle());
                         //   viewHolder.setDesc(model.getDesc());
 
@@ -285,6 +285,12 @@ public class AccountAdminPanel extends AppCompatActivity implements  NavigationV
             ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
             Picasso.with(context).load(image).into(post_image);
 
+        }
+
+        public void setTime(String time){
+
+            TextView post_Desc = (TextView) mView.findViewById(R.id.card_timestamp);
+            post_Desc.setText(time);
         }
 
 

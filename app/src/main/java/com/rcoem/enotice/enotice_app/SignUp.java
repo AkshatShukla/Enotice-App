@@ -30,6 +30,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -38,6 +39,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,6 +51,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rcoem.enotice.enotice_app.Animations.LoginLoadingView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.os.Handler;
@@ -78,6 +81,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
     public String repassword;
 
     private Spinner dept;
+
+    private DatePicker datePicker;
+    private Calendar calendar;
+    private TextView dateView;
+    private int year, month, day;
 
     //defining FireBase Auth object
     public FirebaseAuth firebaseAuth;
@@ -390,6 +398,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         String userdesg;
         int userdesg_firebase;
 
+        calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+
+        month = calendar.get(Calendar.MONTH) + 1;   //Month in Calendar API start with 0.
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        Toast.makeText(SignUp.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+        final String currentDate = day + "/" + month + "/" + year;
 
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users");
 
@@ -427,6 +442,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             Toast.makeText(SignUp.this,userdept_firebase,Toast.LENGTH_LONG).show();
             mDatabase1.child(user_id).child("department").setValue(userdept_firebase);
         }
+
+        mDatabase1.child(user_id).child("time").setValue(currentDate);
 
 
     }
