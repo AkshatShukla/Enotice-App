@@ -11,6 +11,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -221,6 +223,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         boolean passwordAllGood = false;
         boolean deptAllGood = false;
         boolean desgAllGood = false;
+        boolean network = false;
 
 
         mName = (EditText) findViewById(R.id.editName);
@@ -310,10 +313,21 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             desgAllGood = true;
         }
 
+        //Check Internet Connection
+        ConnectivityManager cManager = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo nInfo = cManager.getActiveNetworkInfo();
+        if(nInfo!=null && nInfo.isConnected()) {
+            network = true;
+        }
 
         //Complete SignUpAction
         if(nameAllGood && emailAllGood && passwordAllGood && deptAllGood && desgAllGood){
-            signUpOk = true;
+            if(network) {
+                signUpOk = true;
+            }
+            else {
+                Toast.makeText(this, "Please Connect to the Internet.", Toast.LENGTH_LONG).show();
+            }
         }
 
 
