@@ -97,7 +97,7 @@ public class UserNoticeStatus extends AppCompatActivity {
     }
 
     private void startjugad(String str) {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(str);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Deptposts");
         mquery =  mDatabase.orderByChild("UID").equalTo(mAuth.getCurrentUser().getUid());
         mStoarge = FirebaseStorage.getInstance().getReference();
 
@@ -126,7 +126,10 @@ public class UserNoticeStatus extends AppCompatActivity {
 
                         viewHolder.setImage(getApplicationContext(), model.getImages());
                         if(model.getApproved().equals("false")) {
-                            viewHolder.setDesc("Pending or Rejected");
+                            viewHolder.setDesc("Rejected");
+                        }
+                        else if(model.getApproved().equals("pending")){
+                            viewHolder.setDesc("Pending");
                         }
                         else{
                             viewHolder.setDesc("Approved and on Notice Board");

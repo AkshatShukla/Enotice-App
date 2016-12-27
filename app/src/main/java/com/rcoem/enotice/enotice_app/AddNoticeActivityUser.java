@@ -91,7 +91,7 @@ public class AddNoticeActivityUser extends AppCompatActivity {
         mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim());
+                mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Deptposts");
             }
 
             @Override
@@ -181,7 +181,7 @@ public class AddNoticeActivityUser extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            newPost.child("approved").setValue("false");  //Authentication is Required.
+                            newPost.child("approved").setValue("pending");  //Authentication is Required.
                             newPost.child("removed").setValue(0);         //Not removed initially.
                             newPost.child("title").setValue(title_value);
                             newPost.child("Desc").setValue(desc_value);

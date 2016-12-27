@@ -158,7 +158,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             snackbar.show();
         }*/
         //To show only the content relevant to the specific department.
-        mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(dept);
+        mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(dept).child("Deptposts");
 
         //To query and view only those messages which have been APPROVED by the authenticator.
         mquery =  mDatabaseValidContent.orderByChild("approved").equalTo("true");

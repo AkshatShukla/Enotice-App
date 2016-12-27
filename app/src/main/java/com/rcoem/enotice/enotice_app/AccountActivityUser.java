@@ -126,7 +126,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
     }
 
     private void viewNotice(String str) {
-        mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(str);
+        mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Deptposts");
 
         mquery =  mDatabaseValidContent.orderByChild("approved").equalTo("true");
 

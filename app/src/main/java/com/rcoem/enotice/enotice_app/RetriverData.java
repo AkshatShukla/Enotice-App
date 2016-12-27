@@ -34,7 +34,7 @@ public class RetriverData extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private SwipeRefreshLayout swipeRefreshLayout;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    //Query mquery;
+    Query mquery;
     private ProgressDialog mProgress;
 
     private DatabaseReference mDataBaseDepartment;
@@ -108,7 +108,8 @@ public class RetriverData extends AppCompatActivity {
     }
 
     private void viewNotices(String str) {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(str);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Deptposts");
+        mquery =  mDatabase.orderByChild("approved").equalTo("pending");
         mStoarge = FirebaseStorage.getInstance().getReference();
 
         mBlogList = (RecyclerView) findViewById(R.id.blog_recylView_list);
@@ -124,7 +125,7 @@ public class RetriverData extends AppCompatActivity {
                         BlogModel.class,
                         R.layout.blog_row,
                         BlogViewHolder.class,
-                        mDatabase
+                        mquery
                 ) {
                     @Override
                     protected void populateViewHolder(BlogViewHolder viewHolder, BlogModel model, int position) {
