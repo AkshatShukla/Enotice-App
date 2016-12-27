@@ -66,9 +66,14 @@ public class RetriverData extends AppCompatActivity {
         mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String str = dataSnapshot.child("department").getValue().toString();
-                viewNotices(str);
-                Toast.makeText(RetriverData.this,str, Toast.LENGTH_LONG).show();
+                if(dataSnapshot.hasChildren()) {
+                    String str = dataSnapshot.child("department").getValue().toString();
+                    viewNotices(str);
+                    Toast.makeText(RetriverData.this, str, Toast.LENGTH_LONG).show();
+                }
+                else {
+                    finish();
+                }
             }
 
             @Override
