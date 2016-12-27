@@ -25,6 +25,7 @@ public class AdminSinglePost extends AppCompatActivity {
     private TextView mPostTitle;
     private TextView mPostDesc;
     private TextView mUsername;
+    private Button delete;
     private ImageButton mViewImage;
     private Button Approved;
     private Button Rejected;
@@ -45,18 +46,22 @@ public class AdminSinglePost extends AppCompatActivity {
         mPostDesc = (TextView) findViewById(R.id.Post_Desc_Admin);
         mUsername = (TextView) findViewById(R.id.usernameAdmin);
         mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
+        delete = (Button) findViewById(R.id.button2);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
         mStoarge = FirebaseStorage.getInstance().getReference();
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
-                mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
-                mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
-                String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
-                Picasso.with(AdminSinglePost.this).load(imageUrl).into(mViewImage);
-                mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+
+                if (dataSnapshot.hasChildren()) {
+                    mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
+                    mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
+                    mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
+                    String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
+                    Picasso.with(AdminSinglePost.this).load(imageUrl).into(mViewImage);
+                    mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                }
             }
 
             @Override
@@ -66,7 +71,15 @@ public class AdminSinglePost extends AppCompatActivity {
 
             }
         });
-
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AdminSinglePost.this, "The notice has been Rejected and Removed", Toast.LENGTH_LONG).show();
+                mDatabase.removeValue();
+                Intent intent = new Intent(AdminSinglePost.this, AccountActivityAdmin.class);
+                startActivity(intent);
+            }
+        });
         mViewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

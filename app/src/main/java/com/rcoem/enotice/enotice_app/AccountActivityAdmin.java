@@ -127,11 +127,15 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String dept = dataSnapshot.child("department").getValue().toString().trim();
-                a = dept;
-                viewNotices(dept);
-
-                my_dept = dept;
+                if (dataSnapshot.hasChildren()) {
+                    String dept = dataSnapshot.child("department").getValue().toString().trim();
+                    a = dept;
+                    viewNotices(dept);
+                    my_dept = dept;
+                }
+                else {
+                    finish();
+                }
 
             }
 

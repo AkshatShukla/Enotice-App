@@ -110,6 +110,12 @@
                 android:layout_marginTop="1dp"
                 android:layout_weight="0.59" />
 
+            <Button
+                android:text="Delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button2" />
+
         </LinearLayout>
     </ScrollView>
 
