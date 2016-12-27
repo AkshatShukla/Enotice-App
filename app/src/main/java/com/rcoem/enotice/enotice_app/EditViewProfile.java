@@ -372,6 +372,8 @@ public class EditViewProfile extends AppCompatActivity {
                                         // edit text
                                         mprogress.setMessage("updating");
                                         mprogress.show();
+                                        final String user_id = mAuth.getCurrentUser().getUid();
+
 
                                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -380,7 +382,7 @@ public class EditViewProfile extends AppCompatActivity {
 
 
                                                 .build();
-                                        final String user_id = mAuth.getCurrentUser().getUid();
+                                     //  final  String user_id = mAuth.getCurrentUser().getUid();
 
                                         user.updateProfile(profileUpdates)
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -540,27 +542,25 @@ public class EditViewProfile extends AppCompatActivity {
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+            final String user_id1 = mAuth.getCurrentUser().getUid();
+final String dadada=uri.toString();
 
-                    .setPhotoUri(uri)
-                    .build();
-
-            user.updateProfile(profileUpdates)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                //Log.d(TAG, "User profile updated.");
-                                Toast.makeText(getApplicationContext(),"successfully uploaded",Toast.LENGTH_LONG).show();
-                                mprogress.dismiss();
-                            }
-                        }
-                    });
+            mprogress.setMessage("updating");
+            mprogress.show();
 
 
+            StorageReference filepath = mStoarge.child("Images").child(uri.getLastPathSegment());
+            filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    mDatabase1.child(user_id1).child("image").setValue(downloadUrl.toString());
 
+                    Toast.makeText(getApplicationContext(),"successfully uploaded",Toast.LENGTH_LONG).show();
+                    mprogress.dismiss();
 
-
+                }
+            });
 
 
 
@@ -578,7 +578,11 @@ public class EditViewProfile extends AppCompatActivity {
 
 
 
-            Uri selectedImage = data.getData();
+
+
+
+
+                    Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getContentResolver().query(selectedImage,
