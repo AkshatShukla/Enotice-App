@@ -44,7 +44,11 @@
         <activity android:name=".AwatingForApproval" />
         <activity android:name=".AccountAdminPanel" />
         <activity android:name=".AdminApprove" />
-        <activity android:name=".PdfUpload" />
+        <activity android:name=".PdfUpload"
+            android:label="Select a Document"></activity>
+
+
+
         <activity android:name=".pdfview" />
         <activity android:name=".PdfDownload" />
         <activity android:name=".BlockUserPlanel" />
