@@ -135,7 +135,7 @@ public class AddNoticeActivityUser extends AppCompatActivity {
                             startPosting();
                         }
                         else{
-                            Toast.makeText(AddNoticeActivityUser.this,"Contact HOD of Your Dept ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(AddNoticeActivityUser.this,"Sorry, you are not authorized to generate notices. Contact HOD of your Department.", Toast.LENGTH_LONG).show();
                         }
                     }
 
