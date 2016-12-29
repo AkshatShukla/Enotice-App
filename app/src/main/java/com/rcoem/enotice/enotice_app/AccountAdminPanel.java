@@ -139,9 +139,16 @@ public class AccountAdminPanel extends AppCompatActivity implements  NavigationV
                         final String Post_Key = getRef(position).toString();
                         Intent intent = getIntent();
                         final String str = intent.getStringExtra("location");
-                        viewHolder.setTitle(model.getName() +" waiting for your approval");
-                        viewHolder.setName(model.getName());
+                        viewHolder.setTitle(model.getName());
+                        if(model.getDEST().equals("AP")){
+                            viewHolder.setName("Rights :          Assitant Prof");
+                        }
+                        else {
+                            viewHolder.setName("Rights : Head of Department");
+                        }
+
                         viewHolder.setTime(model.getTime());
+                        viewHolder.setImage(getApplicationContext(), model.getImages());
                         //  viewHolder.setTitle(model.getTitle());
                         //   viewHolder.setDesc(model.getDesc());
 

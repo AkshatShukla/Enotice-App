@@ -13,13 +13,14 @@ public class BlogModel {
     private String name;
     private String username;
     private String time;
+    private String DEST;
 
 
 
     public BlogModel() {
     }
 
-    public BlogModel(String image, String desc,String username, String title,String approved,String name, String time) {
+    public BlogModel(String image, String desc,String username, String title,String approved,String name, String time,String DEST) {
         this.images = image;
         this.Desc = desc;
         this.approved = approved;
@@ -27,7 +28,16 @@ public class BlogModel {
         this.username=username;
         this.name = name;
         this.time = time;
+        this.DEST = DEST;
 
+    }
+
+    public String getDEST() {
+        return DEST;
+    }
+
+    public void setDEST(String DEST) {
+        this.DEST = DEST;
     }
 
     public String getTitle() {

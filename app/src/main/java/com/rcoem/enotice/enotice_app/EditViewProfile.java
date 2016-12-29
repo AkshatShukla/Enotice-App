@@ -78,12 +78,8 @@ public class EditViewProfile extends AppCompatActivity {
         mStorage = FirebaseStorage.getInstance().getReference();
         //   Bitmap bm = BitmapFactory.decodeResource(getResources(),
         //    R.drawable.profile_pic);
-        final ImageView mImage = (ImageView) findViewById(R.id.imageView);
-
         mprogress =  new ProgressDialog(this);
         //  mprogress.setMessage("loading");
-       final TextView txt_name = (TextView)findViewById(R.id.name_input);
-
         //// mprogress.show();
         String path  ="photos/"+mAuth.getCurrentUser().getUid().toString();
 //mprogress.setMessage("loading");
@@ -91,19 +87,23 @@ public class EditViewProfile extends AppCompatActivity {
         // Create a reference with an initial file path and name
         //StorageReference path = mStorage.child("images/stars.jpg");
         //StorageReference islandRef = mStorage.child(path);
-        mprogress.setMessage("loading");
-        mprogress.show();
+        try {
+            final File localFile ;
+
+            localFile = File.createTempFile("images", "jpg");
+            //  mprogress.setMessage("loading");
+            // mprogress.show();
+            //Toast.makeText(getApplicationContext(),mDatabase1.toString(),Toast.LENGTH_LONG).show();
+
             mDatabase1.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String imageUrl = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("images").getValue().toString().trim();
-                    Picasso.with(EditViewProfile.this).load(imageUrl).into(mImage);
-
                     // txt_desig.setText(dataSnapshot.getValue().toString());
                     // Toast.makeText(getApplicationContext(),dataSnapshot.getValue().toString(),Toast.LENGTH_LONG).show();
+                    TextView txt_name = (TextView)findViewById(R.id.name_input);
+                    txt_name.setText( dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("name").getValue().toString().trim());
                     String chk = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("level").getValue().toString().trim();
                     dept_disp.setText(dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("department").getValue().toString().trim());
-                    txt_name.setText(dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("name").getValue().toString().trim());
                     if(chk.equalsIgnoreCase("2"))
                     {
                         txt_desig.setText("Head of Dept.");
@@ -115,7 +115,18 @@ public class EditViewProfile extends AppCompatActivity {
                         txt_desig.setText("Assistant professor");
 
                     }
-                       mprogress.dismiss();
+                    //     mprogress.dismiss();
+                    try {
+                        ImageView circularImageView = (ImageView) findViewById(R.id.imageView);
+                        String url = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("images").getValue().toString().trim();
+                        Picasso.with(EditViewProfile.this).load(url).into(circularImageView);
+                    }
+                    catch (Exception e)
+                    {
+                       // Toast.makeText(getApplicationContext(),e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
                 }
                 // mprogress.dismiss();
 
@@ -148,8 +159,9 @@ public class EditViewProfile extends AppCompatActivity {
 
                 TextView txt_email = (TextView)findViewById(R.id.email_input);
                 txt_email.setText(user.getEmail());
-                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUrl);
-             //   mImage.setImageBitmap(bitmap);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUrl);
+                //  ImageView mImage = (ImageView) findViewById(R.id.imageView);
+                //    mImage.setImageBitmap(bitmap);
 
                 //  mprogress.dismiss();
                 final String user_id = mAuth.getCurrentUser().getUid();
@@ -210,7 +222,11 @@ public class EditViewProfile extends AppCompatActivity {
 
 
 
+        }catch (Exception e)
 
+        {
+            //   Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+        }
 /*
         Button des_edit = (Button)findViewById(R.id.des_edit);
         des_edit.setOnClickListener(new View.OnClickListener() {
@@ -379,7 +395,7 @@ public class EditViewProfile extends AppCompatActivity {
 
 
                                                 .build();
-                                     //  final  String user_id = mAuth.getCurrentUser().getUid();
+                                        //  final  String user_id = mAuth.getCurrentUser().getUid();
 
                                         user.updateProfile(profileUpdates)
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -540,7 +556,7 @@ public class EditViewProfile extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             final String user_id1 = mAuth.getCurrentUser().getUid();
-final String dadada=uri.toString();
+            final String dadada=uri.toString();
 
             mprogress.setMessage("updating");
             mprogress.show();
@@ -579,7 +595,7 @@ final String dadada=uri.toString();
 
 
 
-                    Uri selectedImage = data.getData();
+            Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getContentResolver().query(selectedImage,
@@ -595,8 +611,8 @@ final String dadada=uri.toString();
             Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
             //Bitmap  circularBitmap = ImageConverter.getRoundedCornerBitmap(bitmap, 500);
 
-            ImageView circularImageView = (ImageView)findViewById(R.id.imageView);
-            circularImageView.setImageBitmap(bitmap);
+            //ImageView circularImageView = (ImageView)findViewById(R.id.imageView);
+            // circularImageView.setImageBitmap(bitmap);
 
         }
 
