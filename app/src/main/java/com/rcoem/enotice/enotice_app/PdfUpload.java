@@ -61,6 +61,9 @@ public class PdfUpload extends AppCompatActivity {
         // Enable the Up button
       //  ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle("Select a Document");
+
+
+
         view = (LinearLayout) findViewById(R.id.view);
         mProgress  = new ProgressDialog(this);
 

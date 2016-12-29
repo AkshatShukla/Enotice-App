@@ -34,7 +34,10 @@
         <activity android:name=".Single_Post" />
         <activity android:name=".AddNoticeActivityAdmin" />
         <activity android:name=".AddNoticeActivityUser" />
-        <activity android:name=".EditViewProfile" />
+        <activity android:name=".EditViewProfile"
+            android:label="Profile"></activity>
+
+        />
         <activity android:name=".UserNoticeStatus" />
         <activity android:name=".PostViewActivity" />
         <activity android:name=".AdminSinglePost" />

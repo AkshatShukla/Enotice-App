@@ -12,8 +12,10 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +72,32 @@ public class EditViewProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_view_profile);
+
+
+
+
+
+
+        Toolbar myChildToolbar =
+                (Toolbar) findViewById(R.id.toolbar111);
+        setSupportActionBar(myChildToolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+      ab.setDisplayHomeAsUpEnabled(true);
+        ab.setTitle("Profile");
+
+
+
+
+
+
+
+
+
+
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users");
