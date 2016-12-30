@@ -58,6 +58,7 @@
                     android:text="@string/date_n_time"
                     android:layout_toEndOf="@+id/card_name" />
 
+                <!--
                 <ImageView
                     android:id="@+id/overflow_card"
                     android:layout_width="14dp"
@@ -69,7 +70,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_more_vert_white_24dp"
                     android:tint="@color/colorCardHeader"/>
-
+                -->
             </RelativeLayout>
 
             <RelativeLayout
