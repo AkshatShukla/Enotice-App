@@ -468,6 +468,14 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 txtName.setText(dataSnapshot.child("name").getValue().toString().trim());
+
+                Glide.with(getApplicationContext()).load(dataSnapshot.child("images").getValue().toString())
+                        .crossFade()
+                        .thumbnail(0.5f)
+                        .bitmapTransform(new CircleTransform(getApplicationContext()))
+                        .into(imgProfile);
+
+
             }
 
             @Override
@@ -486,11 +494,11 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                 .into(imgNavHeaderBg);
 
         // Loading profile image
-        Glide.with(this).load(R.drawable.user)
+       /* Glide.with(this).load(R.drawable.user)
                 .crossFade()
                 .thumbnail(0.5f)
                 .bitmapTransform(new CircleTransform(this))
-                .into(imgProfile);
+                .into(imgProfile);*/
 
         // showing dot next to notifications label
        // navigationView.getMenu().getItem(2).setActionView(R.layout.menu_dot);
