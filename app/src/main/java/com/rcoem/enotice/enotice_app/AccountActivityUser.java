@@ -36,6 +36,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import com.android.volley.AuthFailureError;
@@ -210,6 +212,8 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
         mquery =  mDatabaseValidContent.orderByChild("approved").equalTo("true");
 
+        //Online-Offline Syncing (only strings and not images)
+        mDatabaseValidContent.keepSynced(true);
 
         mBlogList = (RecyclerView) findViewById(R.id.blog_recylView_list);
         mBlogList.setHasFixedSize(true);
@@ -418,11 +422,22 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             post_Desc.setText(Desc);
         }
 
-        public void setImage(Context context, String image){
+        public void setImage(final Context context, final String image){
 
-            ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
-            Picasso.with(context).load(image).into(post_image);
+            final ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
+            //Picasso.with(context).load(image).into(post_image);
 
+            Picasso.with(context).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(post_image, new Callback() {
+                @Override
+                public void onSuccess() {
+                    //Do Nothing
+                }
+
+                @Override
+                public void onError() {
+                    Picasso.with(context).load(image).into(post_image);
+                }
+            });
         }
 
         public void setTime(String time){

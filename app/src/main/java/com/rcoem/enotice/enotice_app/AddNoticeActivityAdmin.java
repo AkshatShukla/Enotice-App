@@ -197,7 +197,7 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                                 }
                             });
 
-                            
+
                             departmentPush(title_value,"HOD ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
 
                         }
