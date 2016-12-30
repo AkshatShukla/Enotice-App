@@ -135,6 +135,8 @@ public class UserNoticeStatus extends AppCompatActivity {
                             viewHolder.setDesc("Approved and on Notice Board");
                         }
 
+                        viewHolder.setTime(model.getTime());
+
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -184,6 +186,11 @@ public class UserNoticeStatus extends AppCompatActivity {
             TextView post_Desc = (TextView) mView.findViewById(R.id.card_prof_name);
 
             post_Desc.setText(approved);
+        }
+        public void setTime(String time){
+
+            TextView post_Desc = (TextView) mView.findViewById(R.id.card_timestamp);
+            post_Desc.setText(time);
         }
 
 
