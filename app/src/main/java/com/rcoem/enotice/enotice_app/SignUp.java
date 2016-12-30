@@ -428,8 +428,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
         mDatabase1.child(user_id).child("block").setValue("No");
 
-        mDatabase1.child(user_id).child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/ic_launcher.png?alt=media&token=2753442a-4c8d-45a3-a6c5-0bf4257c2cc7");
-
         //Validate designation
 
         //Toast.makeText(SignUp.this,userdept,Toast.LENGTH_LONG).show();
