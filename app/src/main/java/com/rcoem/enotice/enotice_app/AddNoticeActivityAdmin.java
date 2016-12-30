@@ -140,7 +140,6 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                     }
                 });
 
-
             }
         });
     }
@@ -198,6 +197,8 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                                 }
                             });
 
+                            
+                            departmentPush(title_value,"HOD ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
 
                         }
 
@@ -207,7 +208,7 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                         }
                     });
 
-                    departmentPush(title_value,"HOD",Dept,downloadUrl.toString());
+
                     mProgress.dismiss();
 
                     startActivity(new Intent(AddNoticeActivityAdmin.this , AccountActivityAdmin.class));
