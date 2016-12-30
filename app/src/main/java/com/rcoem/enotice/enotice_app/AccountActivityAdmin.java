@@ -114,9 +114,6 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
     String my_dept = "";
 
-    //URL to RegisterDevice.php
-    private static final String URL_REGISTER_DEVICE = "http://polarisrcoem.in/RegisterDevice.php";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,7 +192,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             return;
         }
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REGISTER_DEVICE,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_REGISTER_DEVICE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
