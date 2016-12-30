@@ -132,7 +132,9 @@ public class AddNoticeActivityUser extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String block = dataSnapshot.child("block").getValue().toString().trim();
                         if(block.equals("No")){
-                            startPosting();
+
+                            String Dept = dataSnapshot.child("department").getValue().toString().trim();
+                            startPosting(Dept);
                         }
                         else{
                             Toast.makeText(AddNoticeActivityUser.this,"Sorry, you are not authorized to generate notices. Contact HOD of your Department.", Toast.LENGTH_LONG).show();
@@ -149,7 +151,7 @@ public class AddNoticeActivityUser extends AppCompatActivity {
             }
         });
     }
-    private void startPosting() {
+    private void startPosting(final String Dept) {
         final String title_value =  mPostTitle.getText().toString().trim();
         final String desc_value = mPostDesc.getText().toString().trim();
         final String user_id =  mAuth.getCurrentUser().getUid();
@@ -186,6 +188,8 @@ public class AddNoticeActivityUser extends AppCompatActivity {
                             newPost.child("title").setValue(title_value);
                             newPost.child("Desc").setValue(desc_value);
                             newPost.child("time").setValue(currentDate);
+                            newPost.child("department").setValue(Dept);
+                            newPost.child("email").setValue(mAuth.getCurrentUser().getEmail());
                             newPost.child("UID").setValue(mAuth.getCurrentUser().getUid());
                             newPost.child("images").setValue(downloadUrl.toString());
                             newPost.child("username").setValue(dataSnapshot.child("name").getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {

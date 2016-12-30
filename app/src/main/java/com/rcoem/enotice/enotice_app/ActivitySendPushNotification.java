@@ -291,7 +291,7 @@ public class ActivitySendPushNotification extends AppCompatActivity implements R
             case R.id.radioButtonDept:
                 isSendAllChecked = 2;
                 spinner.setEnabled(false);
-                spinner.setVisibility(View.GONE);
+                //spinner.setVisibility(View.GONE);
                 break;
         }
     }

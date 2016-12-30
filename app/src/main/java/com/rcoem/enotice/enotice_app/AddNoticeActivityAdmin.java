@@ -22,6 +22,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +44,8 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class AddNoticeActivityAdmin extends AppCompatActivity {
@@ -119,13 +126,25 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDataBaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+                mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String Dept = dataSnapshot.child("department").getValue().toString().trim();
+                        startPosting(Dept);
+                    }
 
-                startPosting();
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }
         });
     }
-    private void startPosting() {
+    private void startPosting(final String Dept) {
         final String title_value =  mPostTitle.getText().toString().trim();
         final String desc_value = mPostDesc.getText().toString().trim();
         final String user_id =  mAuth.getCurrentUser().getUid();
@@ -163,6 +182,8 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                             newPost.child("title").setValue(title_value);
                             newPost.child("time").setValue(currentDate);
                             newPost.child("Desc").setValue(desc_value);
+                            newPost.child("email").setValue(mAuth.getCurrentUser().getEmail());
+                            newPost.child("department").setValue(Dept);
                             newPost.child("images").setValue(downloadUrl.toString());
                             newPost.child("username").setValue(dataSnapshot.child("name").getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -176,6 +197,8 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                                     }
                                 }
                             });
+
+
                         }
 
                         @Override
@@ -184,7 +207,7 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                         }
                     });
 
-
+                    departmentPush(title_value,"HOD",Dept,downloadUrl.toString());
                     mProgress.dismiss();
 
                     startActivity(new Intent(AddNoticeActivityAdmin.this , AccountActivityAdmin.class));
@@ -193,6 +216,46 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
             });
 
         }
+    }
+
+    private void departmentPush(final String t,final String m,final String dept,final String i){
+        final String title = t;
+        final String message = m;
+        final String image = i;
+        final String email = "dhanajay@gmail.com";
+        //progressDialog.setMessage("Sending Dept Push");
+        // progressDialog.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_DEPT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // progressDialog.dismiss();
+
+                        Toast.makeText(AddNoticeActivityAdmin.this, response, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("title", title);
+                params.put("message", message);
+
+                if (!TextUtils.isEmpty(image))
+                    params.put("image", image);
+
+                params.put("email", email);
+                params.put("dept",dept);
+                return params;
+            }
+        };
+
+        MyVolley.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     @Override
