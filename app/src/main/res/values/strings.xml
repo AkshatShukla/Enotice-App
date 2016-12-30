@@ -104,4 +104,8 @@
     <!-- FAB Strings -->
     <string name="fab_add_notice">Add a Notice</string>
     <string name="fab_add_document">Add a Document</string>
+
+
+    <string name="FCM_PREF">com.rcoem.enotice.enotice_app.fcm_pref</string>
+    <string name="FCM_TOKEN">com.rcoem.enotice.enotice_app.fcm_token</string>
 </resources>

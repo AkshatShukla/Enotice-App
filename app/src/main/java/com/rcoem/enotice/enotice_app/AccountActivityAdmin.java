@@ -2,6 +2,7 @@ package com.rcoem.enotice.enotice_app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -48,6 +49,20 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AccountActivityAdmin extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
 
@@ -98,12 +113,16 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
     long back_pressed;
 
     String my_dept = "";
+
+    //URL to RegisterDevice.php
+    private static final String URL_REGISTER_DEVICE = "http://polarisrcoem.in/RegisterDevice.php";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_admin);
 
-
+        //SwipeRefresh Code
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -123,6 +142,24 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("posts");
         mAuth = FirebaseAuth.getInstance();
         mDatabaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        mDatabaseDepartment.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()) {
+                    String dept = dataSnapshot.child("department").getValue().toString();
+                    sendTokenToServer(dept);
+                }
+                else {
+                    finish();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         mDatabaseDepartment.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -145,6 +182,51 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             }
         });
 
+    }
+
+    private void sendTokenToServer(final String dept) {
+        mAuth = FirebaseAuth.getInstance();
+        //getting token from shared preferences
+        final String token = SharedPrefManager.getInstance(this).getDeviceToken();
+        final String email = mAuth.getCurrentUser().getEmail();
+
+        if (token == null) {
+            Toast.makeText(this, "Token not generated", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REGISTER_DEVICE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //progressDialog.dismiss();
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            Toast.makeText(AccountActivityAdmin.this, obj.getString("message"), Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //progressDialog.dismiss();
+                        Toast.makeText(AccountActivityAdmin.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("token", token);
+                params.put("dept",dept);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
 
@@ -464,6 +546,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             Snackbar snackbar = Snackbar
                     .make(di, "Coded with love by CSE, RCOEM", Snackbar.LENGTH_LONG);
             snackbar.show();
+            startActivity(new Intent(getApplicationContext(),ActivitySendPushNotification.class));
         }
         else if (id == R.id.ViewUsers) {
             //  Toast.makeText(AccountActivityAdmin.this, R.string.sign_out, Toast.LENGTH_LONG).show();

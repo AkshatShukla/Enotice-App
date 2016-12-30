@@ -38,6 +38,20 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,12 +97,17 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
     private DatabaseReference mDatabaseValidContent;
     Query mquery;
     long back_pressed;
+
+    //URL to RegisterDevice.php
+    private static final String URL_REGISTER_DEVICE = "http://polarisrcoem.in/RegisterDevice.php";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_user);
         mAuth = FirebaseAuth.getInstance();
 
+        //SwipeRefresh Code
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -108,6 +127,21 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
+
+        mDatabase1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String dept = dataSnapshot.child("department").getValue().toString();
+                sendTokenToServer(dept);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         mDatabase1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -123,6 +157,55 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         });
 
 
+    }
+
+    private void sendTokenToServer(final String dept) {
+        mAuth = FirebaseAuth.getInstance();
+        //getting token from shared preferences
+        final String token = SharedPrefManager.getInstance(this).getDeviceToken();
+        final String email = mAuth.getCurrentUser().getEmail();
+
+        //String Str1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid()).child("department").toString();
+
+        //Toast.makeText(this, dept, Toast.LENGTH_LONG).show();
+
+        if (token == null) {
+            Toast.makeText(this, "Token not generated", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_REGISTER_DEVICE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //progressDialog.dismiss();
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            Toast.makeText(AccountActivityUser.this, obj.getString("message"), Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //progressDialog.dismiss();
+                        Toast.makeText(AccountActivityUser.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("token", token);
+                params.put("dept", dept);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     private void viewNotice(String str) {
@@ -437,6 +520,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             Snackbar snackbar = Snackbar
                     .make(di, "Coded with love by CSE, RCOEM", Snackbar.LENGTH_LONG);
             snackbar.show();
+            startActivity(new Intent(getApplicationContext(),ActivitySendPushNotification.class));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_user);
         drawer.closeDrawer(GravityCompat.START);
