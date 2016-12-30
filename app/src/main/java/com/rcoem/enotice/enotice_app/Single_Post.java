@@ -171,8 +171,8 @@ public class Single_Post extends AppCompatActivity {
 
                             //AlertDialog alert11 = builder1.create();
                             //alert11.show();
-                            //Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
-                            // startActivity(intent);
+                            Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
+                            startActivity(intent);
                             finish();
                         }
                     }
