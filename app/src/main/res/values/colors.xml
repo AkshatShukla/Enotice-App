@@ -37,4 +37,6 @@
     <color name="colorBg">#c76706</color>
     <color name="colorWhite">#FFF</color>
     <color name="colorGrey">#D1D1D1</color>
+
+    <color name="unblocked">#43A047</color>
 </resources>

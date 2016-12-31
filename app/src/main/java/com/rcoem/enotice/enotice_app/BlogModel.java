@@ -14,13 +14,16 @@ public class BlogModel {
     private String username;
     private String time;
     private String DEST;
+    private String block;
 
 
 
     public BlogModel() {
     }
 
-    public BlogModel(String image, String desc,String username, String title,String approved,String name, String time,String DEST) {
+
+
+    public BlogModel(String image, String desc, String username, String title, String approved, String name, String time, String DEST, String block) {
         this.images = image;
         this.Desc = desc;
         this.approved = approved;
@@ -29,6 +32,7 @@ public class BlogModel {
         this.name = name;
         this.time = time;
         this.DEST = DEST;
+        this.block = block;
 
     }
 
@@ -86,5 +90,13 @@ public class BlogModel {
     public String getTime() {return time;}
 
     public void setTime(String time) {this.time = time;}
+
+    public String getBlock() {
+        return block;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
 
 }

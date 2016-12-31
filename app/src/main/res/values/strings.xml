@@ -62,6 +62,7 @@
     <string name="date_n_time">24 Sep 11:00am</string>
     <string name="notice_title">The title or description.</string>
     <string name="department">Computer Science and Engineering</string>
+    <string name="designation">Assistant Professor</string>
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

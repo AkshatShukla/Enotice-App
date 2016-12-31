@@ -515,7 +515,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                 .into(imgProfile);*/
 
         // showing dot next to notifications label
-       // navigationView.getMenu().getItem(2).setActionView(R.layout.menu_dot);
+        //navigationView.getMenu().getItem(2).setActionView(R.layout.menu_dot);
     }
 
     @Override

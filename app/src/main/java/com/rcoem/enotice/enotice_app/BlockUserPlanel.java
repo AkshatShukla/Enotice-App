@@ -6,25 +6,20 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,7 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -139,28 +133,25 @@ public class BlockUserPlanel extends AppCompatActivity {
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
         //  mProgress.setMessage("Uploading Details");
         //   mProgress.show();
-        FirebaseRecyclerAdapter<BlogModel,AccountAdminPanel.BlogViewHolder> firebaseRecyclerAdapter =new
-                FirebaseRecyclerAdapter<BlogModel, AccountAdminPanel.BlogViewHolder>(
+        FirebaseRecyclerAdapter<BlogModel,BlogViewHolder> firebaseRecyclerAdapter =new
+                FirebaseRecyclerAdapter<BlogModel, BlogViewHolder>(
 
                         BlogModel.class,
                         R.layout.block_view,
-                        AccountAdminPanel.BlogViewHolder.class,
+                        BlogViewHolder.class,
                         mquery
                 ) {
                     @Override
-                    protected void populateViewHolder(AccountAdminPanel.BlogViewHolder viewHolder, BlogModel model, int position) {
+                    protected void populateViewHolder(BlogViewHolder viewHolder, BlogModel model, int position) {
 
                         final String Post_Key = getRef(position).toString();
                         Intent intent = getIntent();
                         final String str = intent.getStringExtra("location");
-                        viewHolder.setTitle(model.getName());
-                      //  viewHolder.setName(model.getName());
 
-                        //  viewHolder.setTitle(model.getTitle());
-                        //   viewHolder.setDesc(model.getDesc());
+                        viewHolder.setName(model.getName());
                         viewHolder.setImage(getApplicationContext(), model.getImages());
-
-                        //    viewHolder.setDesc(model.getUsername());
+                        viewHolder.setDesg(model.getDEST());
+                        viewHolder.setBlockStatus(model.getBlock());
 
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -187,11 +178,8 @@ public class BlockUserPlanel extends AppCompatActivity {
 
         // swipeRefreshLayout.setOnRefreshListener(this);
 
-        /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-*/
+
+
 
 
 
@@ -241,36 +229,50 @@ public class BlockUserPlanel extends AppCompatActivity {
             super(itemView);
             mView = itemView;
         }
-        public void setUsername(String username){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_prof_name);
-            post_Desc.setText(username);
-        }
-        public void setTitle(String title){
-
-            TextView post_title = (TextView) mView.findViewById(R.id.title_card);
-            post_title.setText(title);
-        }
-
-        public void setDesc(String Desc){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_name);
-            post_Desc.setText(Desc);
-        }
-        public void setName(String name){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_name);
-            post_Desc.setText(name);
-        }
 
         public void setImage(Context context, String image){
 
-            ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
-            Picasso.with(context).load(image).into(post_image);
+            ImageView post_image = (ImageView) mView.findViewById(R.id.prof_pic_block_view);
+            Glide.with(context).load(image)
+                    .crossFade()
+                    .thumbnail(0.5f)
+                    .bitmapTransform(new CircleTransform(context))
+                    .into(post_image);
 
         }
 
+        public void setName(String name){
 
+            TextView post_Desc = (TextView) mView.findViewById(R.id.name_block_view);
+            post_Desc.setText(name);
+        }
+
+        public void setDesg(String Desg){
+
+            String desg;
+
+            TextView post_Desc = (TextView) mView.findViewById(R.id.designation_block_view);
+            if(Desg.equals("AP")){
+                desg = "Assistant Professor";
+            }
+            else{
+                desg = "Head of Department";
+            }
+            post_Desc.setText(desg);
+        }
+
+        public void setBlockStatus(String status){
+
+            LinearLayout li_status = (LinearLayout)mView.findViewById(R.id.li_block_status);
+
+            if(status.equals("No")){
+                li_status.setBackgroundResource(R.drawable.unblock_circle);
+
+            }
+            else{
+                li_status.setBackgroundResource(R.drawable.blocked_circle);
+            }
+        }
 
     }
 
