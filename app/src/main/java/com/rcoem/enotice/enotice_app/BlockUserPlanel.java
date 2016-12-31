@@ -161,6 +161,7 @@ public class BlockUserPlanel extends AppCompatActivity {
                                 Intent intent = new Intent(BlockUserPlanel.this,BlockContactsPanel.class);
                                 intent.putExtra("postkey",Post_Key);
                                 startActivity(intent);
+                                finish();
 
 
                             }
