@@ -119,6 +119,7 @@ public class UserNoticeStatus extends AppCompatActivity {
 
                         final String Post_Key = getRef(position).toString();
                         Intent intent = getIntent();
+                        final String approved = model.getApproved();
                         final String str = intent.getStringExtra("location");
                         //   viewHolder.setDesc(model.getUsername());
                         viewHolder.setTitle(model.getTitle());
@@ -141,13 +142,23 @@ public class UserNoticeStatus extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
 
+                              if (approved.equals("false")){
+                                  Toast.makeText(UserNoticeStatus.this,"Rejected Activity",Toast.LENGTH_LONG).show();
+                                  Intent intent = new Intent(UserNoticeStatus.this,UserRejectSinglePost.class);
+                                  intent.putExtra("postkey",Post_Key);
+                                  startActivity(intent);
+                                  finish();
 
-                                Toast.makeText(UserNoticeStatus.this,Post_Key,Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(UserNoticeStatus.this,UserStatusViewSinglePost.class);
-                                intent.putExtra("postkey",Post_Key);
-                                startActivity(intent);
-                                //intent.putExtra("Post_key",str);
-                                //  startActivity(intent);
+                              }
+                                else {
+                                  Toast.makeText(UserNoticeStatus.this, Post_Key, Toast.LENGTH_LONG).show();
+                                  Intent intent = new Intent(UserNoticeStatus.this, UserStatusViewSinglePost.class);
+                                  intent.putExtra("postkey", Post_Key);
+                                  startActivity(intent);
+                                  finish();
+                                  //intent.putExtra("Post_key",str);
+                                  //  startActivity(intent);
+                              }
 
                             }
                         });

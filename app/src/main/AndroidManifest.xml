@@ -10,12 +10,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".EnoticeApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".EnoticeApp"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -35,9 +35,9 @@
         <activity android:name=".Single_Post" />
         <activity android:name=".AddNoticeActivityAdmin" />
         <activity android:name=".AddNoticeActivityUser" />
-        <activity android:name=".EditViewProfile"
-            android:label="Profile"></activity>
-
+        <activity
+            android:name=".EditViewProfile"
+            android:label="Profile" />
         />
         <activity android:name=".UserNoticeStatus" />
         <activity android:name=".PostViewActivity" />
@@ -48,30 +48,30 @@
         <activity android:name=".AwatingForApproval" />
         <activity android:name=".AccountAdminPanel" />
         <activity android:name=".AdminApprove" />
-        <activity android:name=".PdfUpload"
-            android:label="Select a Document"></activity>
-
+        <activity
+            android:name=".PdfUpload"
+            android:label="Select a Document" />
         <activity android:name=".pdfview" />
         <activity android:name=".PdfDownload" />
         <activity android:name=".BlockUserPlanel" />
         <activity android:name=".BlockContactsPanel" />
         <activity android:name=".CrossDept" />
         <activity android:name=".AccountCrossDept" />
-        <activity android:name=".ActivitySendPushNotification"></activity>
+        <activity android:name=".ActivitySendPushNotification" />
 
         <!-- Services -->
-        <service
-            android:name=".MyFirebaseInstanceIDService">
+        <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".MyFirebaseMessagingService">
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".UserRejectSinglePost"></activity>
     </application>
 
 </manifest>

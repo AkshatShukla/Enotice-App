@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,12 +20,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-public class UserStatusViewSinglePost extends AppCompatActivity {
+public class UserRejectSinglePost extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private TextView mPostTitle;
     private TextView mPostDesc;
     private TextView mUsername;
-    private TextView mMsg;
+    private Button delete;
     private ImageButton mViewImage;
     private Button Approved;
     private Button Rejected;
@@ -32,54 +33,52 @@ public class UserStatusViewSinglePost extends AppCompatActivity {
     private Uri mImageUri = null;
     private StorageReference mStoarge;
     private boolean process;
-
     Toolbar mActionBarToolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_status_view_single_post);
-        Intent intent = getIntent();
-        final String str = intent.getStringExtra("postkey");
-
+        setContentView(R.layout.activity_user_reject_single_post);
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        mPostTitle = (TextView) findViewById(R.id.Post_title) ;
-        mMsg = (TextView) findViewById(R.id.textView3) ;
-        mPostDesc = (TextView) findViewById(R.id.Post_Desc);
-        mUsername = (TextView) findViewById(R.id.username);
-        mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonUser);
+        Intent intent = getIntent();
+        final String str = intent.getStringExtra("postkey");
+        mPostTitle = (TextView) findViewById(R.id.Post_title_Admin) ;
+        mPostDesc = (TextView) findViewById(R.id.Post_Desc_Admin);
+        mUsername = (TextView) findViewById(R.id.usernameAdmin);
+        mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
+        delete = (Button) findViewById(R.id.button2);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
         mStoarge = FirebaseStorage.getInstance().getReference();
-
-
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChildren()) {
+
+                if (dataSnapshot.hasChildren()
+                        ) {
                     mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
-                    String m;
-                    if (dataSnapshot.child("approved").getValue().toString().trim().equals("true")) {
-                        m = "Approved and on Notice Board";
-                    } else {
-                        m = "Pending or Rejected";
-                    }
-                    mMsg.setText("Your following post is " + m);
                     mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
                     mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
                     String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
-                    Picasso.with(UserStatusViewSinglePost.this).load(imageUrl).into(mViewImage);
+                    Picasso.with(UserRejectSinglePost.this).load(imageUrl).into(mViewImage);
                     mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
-
                 }
-
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+
+
+            }
+        });
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(UserRejectSinglePost.this, "User Notice Removed", Toast.LENGTH_LONG).show();
+                mDatabase.removeValue();
+                Intent intent = new Intent(UserRejectSinglePost.this, AccountActivityUser.class);
+                startActivity(intent);
             }
         });
         mViewImage.setOnClickListener(new View.OnClickListener() {
@@ -88,8 +87,13 @@ public class UserStatusViewSinglePost extends AppCompatActivity {
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
-                        viewImage(imageUrl);
+                        if(dataSnapshot.hasChildren()) {
+                            String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
+                            viewImage(imageUrl);
+                        }
+                        else{
+                            finish();
+                        }
                     }
 
                     @Override
@@ -104,7 +108,7 @@ public class UserStatusViewSinglePost extends AppCompatActivity {
 
     private void viewImage(String imageUrl) {
         // Toast.makeText(AdminSinglePost.this,imageUrl, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(UserStatusViewSinglePost.this,fullScreenImage.class);
+        Intent intent = new Intent(UserRejectSinglePost.this,fullScreenImage.class);
         intent.putExtra("imageUrl",imageUrl);
         startActivity(intent);
     }
