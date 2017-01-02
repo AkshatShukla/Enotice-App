@@ -153,6 +153,7 @@ public class PdfUpload extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
                                 newPost.child("link").setValue(downloadUrl.toString());
+                                newPost.child("approved").setValue("true");
                                 newPost.child("title").setValue(okk);
                                 newPost.child("username").setValue(dataSnapshot.child("name").getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
