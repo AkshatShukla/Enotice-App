@@ -222,6 +222,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                 params.put("email", email);
                 params.put("token", token);
                 params.put("dept",dept);
+                params.put("post","HOD");
                 return params;
             }
         };

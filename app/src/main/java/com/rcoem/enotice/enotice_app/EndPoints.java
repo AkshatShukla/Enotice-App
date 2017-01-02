@@ -10,5 +10,7 @@ public class EndPoints {
     public static final String URL_SEND_MULTIPLE_PUSH = "http://polarisrcoem.in/sendMultiplePush.php";
     public static final String URL_FETCH_DEVICES = "http://polarisrcoem.in/GetRegisteredDevices.php";
 
+
     public static final String URL_SEND_SINGLE_PUSH_DEPT = "http://polarisrcoem.in/sendSinglePushDept.php";
+    public static final String URL_SEND_SINGLE_PUSH_HOD = "http://polarisrcoem.in/sendSinglePushHOD.php";
 }

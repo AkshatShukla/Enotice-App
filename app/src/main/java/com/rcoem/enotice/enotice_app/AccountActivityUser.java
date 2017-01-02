@@ -200,6 +200,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
                 params.put("email", email);
                 params.put("token", token);
                 params.put("dept", dept);
+                params.put("post","AP");
                 return params;
             }
         };

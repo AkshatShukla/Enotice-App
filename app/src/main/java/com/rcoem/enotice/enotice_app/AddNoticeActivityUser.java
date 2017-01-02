@@ -22,6 +22,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +44,8 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class AddNoticeActivityUser extends AppCompatActivity {
@@ -204,6 +211,8 @@ public class AddNoticeActivityUser extends AppCompatActivity {
                                     }
                                 }
                             });
+                            departmentPush(title_value,"Notice For Approval send by ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
+
                         }
 
                         @Override
@@ -214,12 +223,52 @@ public class AddNoticeActivityUser extends AppCompatActivity {
 
                     mProgress.dismiss();
 
+
                     startActivity(new Intent(AddNoticeActivityUser.this , AccountActivityUser.class));
 
                 }
             });
 
         }
+    }
+    private void departmentPush(final String t,final String m,final String dept,final String i){
+        final String title = t;
+        final String message = m;
+        final String image = i;
+        final String email = "dhanajay@gmail.com";
+        //progressDialog.setMessage("Sending Dept Push");
+        // progressDialog.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_HOD,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // progressDialog.dismiss();
+
+                        Toast.makeText(AddNoticeActivityUser.this, response, Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("title", title);
+                params.put("message", message);
+
+                if (!TextUtils.isEmpty(image))
+                    params.put("image", image);
+
+                params.put("email", email);
+                params.put("dept",dept);
+                return params;
+            }
+        };
+
+        MyVolley.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     @Override
