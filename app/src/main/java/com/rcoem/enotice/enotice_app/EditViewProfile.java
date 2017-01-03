@@ -77,7 +77,7 @@ public class EditViewProfile extends AppCompatActivity {
 
 
 
-
+/*
         Toolbar myChildToolbar =
                 (Toolbar) findViewById(R.id.toolbar111);
         setSupportActionBar(myChildToolbar);
@@ -88,6 +88,20 @@ public class EditViewProfile extends AppCompatActivity {
         // Enable the Up button
       ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle("Profile");
+        */
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar111);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        getSupportActionBar().setTitle("Profile");
+
 
 
 

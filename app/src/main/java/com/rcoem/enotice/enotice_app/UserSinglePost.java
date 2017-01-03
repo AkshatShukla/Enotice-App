@@ -30,14 +30,28 @@ public class UserSinglePost extends AppCompatActivity {
     private Uri mImageUri = null;
     private StorageReference mStoarge;
     private boolean process;
-    Toolbar mActionBarToolbar;
+    //Toolbar mActionBarToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_single_post);
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("Post");
+     //   mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+      //  mActionBarToolbar.setTitle("Post");
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        //getSupportActionBar().setTitle("Post");
+
+
         Intent intent = getIntent();
         final String str = intent.getStringExtra("postkey");
 
@@ -59,7 +73,7 @@ public class UserSinglePost extends AppCompatActivity {
                     mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
                     String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
                     Picasso.with(UserSinglePost.this).load(imageUrl).into(mViewImage);
-                    mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                    toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                 } else {
                     finish();
                 }
