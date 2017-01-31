@@ -157,14 +157,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                     public void run() {
                         loginView.setStatus(LoginLoadingView.STATUS_LOGIN_SUCCESS);
                     }
-                }, 8000);
+                }, 6000);
 
                 loginView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         TransitionManager.go(mSceneMain, new ChangeBounds().setDuration(mDuration).setInterpolator(new DecelerateInterpolator()));
                     }
-                }, 10000);
+                }, 8000);
 
 
             }
@@ -399,7 +399,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                         Toast.makeText(SignUp.this,"",Toast.LENGTH_LONG).show();
                     }
                 }
-            }, 4000);
+            }, 3500);
 
 
 

@@ -211,7 +211,7 @@ public class AddNoticeActivityUser extends AppCompatActivity {
                                     }
                                 }
                             });
-                            departmentPush(title_value,"Notice For Approval send by ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
+                            departmentPush(title_value,"Notice For Approval sent by ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
 
                         }
 

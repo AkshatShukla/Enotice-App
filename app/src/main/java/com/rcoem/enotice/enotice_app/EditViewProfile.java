@@ -142,31 +142,30 @@ public class EditViewProfile extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // txt_desig.setText(dataSnapshot.getValue().toString());
                     // Toast.makeText(getApplicationContext(),dataSnapshot.getValue().toString(),Toast.LENGTH_LONG).show();
-                    TextView txt_name = (TextView)findViewById(R.id.name_input);
-                    txt_name.setText( dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("name").getValue().toString().trim());
-                    String chk = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("level").getValue().toString().trim();
-                    dept_disp.setText(dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("department").getValue().toString().trim());
-                    if(chk.equalsIgnoreCase("2"))
-                    {
-                        txt_desig.setText("Head of Dept.");
+                    if(dataSnapshot.hasChildren()) {
+                        TextView txt_name = (TextView) findViewById(R.id.name_input);
+                        txt_name.setText(dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("name").getValue().toString().trim());
+                        String chk = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("level").getValue().toString().trim();
+                        dept_disp.setText(dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("department").getValue().toString().trim());
+                        if (chk.equalsIgnoreCase("2")) {
+                            txt_desig.setText("Head of Dept.");
 
-                    }
-                    else
-                    if(chk.equalsIgnoreCase("1"))
-                    {
-                        txt_desig.setText("Assistant professor");
+                        } else if (chk.equalsIgnoreCase("1")) {
+                            txt_desig.setText("Assistant professor");
 
+                        }
+                        //     mprogress.dismiss();
+                        try {
+                            ImageView circularImageView = (ImageView) findViewById(R.id.imageView);
+                            String url = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("images").getValue().toString().trim();
+                            Picasso.with(EditViewProfile.this).load(url).into(circularImageView);
+                        } catch (Exception e) {
+                            // Toast.makeText(getApplicationContext(),e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
                     }
-                    //     mprogress.dismiss();
-                    try {
-                        ImageView circularImageView = (ImageView) findViewById(R.id.imageView);
-                        String url = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("images").getValue().toString().trim();
-                        Picasso.with(EditViewProfile.this).load(url).into(circularImageView);
-                    }
-                    catch (Exception e)
-                    {
-                       // Toast.makeText(getApplicationContext(),e.getMessage().toString(),Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
+                    else {
+                        finish();
                     }
 
                 }
