@@ -15,3 +15,4 @@ app/src/main/res/layout/signup.xml
 app/build.gradle
 app/src/main/res/drawable/fab_label_background.xml
 .idea/modules.xml
+.idea/inspectionProfiles/profiles_settings.xml

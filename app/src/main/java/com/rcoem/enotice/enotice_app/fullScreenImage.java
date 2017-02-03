@@ -9,18 +9,24 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 public class fullScreenImage extends AppCompatActivity {
 
     private ImageView mViewImage;
+    PhotoViewAttacher mAttacher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_screen_image);
         Intent intent = getIntent();
         final String str = intent.getStringExtra("imageUrl");
-        //Toast.makeText(fullScreenImage.this,str, Toast.LENGTH_LONG).show();
+
         mViewImage = (ImageView) findViewById(R.id.FullScreenImageView);
         Picasso.with(fullScreenImage.this).load(str).into(mViewImage);
+
+        //PhotoViewAttacher handles all the gesture zooming functionality
+        mAttacher = new PhotoViewAttacher(mViewImage);
     }
 
     @Override
