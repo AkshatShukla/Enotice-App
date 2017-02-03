@@ -66,7 +66,19 @@ public class Single_Post extends AppCompatActivity {
         mStoarge = FirebaseStorage.getInstance().getReference();
         mPostDesc.setText(str);
 
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        //mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
 
         final AlertDialog.Builder builder1 = new AlertDialog.Builder(Single_Post.this);
@@ -84,6 +96,7 @@ public class Single_Post extends AppCompatActivity {
                             String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
                             Picasso.with(Single_Post.this).load(imageUrl).into(mViewImage);
                             //mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                            toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                         }
                     else {
                             finish();
