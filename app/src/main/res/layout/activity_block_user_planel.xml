@@ -40,4 +40,7 @@
 
     </LinearLayout>
 
+    <!-- Bottom Sheet Content -->
+    <include layout="@layout/content_bottom_sheet" />
+
 </android.support.design.widget.CoordinatorLayout>

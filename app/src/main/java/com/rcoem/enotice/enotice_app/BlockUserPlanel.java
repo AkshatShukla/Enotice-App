@@ -3,6 +3,8 @@ package com.rcoem.enotice.enotice_app;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -13,11 +15,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -28,6 +32,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.rm.rmswitch.RMSwitch;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -57,10 +63,24 @@ public class BlockUserPlanel extends AppCompatActivity {
 
     FirebaseAuth mAuth;
 
+    BottomSheetBehavior bottomSheetBehavior ;
+
+    BottomSheetDialog bottomSheetDialog ;
+
+    private TextView mPostTitle;
+    private DatabaseReference mDatabase;
     DrawerLayout di;
+
+    private ImageView circularImageView;
+
+    private RMSwitch mSwitch;
+    private boolean process;
+    private String val;
+
 
     Toolbar mActionBarToolbar;
     private DatabaseReference mDatabaseValidContent;
+
     Query mquery;
     long back_pressed;
     @Override
@@ -116,8 +136,8 @@ public class BlockUserPlanel extends AppCompatActivity {
             }
         });
 
-
     }
+
 
     private void viewNotice(String str) {
         mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -127,6 +147,8 @@ public class BlockUserPlanel extends AppCompatActivity {
         }
         mquery =  mDatabaseValidContent.orderByChild("department").equalTo(sup);
 
+
+        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.RelativeLayoutSheet));
 
         mBlogList = (RecyclerView) findViewById(R.id.blog_recylView_list);
         mBlogList.setHasFixedSize(true);
@@ -157,70 +179,120 @@ public class BlockUserPlanel extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
 
+                                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(BlockUserPlanel.this);
+
+                                View view1 = getLayoutInflater().inflate(R.layout.content_bottom_sheet, null);
+
+                                view1.setVisibility(View.VISIBLE);
+                                mPostTitle = (TextView) view1.findViewById(R.id.user_name1);
+
+                                circularImageView = (ImageView) view1.findViewById(R.id.imageView);
+
+                                mSwitch = (RMSwitch) view1.findViewById(R.id.toggleBtn);
+
+                                bottomSheetDialog.setContentView(view1);
+
+                                mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(Post_Key);
+
+                                mDatabase.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        mPostTitle.setText(dataSnapshot.child("name").getValue().toString().trim());
+                                        String url = dataSnapshot.child("images").getValue().toString().trim();
+                                        Picasso.with(BlockUserPlanel.this).load(url).into(circularImageView);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                                process = true;
+                                mSwitch.setChecked(false);
+                                mDatabase.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                            val = dataSnapshot.child("block").getValue().toString().trim();
+                                            if (val.equals("No")) {
+                                                mSwitch.setChecked(false);
+                                            }
+                                            else {
+                                                mSwitch.setChecked(true);
+                                            }
+                                        }
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                                // Add a Switch state observer
+                                mSwitch.addSwitchObserver(new RMSwitch.RMSwitchObserver() {
+                                    @Override
+                                    public void onCheckStateChange(RMSwitch switchView, boolean isChecked) {
+
+                                        if (!isChecked) {
+                                            mDatabase.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    if(process) {
+                                                        mDatabase.child("block").setValue("No");
+                                                        process = false;
+
+                                                        Toast.makeText(BlockUserPlanel.this, "User Has been Unblocked", Toast.LENGTH_LONG).show();
+
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
+
+                                        else {
+                                            mDatabase.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    if(process) {
+                                                        mDatabase.child("block").setValue("Yes");
+                                                        process = false;
+                                                        mSwitch.setChecked(true);
+                                                        Toast.makeText(BlockUserPlanel.this, "User Has been Blocked", Toast.LENGTH_LONG).show();
+
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+
+                                bottomSheetDialog.show();
                                 //Toast.makeText(BlockUserPlanel.this,Post_Key,Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(BlockUserPlanel.this,BlockContactsPanel.class);
-                                intent.putExtra("postkey",Post_Key);
-                                startActivity(intent);
-                                finish();
+                                //Intent intent = new Intent(BlockUserPlanel.this,BlockContactsPanel.class);
+                                //intent.putExtra("postkey",Post_Key);
+                                //startActivity(intent);
+                                //finish();
 
 
                             }
                         });
                     }
                 };
-        //  mProgress.dismiss();
-
-
-
-
-
-        //  randomListing = new ArrayList<NoticeCard>();
-        // adapter = new NoticeCardAdapter(this, randomListing);
-
-        // swipeRefreshLayout.setOnRefreshListener(this);
-
-
-
-
-
-
-
-
-
-
-
-        //    addContent();
-
 
         mBlogList.setAdapter(firebaseRecyclerAdapter);
 
         mAuth = FirebaseAuth.getInstance();
 
-        /*
-        signOut = (Button) findViewById(R.id.signOut);
-
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                mAuth.signOut();
-                Snackbar snackbar = Snackbar
-                        .make(ri, R.string.sign_out, Snackbar.LENGTH_LONG);
-                snackbar.show();
-                //Toast.makeText(AccountActivity.this, R.string.sign_out, Toast.LENGTH_LONG).show();
-                startActivity(new Intent(AccountActivity.this, MainActivity.class));
-            }
-        });
-        */
     }
 
-
-
-     /* @Override
-    public void onRefresh() {
-       // swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setRefreshing(false);
-    }*/
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder {
 
