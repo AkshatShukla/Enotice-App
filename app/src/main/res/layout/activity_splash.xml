@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:id="@+id/splash">
+
+    <com.ldoublem.loadingviewlib.view.LVBlock
+        android:id="@+id/lv_block"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
+
+    <TextView
+        android:id="@+id/desg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textSize="30dp"
+        android:textColor="#454545"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="false" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textSize="12dp"
+        android:textColor="#454545"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:text="Coded with love by CSE, RCOEM" />
+
+</RelativeLayout>

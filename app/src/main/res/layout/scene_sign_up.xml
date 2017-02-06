@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textSize="14sp"
-                android:text="Have an account?"
+                android:text="Create a new E-Notice Account"
                 android:id="@+id/haveAccount"/>
 
             <TextView

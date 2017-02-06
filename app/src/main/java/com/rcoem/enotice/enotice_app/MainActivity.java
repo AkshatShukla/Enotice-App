@@ -2,8 +2,11 @@ package com.rcoem.enotice.enotice_app;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ldoublem.loadingviewlib.view.LVBlock;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout li;
     long back_pressed;
 
+    private LVBlock mLVBlock;
+    private static int ANIMATION_DELAY = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         mLoginBtn = (View) findViewById(R.id.loginBtn);
         mSignupBtn = (TextView) findViewById(R.id.signupBtn);
         mProgress  = new ProgressDialog(this);
+        mProgress.setCancelable(false);
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -71,8 +80,22 @@ public class MainActivity extends AppCompatActivity {
                 if(firebaseAuth.getCurrentUser() != null) {
                     //User has logged-in already
                     //Move user directly to the Account Activity.
-                    mProgress.setMessage("Give Us A Moment...");
-                    mProgress.show();
+                    setContentView(R.layout.activity_splash);
+                    mLVBlock = (LVBlock) findViewById(R.id.lv_block);
+
+                    mLVBlock.setViewColor(Color.rgb(245,209,22));
+                    mLVBlock.setShadowColor(Color.GRAY);
+                    mLVBlock.startAnim(1000);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // This method will be executed once the timer is over
+                            // Start your app main activity
+                            mLVBlock.stopAnim();
+                            // close this activity
+
+                    //mProgress.setMessage("Give Us A Moment...");
+                    //mProgress.show();
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
                     mDatabase.addValueEventListener(new ValueEventListener() {
@@ -110,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     });
+                        }
+                    }, ANIMATION_DELAY);  //Delay after which the inside code gets executed
                 }
             }
         };
