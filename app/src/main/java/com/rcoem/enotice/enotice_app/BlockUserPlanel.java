@@ -37,6 +37,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 public class BlockUserPlanel extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -199,7 +201,7 @@ public class BlockUserPlanel extends AppCompatActivity {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         mPostTitle.setText(dataSnapshot.child("name").getValue().toString().trim());
                                         String url = dataSnapshot.child("images").getValue().toString().trim();
-                                        Picasso.with(BlockUserPlanel.this).load(url).into(circularImageView);
+                                        Picasso.with(BlockUserPlanel.this).load(url).noFade().into(circularImageView);
                                     }
 
                                     @Override
@@ -239,8 +241,8 @@ public class BlockUserPlanel extends AppCompatActivity {
                                                     if(process) {
                                                         mDatabase.child("block").setValue("No");
                                                         process = false;
-
-                                                        Toast.makeText(BlockUserPlanel.this, "User Has been Unblocked", Toast.LENGTH_LONG).show();
+                                                        Toasty.custom(BlockUserPlanel.this, "User Has been Unblocked", R.drawable.ok, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.unblocked), 100, true, true).show();
+                                                        //Toast.makeText(BlockUserPlanel.this, "User Has been Unblocked", Toast.LENGTH_LONG).show();
 
                                                     }
                                                 }
@@ -260,7 +262,8 @@ public class BlockUserPlanel extends AppCompatActivity {
                                                         mDatabase.child("block").setValue("Yes");
                                                         process = false;
                                                         mSwitch.setChecked(true);
-                                                        Toast.makeText(BlockUserPlanel.this, "User Has been Blocked", Toast.LENGTH_LONG).show();
+                                                        Toasty.custom(BlockUserPlanel.this, "User Has been Blocked", R.drawable.cancel, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.blocked), 100, true, true).show();
+                                                        //Toast.makeText(BlockUserPlanel.this, "User Has been Blocked", Toast.LENGTH_LONG).show();
 
                                                     }
                                                 }

@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.github.fabtransitionactivity.SheetLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -67,7 +68,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AccountActivityAdmin extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
+public class AccountActivityAdmin extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView recyclerView;
     private NoticeCardAdapter adapter;
@@ -84,7 +85,6 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
     private DatabaseReference mDatabaseDepartment;
 
     private String department;
-
 
     // private  String Dept;
     FloatingActionButton fabplus;
@@ -143,9 +143,12 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         mAuth = FirebaseAuth.getInstance();
         mDatabaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
+        //Code to send user token and details to hosted MySQL server
+        //sendTokenToServer method called here
         mDatabaseDepartment.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                //check if user exists in the firebase real-time database
                 if(dataSnapshot.hasChildren()) {
                     String dept = dataSnapshot.child("department").getValue().toString();
                     sendTokenToServer(dept);
@@ -156,10 +159,12 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                //Do nothing
             }
         });
 
+        //Code to display notices according to current user department
+        //viewNotices method is called here
         mDatabaseDepartment.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -178,14 +183,17 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                //Do nothing
             }
         });
 
     }
 
+    //Method to get token from firebase server and send token to MySQL server
+
     private void sendTokenToServer(final String dept) {
         mAuth = FirebaseAuth.getInstance();
+
         //getting token from shared preferences
         final String token = SharedPrefManager.getInstance(this).getDeviceToken();
         final String email = mAuth.getCurrentUser().getEmail();
@@ -195,6 +203,11 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             return;
         }
 
+
+        /*Following code is to send email, token, dept and post of current user
+          to the database with POST method by taking end-points from EndPoints.java
+          On response, appropriate toast is caught.
+        */
         StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_REGISTER_DEVICE,
                 new Response.Listener<String>() {
                     @Override
@@ -231,19 +244,10 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
     }
 
 
+    //Method to view department specific notices in feed
+
     private void viewNotices(String dept) {
-        //Toast.makeText(AccountActivityAdmin.this,dept,Toast.LENGTH_LONG).show();
-        /*if (dept == "Mech") {
-            Snackbar snackbar = Snackbar
-                    .make(di, R.string.welcome_mech, Snackbar.LENGTH_LONG);
-            snackbar.show();
-        }
-        else
-        {
-            Snackbar snackbar = Snackbar
-                    .make(di, R.string.welcome_cse, Snackbar.LENGTH_LONG);
-            snackbar.show();
-        }*/
+
         //To show only the content relevant to the specific department.
         mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(dept).child("Deptposts");
 
@@ -253,15 +257,14 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         //Online-Offline Syncing (only strings and not images)
         mDatabaseValidContent.keepSynced(true);
 
+        //BlogList view initialized to view notices in card layout list
         mBlogList = (RecyclerView) findViewById(R.id.blog_recylView_list);
         mBlogList.setHasFixedSize(true);
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
 
 
-
         FirebaseRecyclerAdapter<BlogModel,BlogViewHolder> firebaseRecyclerAdapter =new
                 FirebaseRecyclerAdapter<BlogModel, BlogViewHolder>(
-
                         BlogModel.class,
                         R.layout.blog_row,
                         BlogViewHolder.class,
@@ -271,9 +274,9 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                     protected void populateViewHolder(BlogViewHolder viewHolder, BlogModel model, final int position) {
 
                         final String Post_Key = getRef(position).toString();
-                        //   Intent intent = getIntent();
-                        //   final String str = intent.getStringExtra("location");
+
                         viewHolder.setTitle(model.getTitle());
+
                         viewHolder.setDesc(model.getDesc());
 
                         viewHolder.setImage(getApplicationContext(), model.getImages());
@@ -286,11 +289,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                             @Override
                             public void onClick(View view) {
 
-                                //To code Card-expanding code.
-
-
-
-                               // Toast.makeText(AccountActivityAdmin.this,Post_Key,Toast.LENGTH_LONG).show();
+                                //Card-expanding Code
                                 Intent intent = new Intent(AccountActivityAdmin.this,AdminSinglePost.class);
                                 intent.putExtra("postkey",Post_Key);
                                 startActivity(intent);
@@ -299,9 +298,6 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                         });
                     }
                 };
-        //  mProgress.dismiss();
-
-
 
         di = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
 
@@ -309,8 +305,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         setSupportActionBar(toolbar);
 
 
-        //Floating Action Button Functionality
-        //Generate New Notice
+        //Old code for FAB
         /*
         addNotice = (com.getbase.floatingactionbutton.FloatingActionButton)findViewById(R.id.fab_addnotice);
         addNotice.setOnClickListener(new View.OnClickListener() {
@@ -331,6 +326,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             }
         });*/
 
+        //Floating Action Button Functionality
         fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
         fabaddNotice = (FloatingActionButton) findViewById(R.id.add_notice_fab);
         fabaddDocument = (FloatingActionButton) findViewById(R.id.add_document_fab);
@@ -343,6 +339,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         rClock=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
         rAntiClock=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_anticlockwise);
 
+        /*
         fabplus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -391,6 +388,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                 }
             }
         });
+        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -398,8 +396,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
-
+        //View of Navigation Bar
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -409,9 +406,6 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
         imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
         loadNavHeader();
-
-        //    addContent();
-
 
         mBlogList.setAdapter(firebaseRecyclerAdapter);
 
@@ -474,6 +468,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
     }
 
+    //Method to load current user details in the Navigation Bar header
 
     private void loadNavHeader() {
         // name, website
@@ -489,33 +484,25 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                         .thumbnail(0.5f)
                         .bitmapTransform(new CircleTransform(getApplicationContext()))
                         .into(imgProfile);
-
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                //Do nothing
             }
         });
 
-        //txtName.setText("Prof. S P Kane");
+        //Set the current user email-id
         txtWebsite.setText(mAuth.getCurrentUser().getEmail());
 
-        // loading header background image
+        //Loading header background image
         Glide.with(this).load(R.drawable.navmenuheaderbg)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imgNavHeaderBg);
 
-        // Loading profile image
-       /* Glide.with(this).load(R.drawable.user)
-                .crossFade()
-                .thumbnail(0.5f)
-                .bitmapTransform(new CircleTransform(this))
-                .into(imgProfile);*/
 
-        // showing dot next to notifications label
+        //COde to show dot next to a particular notifications label
         //navigationView.getMenu().getItem(2).setActionView(R.layout.menu_dot);
     }
 
@@ -546,38 +533,46 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-
+            //goto main Notice Feed
+            startActivity(new Intent(getApplicationContext(),AccountActivityAdmin.class));
 
         } else if (id == R.id.nav_profile) {
+            //goto Profile Setup activity
             startActivity(new Intent(getApplicationContext(),EditViewProfile.class));
-            //  Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
+
         } else if (id == R.id.nav_approval) {
+            //goto Pending Approvals activity
             startActivity(new Intent(AccountActivityAdmin.this,RetriverData.class));
-            // Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
+
         } else if(id == R.id.nav_documents){
-            //Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
+            //goto New Documents Activity
             startActivity(new Intent(getApplicationContext(),pdfview.class));
+
         }
         else if (id == R.id.nav_logout) {
+            //Log out from account
             mAuth.signOut();
             Snackbar snackbar = Snackbar
                     .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);
             snackbar.show();
-            //Toast.makeText(AccountActivity.this, R.string.sign_out, Toast.LENGTH_LONG).show();
             startActivity(new Intent(AccountActivityAdmin.this, MainActivity.class));
+
         } else if (id == R.id.nav_about_us) {
             Snackbar snackbar = Snackbar
                     .make(di, "Coded with love by CSE, RCOEM", Snackbar.LENGTH_LONG);
             snackbar.show();
             startActivity(new Intent(getApplicationContext(),ActivitySendPushNotification.class));
+
         }
         else if (id == R.id.ViewUsers) {
-            //  Toast.makeText(AccountActivityAdmin.this, R.string.sign_out, Toast.LENGTH_LONG).show();
+            //goto Block User Panel activity
             startActivity(new Intent(AccountActivityAdmin.this,BlockUserPlanel.class));
+
         }
         else if (id == R.id.nav_otherDept) {
-            //  Toast.makeText(AccountActivityAdmin.this, R.string.sign_out, Toast.LENGTH_LONG).show();
+            //goto Cross-Dept Portal activity
             startActivity(new Intent(AccountActivityAdmin.this,CrossDept.class));
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
         drawer.closeDrawer(GravityCompat.START);
@@ -591,16 +586,6 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
-        switch(requestCode){
-            case 1:
-                if(resultCode==RESULT_OK){
-                    String FilePath = data.getData().getPath();
-                    //textFile.setText(FilePath);
-                  //  Toast.makeText(this,FilePath.toString(),Toast.LENGTH_LONG).show();
-                }
-                break;
-
-        }
     }
     @Override
     public void onBackPressed()
@@ -624,16 +609,5 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             }
         }
     }
-
-
-
-
-    /* @Override
-    public void onRefresh() {
-       swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setRefreshing(false);
-    }*/
-
-
 
 }
