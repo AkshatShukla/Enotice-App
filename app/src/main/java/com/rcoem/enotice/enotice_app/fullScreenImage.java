@@ -34,4 +34,10 @@ public class fullScreenImage extends AppCompatActivity {
         super.onStop();
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

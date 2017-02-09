@@ -88,7 +88,6 @@ public class RetriverData extends AppCompatActivity {
                 if(dataSnapshot.hasChildren()) {
                     String str = dataSnapshot.child("department").getValue().toString();
                     viewNotices(str);
-                    Toast.makeText(RetriverData.this, str, Toast.LENGTH_LONG).show();
                 }
                 else {
                     finish();
@@ -100,10 +99,6 @@ public class RetriverData extends AppCompatActivity {
 
             }
         });
-        //   mDatabase = FirebaseDatabase.getInstance().getReference().child("posts");
-
-
-
 
     }
 
@@ -148,14 +143,10 @@ public class RetriverData extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
 
-                                    //Toast.makeText(RetriverData.this,Post_Key,Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(RetriverData.this, Single_Post.class);
                                     intent.putExtra("postkey", Post_Key);
                                     startActivity(intent);
 
-
-                                //intent.putExtra("Post_key",str);
-                                //startActivity(intent);
                             }
                         });
                     }

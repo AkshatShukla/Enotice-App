@@ -5,6 +5,7 @@ package com.rcoem.enotice.enotice_app;
  */
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -47,6 +48,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import dmax.dialog.SpotsDialog;
+import es.dmoral.toasty.Toasty;
+
 
 public class AddNoticeActivityUser extends AppCompatActivity {
 
@@ -75,6 +79,7 @@ public class AddNoticeActivityUser extends AppCompatActivity {
     private String Department;
 
     private ProgressDialog mProgress;
+    private AlertDialog dialog;
 
     private FirebaseUser mCurrentUser;
 
@@ -167,14 +172,16 @@ public class AddNoticeActivityUser extends AppCompatActivity {
 
         month = calendar.get(Calendar.MONTH) + 1;   //Month in Calendar API start with 0.
         day = calendar.get(Calendar.DAY_OF_MONTH);
-        Toast.makeText(AddNoticeActivityUser.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+        //Toast.makeText(AddNoticeActivityUser.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
         final String currentDate = day + "/" + month + "/" + year;
-        mProgress.setMessage("Uploading Notice...");
 
+        //mProgress.setMessage("Uploading Notice...");
+        final AlertDialog dialog = new SpotsDialog(AddNoticeActivityUser.this, R.style.CustomProgress);
+        dialog.show();
 
 
         if(!TextUtils.isEmpty(title_value) && !TextUtils.isEmpty(desc_value) || mImageUri != null){
-            mProgress.show();
+
             StorageReference filepath = mStoarge.child("Images").child(mImageUri.getLastPathSegment());
             filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -203,15 +210,15 @@ public class AddNoticeActivityUser extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Toast.makeText(AddNoticeActivityUser.this,"Uploaded Successfully", Toast.LENGTH_LONG).show();
+                                        Toasty.success(AddNoticeActivityUser.this,"Upload Successfully").show();
                                     }
                                     else
                                     {
-                                        Toast.makeText(AddNoticeActivityUser.this,"Not Successfully Uploaded", Toast.LENGTH_LONG).show();
+                                        Toasty.error(AddNoticeActivityUser.this,"Upload Unsuccessful").show();
                                     }
                                 }
                             });
-                            departmentPush(title_value,"Notice For Approval sent by ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
+                            departmentPush(title_value,"Pending Notice Approval sent by ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
 
                         }
 
@@ -221,8 +228,8 @@ public class AddNoticeActivityUser extends AppCompatActivity {
                         }
                     });
 
-                    mProgress.dismiss();
-
+                    //mProgress.dismiss();
+                    dialog.dismiss();
 
                     startActivity(new Intent(AddNoticeActivityUser.this , AccountActivityUser.class));
 
@@ -244,7 +251,8 @@ public class AddNoticeActivityUser extends AppCompatActivity {
                     public void onResponse(String response) {
                         // progressDialog.dismiss();
 
-                        Toast.makeText(AddNoticeActivityUser.this, response, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(AddNoticeActivityUser.this, response, Toast.LENGTH_LONG).show();
+                        Toasty.custom(AddNoticeActivityUser.this, "HOD will be notified of your Notice", R.mipmap.ic_launcher, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorBg), 100, false, true).show();
                     }
                 },
                 new Response.ErrorListener() {

@@ -71,14 +71,20 @@ dependencies {
     //Custom toast with drawable and look
     compile 'com.github.GrenderG:Toasty:1.1.2'
 
+    //For circular badge images
     compile 'de.hdodenhof:circleimageview:2.1.0'
 
+    //For Splash Screen Animation
     compile 'com.ldoublem.loadingview:loadingviewlib:1.0'
 
-    dependencies {
-        compile 'com.github.coyarzun89:fabtransitionactivity:0.2.0'
-    }
+    //For bottom dialogue box
+    compile 'com.github.javiersantos:BottomDialogs:1.2.1'
 
+    //Loading and Updating Animation
+    compile 'com.github.d-max:spots-dialog:0.7@aar'
+
+    //For Material Dialogue boxes
+    compile 'com.afollestad.material-dialogs:core:0.9.3.0'
 }
 
 //To use Google Play Services

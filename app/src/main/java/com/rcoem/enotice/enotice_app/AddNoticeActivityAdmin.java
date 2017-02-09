@@ -4,6 +4,7 @@ package com.rcoem.enotice.enotice_app;
  * Created by Akshat Shukla on 29-10-2016.
  */
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -47,6 +48,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import dmax.dialog.SpotsDialog;
+import es.dmoral.toasty.Toasty;
+
 
 public class AddNoticeActivityAdmin extends AppCompatActivity {
 
@@ -72,6 +76,7 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
     private String Department;
 
     private ProgressDialog mProgress;
+    private AlertDialog dialog;
 
     private FirebaseUser mCurrentUser;
 
@@ -155,12 +160,12 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
         //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
         final String currentDate = day + "/" + month + "/" + year;
 
-        mProgress.setMessage("Uploading Notice...");
-
-
+        //mProgress.setMessage("Uploading Notice...");
+        final AlertDialog dialog = new SpotsDialog(AddNoticeActivityAdmin.this, R.style.CustomProgress);
+        dialog.show();
 
         if(!TextUtils.isEmpty(title_value) && !TextUtils.isEmpty(desc_value) && mImageUri != null){
-            mProgress.show();
+            //mProgress.show();
             StorageReference filepath = mStoarge.child("Images").child(mImageUri.getLastPathSegment());
             filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -168,9 +173,6 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                     final DatabaseReference newPost =mData.push();
-
-
-                    // Toast.makeText(StartPosting.this,"uploaded successfully", Toast.LENGTH_LONG).show();
 
                     mDataUser.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -188,17 +190,17 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
-                                        Toast.makeText(AddNoticeActivityAdmin.this,"uploaded successfully", Toast.LENGTH_LONG).show();
+                                        Toasty.success(AddNoticeActivityAdmin.this,"Upload Successfully").show();
                                     }
                                     else
                                     {
-                                        Toast.makeText(AddNoticeActivityAdmin.this,"uploaded Not successfully", Toast.LENGTH_LONG).show();
+                                        Toasty.error(AddNoticeActivityAdmin.this,"Upload Unsuccessful").show();
                                     }
                                 }
                             });
 
 
-                            departmentPush(title_value,"HOD ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
+                            departmentPush(title_value,"Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
 
                         }
 
@@ -209,7 +211,8 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                     });
 
 
-                    mProgress.dismiss();
+                    //mProgress.dismiss();
+                    dialog.dismiss();
 
                     startActivity(new Intent(AddNoticeActivityAdmin.this , AccountActivityAdmin.class));
 
@@ -232,7 +235,8 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                     public void onResponse(String response) {
                         // progressDialog.dismiss();
 
-                        Toast.makeText(AddNoticeActivityAdmin.this, response, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(AddNoticeActivityAdmin.this, response, Toast.LENGTH_LONG).show();
+                        Toasty.custom(AddNoticeActivityAdmin.this, "Department Teachers will be notified of your Notice", R.mipmap.ic_launcher, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorBg), 100, false, true).show();
                     }
                 },
                 new Response.ErrorListener() {

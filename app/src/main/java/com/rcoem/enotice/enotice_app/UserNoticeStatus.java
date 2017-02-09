@@ -79,9 +79,13 @@ public class UserNoticeStatus extends AppCompatActivity {
         mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String str = dataSnapshot.child("department").getValue().toString();
-                startjugad(str);
-                Toast.makeText(UserNoticeStatus.this,str, Toast.LENGTH_LONG).show();
+                if (dataSnapshot.hasChildren()) {
+                    String str = dataSnapshot.child("department").getValue().toString();
+                    viewNotices(str);
+                }
+                else {
+                    finish();
+                }
             }
 
             @Override
@@ -90,13 +94,9 @@ public class UserNoticeStatus extends AppCompatActivity {
             }
         });
         //   mDatabase = FirebaseDatabase.getInstance().getReference().child("posts");
-
-
-
-
     }
 
-    private void startjugad(String str) {
+    private void viewNotices(String str) {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Deptposts");
         mquery =  mDatabase.orderByChild("UID").equalTo(mAuth.getCurrentUser().getUid());
         mStoarge = FirebaseStorage.getInstance().getReference();
@@ -143,21 +143,18 @@ public class UserNoticeStatus extends AppCompatActivity {
                             public void onClick(View view) {
 
                               if (approved.equals("false")){
-                                  Toast.makeText(UserNoticeStatus.this,"Rejected Activity",Toast.LENGTH_LONG).show();
+
                                   Intent intent = new Intent(UserNoticeStatus.this,UserRejectSinglePost.class);
                                   intent.putExtra("postkey",Post_Key);
                                   startActivity(intent);
                                   finish();
-
                               }
                                 else {
-                                  Toast.makeText(UserNoticeStatus.this, Post_Key, Toast.LENGTH_LONG).show();
+
                                   Intent intent = new Intent(UserNoticeStatus.this, UserStatusViewSinglePost.class);
                                   intent.putExtra("postkey", Post_Key);
                                   startActivity(intent);
                                   finish();
-                                  //intent.putExtra("Post_key",str);
-                                  //  startActivity(intent);
                               }
 
                             }
@@ -205,5 +202,13 @@ public class UserNoticeStatus extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(UserNoticeStatus.this, AccountActivityUser.class);
+        startActivity(intent);
+        finish();
     }
 }

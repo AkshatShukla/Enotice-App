@@ -71,10 +71,7 @@ public class UserStatusViewSinglePost extends AppCompatActivity {
                     String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
                     Picasso.with(UserStatusViewSinglePost.this).load(imageUrl).into(mViewImage);
                     mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
-
                 }
-
-
             }
 
             @Override
@@ -106,6 +103,13 @@ public class UserStatusViewSinglePost extends AppCompatActivity {
         // Toast.makeText(AdminSinglePost.this,imageUrl, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(UserStatusViewSinglePost.this,fullScreenImage.class);
         intent.putExtra("imageUrl",imageUrl);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(UserStatusViewSinglePost.this, UserNoticeStatus.class);
         startActivity(intent);
     }
 }

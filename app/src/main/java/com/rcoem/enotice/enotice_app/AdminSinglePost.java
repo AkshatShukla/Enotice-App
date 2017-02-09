@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,6 +20,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
+
+import es.dmoral.toasty.Toasty;
 
 public class AdminSinglePost extends AppCompatActivity {
     private DatabaseReference mDatabase;
@@ -88,10 +91,26 @@ public class AdminSinglePost extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminSinglePost.this, "The notice has been Rejected and Removed", Toast.LENGTH_LONG).show();
-                mDatabase.removeValue();
-                Intent intent = new Intent(AdminSinglePost.this, AccountActivityAdmin.class);
-                startActivity(intent);
+
+                new BottomDialog.Builder(AdminSinglePost.this)
+                        .setTitle("Delete Notice Permanently")
+                        .setContent("Are you sure you want to remove this notice completely?")
+                        .setPositiveText("Yes")
+                        .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                        .setCancelable(false)
+                        .setNegativeText("No")
+                        .setPositiveTextColorResource(android.R.color.white)
+                        //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                        .onPositive(new BottomDialog.ButtonCallback() {
+                            @Override
+                            public void onClick(BottomDialog dialog) {
+                                Toasty.success(AdminSinglePost.this,"Notice Deleted").show();
+                                mDatabase.removeValue();
+                                Intent intent = new Intent(AdminSinglePost.this, AccountActivityAdmin.class);
+                                startActivity(intent);
+                            }
+                        }).show();
+
             }
         });
         mViewImage.setOnClickListener(new View.OnClickListener() {
@@ -100,8 +119,13 @@ public class AdminSinglePost extends AppCompatActivity {
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
-                        viewImage(imageUrl);
+                        if (dataSnapshot.hasChildren()) {
+                            String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
+                            viewImage(imageUrl);
+                        }
+                        else {
+                            finish();
+                        }
                     }
 
                     @Override
