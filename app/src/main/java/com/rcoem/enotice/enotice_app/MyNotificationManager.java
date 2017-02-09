@@ -27,6 +27,7 @@ public class MyNotificationManager {
     public static final int ID_SMALL_NOTIFICATION = 235;
 
     private Context mCtx;
+    private String fBack;
 
     public MyNotificationManager(Context mCtx) {
         this.mCtx = mCtx;
@@ -36,6 +37,9 @@ public class MyNotificationManager {
     //parameters are title for message title, message for message text, url of the big image and an intent that will open
     //when you will tap on the notification
     public void showBigNotification(String title, String message, String url, Intent intent) {
+
+        intent =  new Intent(mCtx, MainActivity.class);
+        intent.putExtra("fBack", message);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         mCtx,
@@ -51,6 +55,7 @@ public class MyNotificationManager {
         Notification notification;
         notification = mBuilder.setSmallIcon(R.mipmap.ic_launcher).setTicker(title).setWhen(0)
                 .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setContentIntent(resultPendingIntent)
                 .setContentTitle(title)
                 .setStyle(bigPictureStyle)
@@ -69,6 +74,9 @@ public class MyNotificationManager {
     //parameters are title for message title, message for message text and an intent that will open
     //when you will tap on the notification
     public void showSmallNotification(String title, String message, Intent intent) {
+
+        intent =  new Intent(mCtx, MainActivity.class);
+        intent.putExtra("fBack", message);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         mCtx,
@@ -82,6 +90,7 @@ public class MyNotificationManager {
         Notification notification;
         notification = mBuilder.setSmallIcon(R.mipmap.ic_launcher).setTicker(title).setWhen(0)
                 .setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setContentIntent(resultPendingIntent)
                 .setContentTitle(title)
                 .setSmallIcon(R.mipmap.ic_launcher)

@@ -4,11 +4,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -18,11 +20,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +39,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import es.dmoral.toasty.Toasty;
 
 public class Single_Post extends AppCompatActivity {
 
@@ -51,6 +57,7 @@ public class Single_Post extends AppCompatActivity {
     RelativeLayout ri;
     Toolbar mActionBarToolbar;
     private ProgressDialog progressDialog;
+    private String feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +122,13 @@ public class Single_Post extends AppCompatActivity {
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String imageUrl =  dataSnapshot.child("images").getValue().toString().trim();
-                        viewImage(imageUrl);
+                        if (dataSnapshot.hasChildren()) {
+                            String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
+                            viewImage(imageUrl);
+                        }
+                        else {
+                            finish();
+                        }
                     }
 
                     @Override
@@ -135,20 +147,36 @@ public class Single_Post extends AppCompatActivity {
 
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
                         if(process) {
-                            mDatabase.child("approved").setValue("true");
-                            process = false;
-                            String title = dataSnapshot.child("title").getValue().toString().trim();
-                            String message = dataSnapshot.child("username").getValue().toString().trim();
-                            String dept = dataSnapshot.child("department").getValue().toString().trim();
-                            String image = dataSnapshot.child("images").getValue().toString().trim();
-                            departmentPush(title,message,dept,image);
 
-                            Toast.makeText(Single_Post.this, "The notice has been Approved", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
-                            startActivity(intent);
-                            finish();
+                            new BottomDialog.Builder(Single_Post.this)
+                                    .setTitle("Approve Notice")
+                                    .setContent("Approved Notices appear on the News Feed as well as on Notice Boards across your department. Are you sure you want to Approve?")
+                                    .setPositiveText("Approve")
+                                    .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                                    .setCancelable(false)
+                                    .setNegativeText("No")
+                                    .setPositiveTextColorResource(android.R.color.white)
+                                    //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                                    .onPositive(new BottomDialog.ButtonCallback() {
+                                        @Override
+                                        public void onClick(BottomDialog dialog) {
+                                            mDatabase.child("approved").setValue("true");
+                                            process = false;
+                                            String title = dataSnapshot.child("title").getValue().toString().trim();
+                                            String message = dataSnapshot.child("username").getValue().toString().trim();
+                                            String dept = dataSnapshot.child("department").getValue().toString().trim();
+                                            String image = dataSnapshot.child("images").getValue().toString().trim();
+                                            departmentPush(title,message,dept,image);
+
+                                            Toasty.custom(Single_Post.this, "Notice has been Approved", R.drawable.ok, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.unblocked), 100, true, true).show();
+                                            Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    }).show();
+
                         }
                     }
 
@@ -160,7 +188,6 @@ public class Single_Post extends AppCompatActivity {
             }
         });
 
-
         Rejected = (Button) findViewById(R.id.Reject_button);
         Rejected.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,25 +195,59 @@ public class Single_Post extends AppCompatActivity {
 
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
                         if(process) {
-                            mDatabase.child("approved").setValue("false");
-                            mDatabase.child("removed").setValue(1);
-                            process = false;
-                            String title = dataSnapshot.child("title").getValue().toString().trim();
-                            String message ="Your Notice has been Rejected";
-                            String image = dataSnapshot.child("images").getValue().toString().trim();
-                            String email = dataSnapshot.child("email").getValue().toString().trim();
-                           // Toast.makeText(Single_Post.this, email, Toast.LENGTH_LONG).show();
-                            sendSinglePush(title,message,image,email);
-                            //Toast.makeText(Single_Post.this, "The notice has been Rejected", Toast.LENGTH_LONG).show();
 
+                            new BottomDialog.Builder(Single_Post.this)
+                                    .setTitle("Reject Notice")
+                                    .setContent("Rejected Notices do not appear on the News Feed as well as on Notice Boards across your department. User who's notice has been rejected is also notified. Are you sure you want to Reject?")
+                                    .setPositiveText("Reject")
+                                    .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                                    .setCancelable(false)
+                                    .setNegativeText("No")
+                                    .onNegative(new BottomDialog.ButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull BottomDialog bottomDialog) {
 
-                            //AlertDialog alert11 = builder1.create();
-                            //alert11.show();
-                            Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
-                            startActivity(intent);
-                            finish();
+                                        }
+                                    })
+                                    .setPositiveTextColorResource(android.R.color.white)
+                                    //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                                    .onPositive(new BottomDialog.ButtonCallback() {
+                                        @Override
+                                        public void onClick(BottomDialog dialog) {
+                                            mDatabase.child("approved").setValue("false");
+                                            mDatabase.child("removed").setValue(1);
+
+                                            new MaterialDialog.Builder(Single_Post.this)
+                                                    .title("Feedback")
+                                                    .content("Notify reason for rejection")
+                                                    .cancelable(true)
+                                                    .positiveColor(getResources().getColor(R.color.colorBg))
+                                                    .positiveText("Send")
+                                                    .negativeText("Dismiss")
+                                                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE)
+                                                    .input("Reason", "", new MaterialDialog.InputCallback() {
+                                                        @Override
+                                                        public void onInput(MaterialDialog dialog, CharSequence input) {
+
+                                                            process = false;
+                                                            feedback = input.toString();
+                                                            String title = dataSnapshot.child("title").getValue().toString().trim();
+                                                            String image = dataSnapshot.child("images").getValue().toString().trim();
+                                                            String email = dataSnapshot.child("email").getValue().toString().trim();
+                                                            sendSinglePush(title,feedback,image,email);
+
+                                                            Toasty.custom(Single_Post.this, "Notice has been Rejected", R.drawable.cancel, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.blocked), 100, true, true).show();
+                                                            Intent intent = new Intent(Single_Post.this, AccountActivityAdmin.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    }).show();
+
+                                        }
+                                    }).show();
+
                         }
                     }
                     @Override

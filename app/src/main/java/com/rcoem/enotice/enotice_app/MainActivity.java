@@ -30,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ldoublem.loadingviewlib.view.LVBlock;
 
+import es.dmoral.toasty.Toasty;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText mEmailField;
@@ -122,7 +124,16 @@ public class MainActivity extends AppCompatActivity {
                                 finish();
                             } else {
                                 mProgress.dismiss();
-                                Intent intent = new Intent(MainActivity.this, AccountActivityUser.class);
+                                Intent intent = getIntent();
+                                final String fBack = intent.getStringExtra("fBack");
+
+                                if (intent.getStringExtra("fBack") != null) {
+                                    Toasty.info(MainActivity.this, fBack, Toast.LENGTH_LONG, true).show();
+                                }
+                                else {
+                                    //Do Nothing
+                                }
+                                intent = new Intent(MainActivity.this, AccountActivityUser.class);
                                 startActivity(intent);
                                 finish();
                             }
