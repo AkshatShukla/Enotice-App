@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.github.fabtransitionactivity.SheetLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -339,7 +338,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         rClock=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_clockwise);
         rAntiClock=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_anticlockwise);
 
-        /*
+
         fabplus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -388,7 +387,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                 }
             }
         });
-        */
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

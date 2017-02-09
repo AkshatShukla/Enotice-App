@@ -57,6 +57,8 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 public class AccountActivityUser extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
 
     private RecyclerView recyclerView;
@@ -126,37 +128,51 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
-
+        //Code to send user token and details to hosted MySQL server
+        //sendTokenToServer method called here
         mDatabase1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String dept = dataSnapshot.child("department").getValue().toString();
-                sendTokenToServer(dept);
-
+                //check if user exists in the firebase real-time database
+                if(dataSnapshot.hasChildren()) {
+                    String dept = dataSnapshot.child("department").getValue().toString();
+                    sendTokenToServer(dept);
+                }
+                else {
+                    finish();
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                //Do nothing
             }
         });
 
+        //Code to display notices according to current user department
+        //viewNotices method is called here
         mDatabase1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String Str = dataSnapshot.child("department").getValue().toString();
-                viewNotice(Str);
 
+                if (dataSnapshot.hasChildren()) {
+                    String Str = dataSnapshot.child("department").getValue().toString();
+                    viewNotice(Str);
+                }
+                else {
+                    finish();
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                //Do nothing
             }
         });
-
 
     }
+
+    //Method to get token from firebase server and send token to MySQL server
 
     private void sendTokenToServer(final String dept) {
         mAuth = FirebaseAuth.getInstance();
@@ -173,6 +189,10 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             return;
         }
 
+        /*Following code is to send email, token, dept and post of current user
+          to the database with POST method by taking end-points from EndPoints.java
+          On response, appropriate toast is caught.
+        */
         StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_REGISTER_DEVICE,
                 new Response.Listener<String>() {
                     @Override
@@ -208,9 +228,14 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         requestQueue.add(stringRequest);
     }
 
+    //Method to view department specific notices in feed
+
     private void viewNotice(String str) {
+
+        //To show only the content relevant to the specific department.
         mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Deptposts");
 
+        //To query and view only those messages which have been APPROVED by the authenticator.
         mquery =  mDatabaseValidContent.orderByChild("approved").equalTo("true");
 
         //Online-Offline Syncing (only strings and not images)
@@ -219,8 +244,8 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         mBlogList = (RecyclerView) findViewById(R.id.blog_recylView_list);
         mBlogList.setHasFixedSize(true);
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
-        //  mProgress.setMessage("Uploading Details");
-        //   mProgress.show();
+
+
         FirebaseRecyclerAdapter<BlogModel,AccountActivityAdmin.BlogViewHolder> firebaseRecyclerAdapter =new
                 FirebaseRecyclerAdapter<BlogModel, AccountActivityAdmin.BlogViewHolder>(
 
@@ -248,21 +273,15 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
                             @Override
                             public void onClick(View view) {
 
-                              //  Toast.makeText(AccountActivityUser.this,Post_Key,Toast.LENGTH_LONG).show();
+                                //Card-expanding Code
                                 Intent intent = new Intent(AccountActivityUser.this,UserSinglePost.class);
                                 intent.putExtra("postkey",Post_Key);
                                 startActivity(intent);
-
-                                //intent.putExtra("Post_key",str);
-                                //  startActivity(intent);
 
                             }
                         });
                     }
                 };
-        //  mProgress.dismiss();
-
-
 
         di = (DrawerLayout) findViewById(R.id.drawer_layout_user);
 
@@ -271,8 +290,6 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
         fabaddNotice = (FloatingActionButton) findViewById(R.id.add_notice_fab);
@@ -352,8 +369,6 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
-
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -371,31 +386,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
         mAuth = FirebaseAuth.getInstance();
 
-        /*
-        signOut = (Button) findViewById(R.id.signOut);
-
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                mAuth.signOut();
-                Snackbar snackbar = Snackbar
-                        .make(ri, R.string.sign_out, Snackbar.LENGTH_LONG);
-                snackbar.show();
-                //Toast.makeText(AccountActivity.this, R.string.sign_out, Toast.LENGTH_LONG).show();
-                startActivity(new Intent(AccountActivity.this, MainActivity.class));
-            }
-        });
-        */
     }
-
-
-
-     /* @Override
-    public void onRefresh() {
-       // swipeRefreshLayout.setRefreshing(true);
-        swipeRefreshLayout.setRefreshing(false);
-    }*/
 
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder {
@@ -446,12 +437,9 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             TextView post_Desc = (TextView) mView.findViewById(R.id.card_timestamp);
             post_Desc.setText(time);
         }
-
-
-
     }
 
-
+    //Method to load current user details in the Navigation Bar header
 
     private void loadNavHeader() {
         // name, website
@@ -490,8 +478,8 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
                 .bitmapTransform(new CircleTransform(this))
                 .into(imgProfile);*/
 
-        // showing dot next to notifications label
-        // navigationView.getMenu().getItem(2).setActionView(R.layout.menu_dot);
+        //COde to show dot next to a particular notifications label
+        //navigationView.getMenu().getItem(2).setActionView(R.layout.menu_dot);
     }
 
     @Override
