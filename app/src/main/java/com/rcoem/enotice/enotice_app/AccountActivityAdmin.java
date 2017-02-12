@@ -138,6 +138,8 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             }
         });
 
+        startService(new Intent(this, MyFirebaseMessagingService.class));
+
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("posts");
         mAuth = FirebaseAuth.getInstance();
         mDatabaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());

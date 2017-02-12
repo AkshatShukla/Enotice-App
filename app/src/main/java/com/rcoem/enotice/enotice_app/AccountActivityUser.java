@@ -126,6 +126,8 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             }
         });
 
+        startService(new Intent(this, MyFirebaseMessagingService.class));
+
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         //Code to send user token and details to hosted MySQL server

@@ -1,7 +1,11 @@
 package com.rcoem.enotice.enotice_app;
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -54,10 +58,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
             //if there is no image
-            if(imageUrl.equals("null")){
+            if (imageUrl.equals("null")) {
                 //displaying small notification
                 mNotificationManager.showSmallNotification(title, message, intent);
-            }else{
+            } else {
                 //if there is an image
                 //displaying a big notification
                 mNotificationManager.showBigNotification(title, message, imageUrl, intent);
@@ -69,4 +73,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Intent it = new Intent(MyFirebaseMessagingService.this, MyFirebaseMessagingService.class);
+        getApplication().startService(it); // If service will destroy, Start the service again
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        
+        Intent restartService = new Intent(getApplicationContext(),
+                this.getClass());
+        restartService.setPackage(getPackageName());
+        PendingIntent restartServicePI = PendingIntent.getService(
+                getApplicationContext(), 1, restartService,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        //Restart the service once it has been killed android
+
+
+        AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 100, restartServicePI);
+    }
 }

@@ -54,14 +54,16 @@ public class UserRejectSinglePost extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChildren()
-                        ) {
+                if (dataSnapshot.hasChildren()) {
                     mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
                     mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
                     mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
                     String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
                     Picasso.with(UserRejectSinglePost.this).load(imageUrl).into(mViewImage);
                     mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                }
+                else {
+                    finish();
                 }
             }
 
@@ -77,7 +79,7 @@ public class UserRejectSinglePost extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(UserRejectSinglePost.this, "User Notice Removed", Toast.LENGTH_LONG).show();
                 mDatabase.removeValue();
-                Intent intent = new Intent(UserRejectSinglePost.this, AccountActivityUser.class);
+                Intent intent = new Intent(UserRejectSinglePost.this, UserNoticeStatus.class);
                 startActivity(intent);
             }
         });
@@ -110,6 +112,13 @@ public class UserRejectSinglePost extends AppCompatActivity {
         // Toast.makeText(AdminSinglePost.this,imageUrl, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(UserRejectSinglePost.this,fullScreenImage.class);
         intent.putExtra("imageUrl",imageUrl);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(UserRejectSinglePost.this, UserNoticeStatus.class);
         startActivity(intent);
     }
 }
