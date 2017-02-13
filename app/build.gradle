@@ -86,6 +86,10 @@ dependencies {
 
     //For Material Dialogue boxes
     compile 'com.afollestad.material-dialogs:core:0.9.3.0'
+
+    //For top tab bar navigation
+    compile 'devlight.io:navigationtabbar:1.2.5'
+
 }
 
 //To use Google Play Services

@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-feature android:name="android.hardware.camera" android:required="false"></uses-feature>
 
     <application
         android:name=".EnoticeApp"
@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.rcoem.enotice.enotice_app.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -72,7 +72,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".UserRejectSinglePost"></activity>
+        <activity android:name=".UserRejectSinglePost" />
+        <activity android:name=".AddNoticeTabbed"></activity>
     </application>
 
 </manifest>

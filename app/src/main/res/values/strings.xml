@@ -109,4 +109,7 @@
 
     <string name="FCM_PREF">com.rcoem.enotice.enotice_app.fcm_pref</string>
     <string name="FCM_TOKEN">com.rcoem.enotice.enotice_app.fcm_token</string>
+    <string name="title_activity_add_notice_tabbed">AddNoticeTabbed</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

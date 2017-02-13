@@ -380,7 +380,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                         @Override
                         public void onClick(View v) {
                             //To add new notice code and shift control to AddNoticeActivityAdmin.
-                            Intent intent = new Intent(AccountActivityAdmin.this, AddNoticeActivityAdmin.class);
+                            Intent intent = new Intent(AccountActivityAdmin.this, AddNoticeTabbed.class);
                             startActivity(intent);
                         }
                     });
