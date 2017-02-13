@@ -30,16 +30,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <Button
-            android:id="@+id/btnCapturePicture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@color/colorBg"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="Capture Picture"
-            android:textColor="@color/cardview_light_background" />
+
 
     </android.support.v4.view.ViewPager>
 </android.support.design.widget.CoordinatorLayout>

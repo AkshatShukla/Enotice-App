@@ -87,14 +87,44 @@ public class AddImageNoticeFragment extends Fragment  {
         bt.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
 
-                //create an Intent object
+               /* //create an Intent object
                 Intent intent = new Intent(context, AddNoticeActivityAdmin.class);
 
                 //start the second activity
-                startActivity(intent);
+                startActivity(intent); */
+
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent , Gallery_Request);
             }
 
         });
+
+        imgPreview  = (ImageView) context.findViewById(R.id.imagePreview);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Gallery_Request && resultCode == RESULT_OK) {
+            Uri ImageUri = data.getData();
+            CropImage.activity(ImageUri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .start(context);
+
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+
+                mImageUri = result.getUri();
+
+                imgPreview.setImageURI(mImageUri);
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
     }
 }
 

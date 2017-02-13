@@ -24,6 +24,8 @@ public class AddNoticeTabbed extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private Button add;
+
     private int[] tabIcons = {
             R.drawable.text_notice,
             R.drawable.image_notice,
@@ -46,17 +48,6 @@ public class AddNoticeTabbed extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
-
-        Button add = (Button)findViewById(R.id.btnCapturePicture);
-        add.bringToFront();
-        add.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                Intent myIntent = new Intent(AddNoticeTabbed.this,AddNoticeActivityAdmin.class);
-                startActivity(myIntent);
-            }
-        });
 
     }
 
