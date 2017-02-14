@@ -112,4 +112,16 @@
     <string name="title_activity_add_notice_tabbed">AddNoticeTabbed</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- Spinner Title -->
+    <string name="spinner_title">Choose Notice Type</string>
+
+    <string-array name="type_arrays">
+        <item>For Teachers</item>
+        <item>For Students</item>
+        <item>Urgent</item>
+        <item>Normal</item>
+        <item>Assignment</item>
+        <item>Time Table</item>
+    </string-array>
 </resources>

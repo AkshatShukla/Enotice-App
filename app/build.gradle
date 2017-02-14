@@ -90,6 +90,8 @@ dependencies {
     //For top tab bar navigation
     compile 'devlight.io:navigationtabbar:1.2.5'
 
+    //For Material Text View
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
 }
 
 //To use Google Play Services
