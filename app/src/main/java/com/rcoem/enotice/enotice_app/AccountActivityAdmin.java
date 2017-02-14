@@ -36,6 +36,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -250,10 +251,13 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
     private void viewNotices(String dept) {
 
         //To show only the content relevant to the specific department.
-        mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(dept).child("Deptposts");
+        mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(dept).child("Approved");
+
+        long currentTime = -1 * new Date().getTime();
+        String time = "" + currentTime;
 
         //To query and view only those messages which have been APPROVED by the authenticator.
-        mquery =  mDatabaseValidContent.orderByChild("approved").equalTo("true");
+        mquery =  mDatabaseValidContent.orderByChild("servertime");
 
         //Online-Offline Syncing (only strings and not images)
         mDatabaseValidContent.keepSynced(true);
@@ -293,6 +297,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                                 //Card-expanding Code
                                 Intent intent = new Intent(AccountActivityAdmin.this,AdminSinglePost.class);
                                 intent.putExtra("postkey",Post_Key);
+                                Toast.makeText(AccountActivityAdmin.this,Post_Key, Toast.LENGTH_LONG).show();
                                 startActivity(intent);
 
                             }
@@ -380,7 +385,8 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                         @Override
                         public void onClick(View v) {
                             //To add new notice code and shift control to AddNoticeActivityAdmin.
-                            Intent intent = new Intent(AccountActivityAdmin.this, AddNoticeTabbed.class);
+                            //Intent intent = new Intent(AccountActivityAdmin.this, AddNoticeTabbed.class);
+                            Intent intent = new Intent(AccountActivityAdmin.this, AddNoticeActivityAdmin.class);
                             startActivity(intent);
                         }
                     });

@@ -45,6 +45,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,7 +100,7 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
         mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Deptposts");
+                mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
             }
 
             @Override
@@ -159,6 +160,9 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
         day = calendar.get(Calendar.DAY_OF_MONTH);
         //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
         final String currentDate = day + "/" + month + "/" + year;
+        final long currentLongTime = -1 * new Date().getTime();
+        final String currentTime = "" + currentLongTime;
+
 
         //mProgress.setMessage("Uploading Notice...");
         final AlertDialog dialog = new SpotsDialog(AddNoticeActivityAdmin.this, R.style.CustomProgress);
@@ -182,6 +186,7 @@ public class AddNoticeActivityAdmin extends AppCompatActivity {
                             newPost.child("removed").setValue(0);        //Not removed initially.
                             newPost.child("title").setValue(title_value);
                             newPost.child("time").setValue(currentDate);
+                            newPost.child("servertime").setValue(currentLongTime);
                             newPost.child("Desc").setValue(desc_value);
                             newPost.child("email").setValue(mAuth.getCurrentUser().getEmail());
                             newPost.child("department").setValue(Dept);

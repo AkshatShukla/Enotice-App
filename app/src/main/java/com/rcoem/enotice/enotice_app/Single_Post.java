@@ -37,6 +37,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -164,10 +166,30 @@ public class Single_Post extends AppCompatActivity {
                                         public void onClick(BottomDialog dialog) {
                                             mDatabase.child("approved").setValue("true");
                                             process = false;
+                                           final DatabaseReference mDataApproved = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved").push();
+                                            long serverTime = new Date().getTime();
+
+                                            Calendar calendar = Calendar.getInstance();
+                                            int year = calendar.get(Calendar.YEAR);
+
+                                            int month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
+                                            int day = calendar.get(Calendar.DAY_OF_MONTH);
+                                            //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+                                            final String currentDate = day + "/" + month + "/" + year;
+
                                             String title = dataSnapshot.child("title").getValue().toString().trim();
                                             String message = dataSnapshot.child("username").getValue().toString().trim();
                                             String dept = dataSnapshot.child("department").getValue().toString().trim();
                                             String image = dataSnapshot.child("images").getValue().toString().trim();
+                                            String desc = dataSnapshot.child("Desc").getValue().toString().trim();
+
+                                            mDataApproved.child("title").setValue(title);
+                                            mDataApproved.child("username").setValue(message);
+                                            mDataApproved.child("department").setValue(dept);
+                                            mDataApproved.child("images").setValue(image);
+                                            mDataApproved.child("servertime").setValue(serverTime);
+                                            mDataApproved.child("date").setValue(currentDate);
+                                            mDataApproved.child("Desc").setValue(desc);
                                             departmentPush(title,message,dept,image);
 
                                             Toasty.custom(Single_Post.this, "Notice has been Approved", R.drawable.ok, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.unblocked), 100, true, true).show();
