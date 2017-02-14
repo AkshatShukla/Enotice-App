@@ -80,6 +80,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         getApplication().startService(it); // If service will destroy, Start the service again
     }
 
+    /*
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         
@@ -96,4 +97,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 100, restartServicePI);
     }
+    */
 }
