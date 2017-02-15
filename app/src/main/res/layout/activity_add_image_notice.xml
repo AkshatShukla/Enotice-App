@@ -152,6 +152,21 @@
             android:textColor="@color/colorWhite"
             android:layout_weight="1" />
 
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/btnChooseImage"
+            android:background="@color/colorBg"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Submit"
+            android:textSize="20sp"
+            android:textColor="@color/colorWhite"
+            android:layout_weight="1" />
 
     </RelativeLayout>
 
