@@ -167,7 +167,7 @@ public class Single_Post extends AppCompatActivity {
                                             mDatabase.child("approved").setValue("true");
                                             process = false;
                                            final DatabaseReference mDataApproved = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved").push();
-                                            long serverTime = new Date().getTime();
+                                            long serverTime = -1 * new Date().getTime();
 
                                             Calendar calendar = Calendar.getInstance();
                                             int year = calendar.get(Calendar.YEAR);
