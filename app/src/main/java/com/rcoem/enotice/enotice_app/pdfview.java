@@ -1,22 +1,17 @@
 package com.rcoem.enotice.enotice_app;
 
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -33,9 +28,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
-
-import java.io.File;
-import java.io.IOException;
 
 
 public class pdfview extends AppCompatActivity {
@@ -121,7 +113,7 @@ public class pdfview extends AppCompatActivity {
                 FirebaseRecyclerAdapter<BlogModel, BlogViewHolder>(
 
                         BlogModel.class,
-                        R.layout.pdf_row,
+                        R.layout.notice_document_card,
                         BlogViewHolder.class,
                         mDatabase
                 ) {

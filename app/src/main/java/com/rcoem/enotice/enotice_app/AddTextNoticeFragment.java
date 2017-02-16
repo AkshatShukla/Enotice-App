@@ -97,7 +97,7 @@ public class AddTextNoticeFragment extends Fragment {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            mDatabase  = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("TextPost").push();
+                            mDatabase  = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved").push();
                             mDatabase.child("Desc").setValue(desctext);
                             mDatabase.child("UID").setValue(mAuth.getCurrentUser().getUid());
                             mDatabase.child("approved").setValue("true");

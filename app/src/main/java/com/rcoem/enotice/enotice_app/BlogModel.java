@@ -15,6 +15,9 @@ public class BlogModel {
     private String time;
     private String DEST;
     private String block;
+    private int type;
+    private String profileImg;
+
 
 
 
@@ -23,7 +26,7 @@ public class BlogModel {
 
 
 
-    public BlogModel(String image, String desc, String username, String title, String approved, String name, String time, String DEST, String block) {
+    public BlogModel(String image, String desc, String username, String title, String approved, String name, String time, String DEST, String block, int type, String profileImg) {
         this.images = image;
         this.Desc = desc;
         this.approved = approved;
@@ -33,6 +36,8 @@ public class BlogModel {
         this.time = time;
         this.DEST = DEST;
         this.block = block;
+        this.type = type;
+        this.profileImg = profileImg;
 
     }
 
@@ -99,4 +104,19 @@ public class BlogModel {
         this.block = block;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
 }
