@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,6 +39,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -72,7 +79,6 @@ public class AddImageNoticeFragment extends Fragment  {
     private DatabaseReference mData;
     private DatabaseReference mDataUser;
     private DatabaseReference mDataBaseDepartment;
-    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private FirebaseUser mCurrentUser;
     private static final int Gallery_Request = 1;
@@ -117,7 +123,7 @@ public class AddImageNoticeFragment extends Fragment  {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_add_image_notice, container, false);
+        return view;
     }
 
     public void onStart(){
@@ -129,10 +135,19 @@ public class AddImageNoticeFragment extends Fragment  {
 
         mDataBaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
+
+
         mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Deptposts");
+                final String lvlCheck = dataSnapshot.child("level").getValue().toString().trim();
+
+                if (lvlCheck.equals("1")) {
+                    mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Deptposts");
+                }
+                else if (lvlCheck.equals("2")){
+                    mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
+                }
             }
 
             @Override
@@ -236,6 +251,7 @@ public class AddImageNoticeFragment extends Fragment  {
 
                             newPost.child("approved").setValue("true");  //No Authentication is Required.
                             newPost.child("removed").setValue(0);        //Not removed initially.
+                            newPost.child("label").setValue("2");
                             newPost.child("title").setValue(title_value);
                             newPost.child("time").setValue(currentDate);
                             newPost.child("servertime").setValue(currentLongTime);
@@ -257,7 +273,7 @@ public class AddImageNoticeFragment extends Fragment  {
                             });
 
 
-                            //departmentPush(title_value,"Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
+                            departmentPush(title_value,"Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
 
                         }
 
@@ -278,6 +294,47 @@ public class AddImageNoticeFragment extends Fragment  {
         else if (imgPreview.getDrawable() == null) {
             Toasty.error(context,"No image to upload").show();
         }
+    }
+
+    private void departmentPush(final String t,final String m,final String dept,final String i){
+        final String title = t;
+        final String message = m;
+        final String image = i;
+        final String email = "dhanajay@gmail.com";
+        //progressDialog.setMessage("Sending Dept Push");
+        // progressDialog.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_DEPT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // progressDialog.dismiss();
+
+                        //Toast.makeText(AddNoticeActivityAdmin.this, response, Toast.LENGTH_LONG).show();
+                        Toasty.custom(context, "Department Teachers will be notified of your Notice", R.mipmap.ic_launcher, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorBg), 100, false, true).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("title", title);
+                params.put("message", message);
+
+                if (!TextUtils.isEmpty(image))
+                    params.put("image", image);
+
+                params.put("email", email);
+                params.put("dept",dept);
+                return params;
+            }
+        };
+
+        MyVolley.getInstance(context).addToRequestQueue(stringRequest);
     }
 
     @Override
