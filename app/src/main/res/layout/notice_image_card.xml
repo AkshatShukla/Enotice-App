@@ -26,7 +26,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_alignParentStart="true"
                     android:src="@drawable/art_plane"/>
 
@@ -34,9 +34,9 @@
                     android:id="@+id/profname_imagecard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent"
-                    android:layout_marginTop="15dp"
-                    android:textSize="12sp"
+                    android:textColor="#424242"
+                    android:layout_marginTop="19dp"
+                    android:textSize="13sp"
                     android:text="scw"
                     android:layout_marginStart="8dp"
                     android:layout_toEndOf="@id/profpic_imagecard"/>
@@ -45,18 +45,18 @@
                     android:id="@+id/date_imagecard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent"
-                    android:layout_marginTop="15dp"
+                    android:textColor="#424242"
+                    android:layout_marginTop="19dp"
                     android:textSize="12sp"
                     android:layout_marginEnd="16dp"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_alignParentEnd="true" />
 
                 <ImageView
                     android:id="@+id/pic_imagecard"
                     android:layout_below="@id/profpic_imagecard"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:scaleType="centerCrop" />

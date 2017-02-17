@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,8 @@ public class Single_Post extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private TextView mPostTitle;
     private TextView mPostDesc;
+    private TextView profileName;
+    private TextView Date;
     private ImageButton mViewImage;
     private Button Approved;
     private Button Rejected;
@@ -57,6 +60,7 @@ public class Single_Post extends AppCompatActivity {
     private StorageReference mStoarge;
     private boolean process;
     RelativeLayout ri;
+    private ImageView circularImageView;
     Toolbar mActionBarToolbar;
     private ProgressDialog progressDialog;
     private String feedback;
@@ -70,10 +74,13 @@ public class Single_Post extends AppCompatActivity {
 
         mPostTitle = (TextView) findViewById(R.id.Edit_Title_field1) ;
         mPostDesc = (TextView) findViewById(R.id.Edit_description_field1);
+        profileName = (TextView) findViewById(R.id.profileName);
+        Date = (TextView) findViewById(R.id.date);
         mViewImage = (ImageButton) findViewById(R.id.select_image_Button1);
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
         mStoarge = FirebaseStorage.getInstance().getReference();
         mPostDesc.setText(str);
+        circularImageView = (ImageView) findViewById(R.id.imageView);
 
         //mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -102,7 +109,11 @@ public class Single_Post extends AppCompatActivity {
                         if(dataSnapshot.hasChildren()) {
                             mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
                             mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
+                            profileName.setText(dataSnapshot.child("username").getValue().toString().trim());
+                            Date.setText("on"+ dataSnapshot.child("time").getValue().toString().trim());
                             String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
+                            String url = dataSnapshot.child("profileImg").getValue().toString().trim();
+                            Picasso.with(Single_Post.this).load(url).noFade().into(circularImageView);
                             Picasso.with(Single_Post.this).load(imageUrl).into(mViewImage);
                             //mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                             toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());

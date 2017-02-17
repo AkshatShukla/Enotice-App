@@ -2,6 +2,7 @@ package com.rcoem.enotice.enotice_app.ViewHolderClasses;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,10 +28,14 @@ public class ImageNoticeViewHolder extends RecyclerView.ViewHolder {
 
      View mView;
      ImageView post_image;
+    TextView notice_title;
+    CardView imagecard;
 
     public ImageNoticeViewHolder(View itemView) {
         super(itemView);
         mView = itemView;
+
+        imagecard = (CardView) mView.findViewById(R.id.card_view_imagecard);
     }
 
     public void setProfilePic(final Context context, final String profpiclink){
@@ -51,7 +56,7 @@ public class ImageNoticeViewHolder extends RecyclerView.ViewHolder {
 
     public void setTitle(String title){
 
-        TextView notice_title = (TextView) mView.findViewById(R.id.title_imagecard);
+        notice_title = (TextView) mView.findViewById(R.id.title_imagecard);
         notice_title.setText(title);
     }
 
@@ -86,7 +91,7 @@ public class ImageNoticeViewHolder extends RecyclerView.ViewHolder {
         final String Post_Key = PostKey;
 
 
-        viewHolder.setTitle(model.getProfileImg());
+        viewHolder.setTitle(model.getTitle());
 
         viewHolder.setImage(context, model.getImages());
 
@@ -96,7 +101,21 @@ public class ImageNoticeViewHolder extends RecyclerView.ViewHolder {
 
         viewHolder.setProfilePic(context, model.getProfileImg());
 
-        viewHolder.post_image.setOnClickListener(new View.OnClickListener() {
+        viewHolder.imagecard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //Card-expanding Code
+                Intent intent = new Intent(context, AdminSinglePost.class);
+                intent.putExtra("postkey", Post_Key);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Toast.makeText(context, Post_Key, Toast.LENGTH_LONG).show();
+                context.startActivity(intent);
+
+            }
+        });
+
+        viewHolder.notice_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

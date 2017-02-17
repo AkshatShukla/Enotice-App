@@ -81,7 +81,7 @@ public class UserNoticeStatus extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
                     String str = dataSnapshot.child("department").getValue().toString();
-                    viewNotices(str);
+                  //  viewNotices(str);
                 }
                 else {
                     finish();
@@ -96,7 +96,7 @@ public class UserNoticeStatus extends AppCompatActivity {
         //   mDatabase = FirebaseDatabase.getInstance().getReference().child("posts");
     }
 
-    private void viewNotices(String str) {
+   /* private void viewNotices(String str) {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Deptposts");
         mquery =  mDatabase.orderByChild("UID").equalTo(mAuth.getCurrentUser().getUid());
         mStoarge = FirebaseStorage.getInstance().getReference();
@@ -202,7 +202,7 @@ public class UserNoticeStatus extends AppCompatActivity {
         }
 
 
-    }
+    } */
 
     @Override
     public void onBackPressed() {
