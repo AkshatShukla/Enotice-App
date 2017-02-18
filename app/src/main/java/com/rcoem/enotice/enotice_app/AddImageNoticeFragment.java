@@ -237,8 +237,14 @@ public class AddImageNoticeFragment extends Fragment  {
                         if(!TextUtils.isEmpty(title_value) && !TextUtils.isEmpty(desc_value) && imgPreview.getDrawable() != null) {
                             startPosting(Dept);
                         }
-                        else {
-                            Toasty.error(context,"Enter Title/Description").show();
+                        else if (imgPreview.getDrawable() == null) {
+                            Toasty.warning(context,"No image to upload").show();
+                        }
+                        else if (TextUtils.isEmpty(title_value)) {
+                            Toasty.warning(context,"Please Enter Title").show();
+                        }
+                        else if (TextUtils.isEmpty(desc_value)) {
+                            Toasty.warning(context,"Please Enter Description").show();
                         }
                     }
 
@@ -285,7 +291,6 @@ public class AddImageNoticeFragment extends Fragment  {
                         final AlertDialog dialog1 = new SpotsDialog(context, R.style.CustomProgress);
                         dialog1.show();
 
-                        if(!TextUtils.isEmpty(title_value) && !TextUtils.isEmpty(desc_value) && imgPreview.getDrawable() != null){
                             //mProgress.show();
                             StorageReference filepath = mStoarge.child("Images").child(mImageUri.getLastPathSegment());
                             filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -358,16 +363,7 @@ public class AddImageNoticeFragment extends Fragment  {
                                     getActivity().finish();
                                 }
                             });
-                        }
-                        else if (imgPreview.getDrawable() == null) {
-                            Toasty.error(context,"No image to upload").show();
-                        }
-                        else if (TextUtils.isEmpty(title_value)) {
-                            Toasty.error(context,"Please Enter Title").show();
-                        }
-                        else if (TextUtils.isEmpty(desc_value)) {
-                            Toasty.error(context,"Please Enter Description").show();
-                        }
+
                     }
                 }).show();
 

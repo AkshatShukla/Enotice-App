@@ -147,10 +147,10 @@ public class AddDocNoticeFragment extends Fragment {
                     startActivity(intent);
                 }
                 else if (TextUtils.isEmpty((title_value))) {
-                    Toasty.error(getActivity().getApplicationContext(),"Please Enter the Title").show();
+                    Toasty.warning(getActivity().getApplicationContext(),"Please Enter the Title").show();
                 }
                 else if (TextUtils.isEmpty(desc_value)) {
-                    Toasty.error(getActivity().getApplicationContext(),"Please Enter the Description").show();
+                    Toasty.warning(getActivity().getApplicationContext(),"Please Enter the Description").show();
                 }
             }
         });

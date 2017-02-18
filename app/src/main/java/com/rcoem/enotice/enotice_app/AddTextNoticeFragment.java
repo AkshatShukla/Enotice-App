@@ -70,6 +70,8 @@ public class AddTextNoticeFragment extends Fragment {
     private int year, month, day;
 
     private String Approved;
+    private String titleText;
+    private String descText;
 
     private String noticeType;
 
@@ -142,95 +144,93 @@ public class AddTextNoticeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                new BottomDialog.Builder(context)
-                        .setTitle("Upload ("+noticeType+") Text Notice")
-                        .setContent("Are you sure you want to submit it as your notice?")
-                        .setPositiveText("Approve")
-                        .setPositiveBackgroundColorResource(R.color.colorPrimary)
-                        .setCancelable(false)
-                        .setNegativeText("No")
-                        .setPositiveTextColorResource(android.R.color.white)
-                        //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
-                        .onPositive(new BottomDialog.ButtonCallback() {
-                            @Override
-                            public void onClick(BottomDialog dialog) {
-                                final String titletext = title.getText().toString().trim();
-                                final String desctext =  desc.getText().toString().trim();
-                                calendar = Calendar.getInstance();
-                                year = calendar.get(Calendar.YEAR);
+                titleText = title.getText().toString().trim();
+                descText =  desc.getText().toString().trim();
+                if(!TextUtils.isEmpty(titleText) && !TextUtils.isEmpty(descText)) {
+                    new BottomDialog.Builder(context)
+                            .setTitle("Upload (" + noticeType + ") Text Notice")
+                            .setContent("Are you sure you want to submit it as your notice?")
+                            .setPositiveText("Approve")
+                            .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                            .setCancelable(false)
+                            .setNegativeText("No")
+                            .setPositiveTextColorResource(android.R.color.white)
+                            //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                            .onPositive(new BottomDialog.ButtonCallback() {
+                                @Override
+                                public void onClick(BottomDialog dialog) {
 
-                                month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
-                                day = calendar.get(Calendar.DAY_OF_MONTH);
-                                //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
-                                final String currentDate = day + "/" + month + "/" + year;
-                                final long currentLongTime = -1 * new Date().getTime();
-                                final String currentTime = "" + currentLongTime;
-                                if(!TextUtils.isEmpty(titletext) && !TextUtils.isEmpty(desctext)){
+                                    calendar = Calendar.getInstance();
+                                    year = calendar.get(Calendar.YEAR);
 
-                                    final AlertDialog dialog1 = new SpotsDialog(getContext(), R.style.CustomProgress);
-                                    dialog1.show();
+                                    month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
+                                    day = calendar.get(Calendar.DAY_OF_MONTH);
+                                    //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+                                    final String currentDate = day + "/" + month + "/" + year;
+                                    final long currentLongTime = -1 * new Date().getTime();
+                                    final String currentTime = "" + currentLongTime;
 
-                                    mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                        final AlertDialog dialog1 = new SpotsDialog(getContext(), R.style.CustomProgress);
+                                        dialog1.show();
 
-                                            final String Dept = dataSnapshot.child("department").getValue().toString().trim();
-                                            final String lvlCheck = dataSnapshot.child("level").getValue().toString().trim();
+                                        mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                            if (lvlCheck.equals("1")) {
-                                                mDatabase  = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending").push();
-                                                Approved = "false";
+                                                final String Dept = dataSnapshot.child("department").getValue().toString().trim();
+                                                final String lvlCheck = dataSnapshot.child("level").getValue().toString().trim();
+
+                                                if (lvlCheck.equals("1")) {
+                                                    mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending").push();
+                                                    Approved = "false";
+                                                } else if (lvlCheck.equals("2")) {
+                                                    mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved").push();
+                                                    Approved = "true";
+                                                }
+
+                                                mDatabase.child("type").setValue(1);
+                                                mDatabase.child("label").setValue(noticeType);
+                                                mDatabase.child("title").setValue(titleText);
+                                                mDatabase.child("Desc").setValue(descText);
+                                                mDatabase.child("UID").setValue(mAuth.getCurrentUser().getUid());
+                                                mDatabase.child("email").setValue(mAuth.getCurrentUser().getEmail());
+                                                mDatabase.child("username").setValue(dataSnapshot.child("name").getValue());
+                                                mDatabase.child("profileImg").setValue(dataSnapshot.child("images").getValue());
+                                                //Passing Default Text Image for Web App Viewing
+                                                mDatabase.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
+                                                mDatabase.child("time").setValue(currentDate);
+                                                mDatabase.child("servertime").setValue(currentLongTime);
+                                                mDatabase.child("link").setValue(null);
+                                                mDatabase.child("department").setValue(dataSnapshot.child("department").getValue().toString().trim());
+                                                mDatabase.child("approved").setValue(Approved);
+
+                                                if (lvlCheck.equals("2")) {
+                                                    departmentPushDept(titleText, "Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()), Dept);
+                                                } else if (lvlCheck.equals("1")) {
+                                                    departmentPushHOD(titleText, "Pending Notice Approval sent by ".concat(dataSnapshot.child("name").getValue().toString()), Dept);
+                                                }
+
                                             }
-                                            else if (lvlCheck.equals("2")){
-                                                mDatabase  = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved").push();
-                                                Approved = "true";
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+                                                Toasty.error(context, "Connection Error").show();
                                             }
 
-                                            mDatabase.child("type").setValue(1);
-                                            mDatabase.child("label").setValue(noticeType);
-                                            mDatabase.child("title").setValue(titletext);
-                                            mDatabase.child("Desc").setValue(desctext);
-                                            mDatabase.child("UID").setValue(mAuth.getCurrentUser().getUid());
-                                            mDatabase.child("email").setValue(mAuth.getCurrentUser().getEmail());
-                                            mDatabase.child("username").setValue(dataSnapshot.child("name").getValue());
-                                            mDatabase.child("profileImg").setValue(dataSnapshot.child("images").getValue());
-                                            //Passing Default Text Image for Web App Viewing
-                                            mDatabase.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
-                                            mDatabase.child("time").setValue(currentDate);
-                                            mDatabase.child("servertime").setValue(currentLongTime);
-                                            mDatabase.child("link").setValue(null);
-                                            mDatabase.child("department").setValue(dataSnapshot.child("department").getValue().toString().trim());
-                                            mDatabase.child("approved").setValue(Approved);
+                                        });
+                                        Toasty.success(context, "Successfully Posted").show();
+                                        dialog1.dismiss();
+                                        startActivity(new Intent(context, AddNoticeTabbed.class));
+                                        getActivity().finish();
 
-                                            if (lvlCheck.equals("2")) {
-                                                departmentPushDept(titletext,"Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()),Dept);
-                                            }
-                                            else if (lvlCheck.equals("1")) {
-                                                departmentPushHOD(titletext,"Pending Notice Approval sent by ".concat(dataSnapshot.child("name").getValue().toString()),Dept);
-                                            }
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                            Toasty.error(context,"Connection Error").show();
-                                        }
-
-                                    });
-                                    Toasty.success(context,"Successfully Posted").show();
-                                    dialog1.dismiss();
-                                    startActivity(new Intent(context,AddNoticeTabbed.class));
-                                    getActivity().finish();
                                 }
-                                else if (TextUtils.isEmpty(titletext)) {
-                                    Toasty.error(context,"Please Enter Title").show();
-                                }
-                                else if (TextUtils.isEmpty(desctext)) {
-                                    Toasty.error(context,"Please Enter Description").show();
-                                }
-                            }
-                        }).show();
-
+                            }).show();
+                }
+                else if (TextUtils.isEmpty(titleText)) {
+                    Toasty.warning(context, "Please Enter Title").show();
+                } else if (TextUtils.isEmpty(descText)) {
+                    Toasty.warning(context, "Please Enter Description").show();
+                }
             }
         });
 
