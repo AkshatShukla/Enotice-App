@@ -81,8 +81,8 @@ public class PdfUpload extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_upload);
         Intent intent = getIntent();
-        TitleText = intent.getStringExtra("textTitle");
-        DescText = intent.getStringExtra("textDesc");
+        TitleText = intent.getStringExtra("title_value");
+        DescText = intent.getStringExtra("desc_value");
         noticeType = intent.getStringExtra("noticeType");
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -120,7 +120,7 @@ public class PdfUpload extends AppCompatActivity {
     }
 
     private void startPosting(String string) {
-        mData = FirebaseDatabase.getInstance().getReference().child("posts").child(string).child("Document");
+        //mData = FirebaseDatabase.getInstance().getReference().child("posts").child(string).child("Document");
         mDataUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
         //getting SDcard root path
         root = new File(Environment.getExternalStorageDirectory()
@@ -183,7 +183,7 @@ public class PdfUpload extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
                                         final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                                        final DatabaseReference newPost = mData.push();
+
                                         mDataUser.addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(final DataSnapshot dataSnapshot) {
@@ -199,6 +199,8 @@ public class PdfUpload extends AppCompatActivity {
                                                     mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
                                                     Approved = "true";
                                                 }
+
+                                                final DatabaseReference newPost = mData.push();
 
                                                 newPost.child("type").setValue(3);
                                                 newPost.child("label").setValue(noticeType);

@@ -52,8 +52,8 @@ public class AddDocNoticeFragment extends Fragment {
     private Spinner spinnerDoc;
 
     private String noticeType;
-    private String title_value;
-    private String desc_value;
+    private String titleDoc_value;
+    private String descDoc_value;
 
     private boolean docOK;
 
@@ -139,19 +139,24 @@ public class AddDocNoticeFragment extends Fragment {
         btnSubmitDoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!TextUtils.isEmpty(title_value) && !TextUtils.isEmpty(desc_value)) {
+
+                titleDoc_value =  titleDoc.getText().toString().trim();
+                descDoc_value = descDoc.getText().toString().trim();
+
+                if(!TextUtils.isEmpty(titleDoc_value) && !TextUtils.isEmpty(descDoc_value)) {
                     Intent intent = new Intent(context , PdfUpload.class);
-                    intent.putExtra("textTitle",title_value);
-                    intent.putExtra("textDesc",desc_value);
+                    intent.putExtra("title_value",titleDoc_value);
+                    intent.putExtra("desc_value",descDoc_value);
                     intent.putExtra("noticeType",noticeType);
                     startActivity(intent);
                 }
-                else if (TextUtils.isEmpty((title_value))) {
+                else if (TextUtils.isEmpty((titleDoc_value))) {
                     Toasty.warning(getActivity().getApplicationContext(),"Please Enter the Title").show();
                 }
-                else if (TextUtils.isEmpty(desc_value)) {
+                else if (TextUtils.isEmpty(descDoc_value)) {
                     Toasty.warning(getActivity().getApplicationContext(),"Please Enter the Description").show();
                 }
+
             }
         });
 
