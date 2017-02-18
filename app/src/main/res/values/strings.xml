@@ -116,12 +116,4 @@
     <!-- Spinner Title -->
     <string name="spinner_title">Choose Notice Type</string>
 
-    <string-array name="type_arrays">
-        <item>For Teachers</item>
-        <item>For Students</item>
-        <item>Urgent</item>
-        <item>Normal</item>
-        <item>Assignment</item>
-        <item>Time Table</item>
-    </string-array>
 </resources>

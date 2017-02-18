@@ -4,6 +4,7 @@ package com.rcoem.enotice.enotice_app;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,11 +31,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -44,6 +48,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -85,6 +90,8 @@ public class AddImageNoticeFragment extends Fragment  {
 
     private EditText titleText;
     private EditText descText;
+    private String title_value;
+    private String desc_value;
     private Button btnCaptureImage;
     private Button btnChooseImage;
     private Button btnSubmit;
@@ -92,15 +99,28 @@ public class AddImageNoticeFragment extends Fragment  {
     private static final int CAMERA_REQUEST = 1888;
     private Uri mImageUri = null;
 
+    private Spinner spinnerImage;
+    private String noticeType;
+    private ImageView circularImageView;
+
+    private String [] typeArray =
+            {       "For Teachers",
+                    "For Students",
+                    "Urgent",
+                    "Normal",
+                    "Assignment",
+                    "Time Table"};
+
     // directory name to store captured images and videos
     private static final String IMAGE_DIRECTORY_NAME = "E Notices";
+    private String Approved;
 
     private DatePicker datePicker;
     private Calendar calendar;
     private TextView dateView;
     private int year, month, day;
 
-    View view;
+    View imageView;
 
     Activity context;
 
@@ -119,11 +139,11 @@ public class AddImageNoticeFragment extends Fragment  {
                              Bundle savedInstanceState) {
 
         context = getActivity();
-        view = inflater.inflate(R.layout.activity_add_image_notice, container, false);
+        imageView = inflater.inflate(R.layout.activity_add_image_notice, container, false);
 
 
         // Inflate the layout for this fragment
-        return view;
+        return imageView;
     }
 
     public void onStart(){
@@ -132,33 +152,41 @@ public class AddImageNoticeFragment extends Fragment  {
         mStoarge = FirebaseStorage.getInstance().getReference();
         mCurrentUser = mAuth.getCurrentUser();
 
+        spinnerImage = (Spinner) context.findViewById(R.id.spinnerImage);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                context, android.R.layout.simple_spinner_item, typeArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerImage.setAdapter(adapter);
+        spinnerImage.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                               int arg2, long arg3) {
+
+                        int position = spinnerImage.getSelectedItemPosition();
+
+                        noticeType = typeArray[+position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                        // TODO Auto-generated method stub
+
+                    }
+
+                }
+        );
 
         mDataBaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
-
-
-        mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                final String lvlCheck = dataSnapshot.child("level").getValue().toString().trim();
-
-                if (lvlCheck.equals("1")) {
-                    mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Deptposts");
-                }
-                else if (lvlCheck.equals("2")){
-                    mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
         mDataUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
 
-        titleText = (EditText) context.findViewById(R.id.titleText);
-        descText = (EditText) context.findViewById(R.id.descText);
+        titleText = (EditText) context.findViewById(R.id.titleImage);
+        descText = (EditText) context.findViewById(R.id.descImage);
+
 
         btnCaptureImage = (Button) context.findViewById(R.id.btnCapturePicture);
         btnCaptureImage.setOnClickListener(new View.OnClickListener(){
@@ -174,6 +202,7 @@ public class AddImageNoticeFragment extends Fragment  {
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent , Gallery_Request);
                 */
+
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
@@ -190,18 +219,27 @@ public class AddImageNoticeFragment extends Fragment  {
                 startActivityForResult(i, Gallery_Request);
             }
         });
-        btnSubmit = (Button) context.findViewById(R.id.btnSubmit);
+
+        title_value =  titleText.getText().toString().trim();
+        desc_value = descText.getText().toString().trim();
+
+        btnSubmit = (Button) context.findViewById(R.id.btnSubmitImage);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Toasty.info(context,"Submitting").show();
                 mDataBaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
                 mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String Dept = dataSnapshot.child("department").getValue().toString().trim();
-                        startPosting(Dept);
+
+                        if(!TextUtils.isEmpty(title_value) && !TextUtils.isEmpty(desc_value) && imgPreview.getDrawable() != null) {
+                            startPosting(Dept);
+                        }
+                        else {
+                            Toasty.error(context,"Enter Title/Description").show();
+                        }
                     }
 
                     @Override
@@ -217,86 +255,125 @@ public class AddImageNoticeFragment extends Fragment  {
     }
 
     private void startPosting(final String Dept) {
-        final String title_value =  titleText.getText().toString().trim();
-        final String desc_value = descText.getText().toString().trim();
-        final String user_id =  mAuth.getCurrentUser().getUid();
-        calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);
 
-        month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
-        final String currentDate = day + "/" + month + "/" + year;
-        final long currentLongTime = -1 * new Date().getTime();
-        final String currentTime = "" + currentLongTime;
+        new BottomDialog.Builder(context)
+                .setTitle("Upload ("+noticeType+") Image Notice")
+                .setContent("Are you sure you want to submit it as your notice?")
+                .setPositiveText("Approve")
+                .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                .setCancelable(false)
+                .setNegativeText("No")
+                .setPositiveTextColorResource(android.R.color.white)
+                //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                .onPositive(new BottomDialog.ButtonCallback() {
+                    @Override
+                    public void onClick(BottomDialog dialog) {
+
+                        final String user_id =  mAuth.getCurrentUser().getUid();
+                        calendar = Calendar.getInstance();
+                        year = calendar.get(Calendar.YEAR);
+
+                        month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
+                        day = calendar.get(Calendar.DAY_OF_MONTH);
+                        //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+                        final String currentDate = day + "/" + month + "/" + year;
+                        final long currentLongTime = -1 * new Date().getTime();
+                        final String currentTime = "" + currentLongTime;
 
 
-        //mProgress.setMessage("Uploading Notice...");
-        final AlertDialog dialog = new SpotsDialog(context, R.style.CustomProgress);
-        dialog.show();
+                        //mProgress.setMessage("Uploading Notice...");
+                        final AlertDialog dialog1 = new SpotsDialog(context, R.style.CustomProgress);
+                        dialog1.show();
 
-        if(!TextUtils.isEmpty(title_value) && !TextUtils.isEmpty(desc_value) && imgPreview.getDrawable() != null){
-            //mProgress.show();
-            StorageReference filepath = mStoarge.child("Images").child(mImageUri.getLastPathSegment());
-            filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    final Uri downloadUrl = taskSnapshot.getDownloadUrl();
-
-                    final DatabaseReference newPost =mData.push();
-
-                    mDataUser.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                            newPost.child("approved").setValue("true");  //No Authentication is Required.
-                            newPost.child("removed").setValue(0);        //Not removed initially.
-                            newPost.child("label").setValue("2");
-                            newPost.child("title").setValue(title_value);
-                            newPost.child("time").setValue(currentDate);
-                            newPost.child("servertime").setValue(currentLongTime);
-                            newPost.child("Desc").setValue(desc_value);
-                            newPost.child("email").setValue(mAuth.getCurrentUser().getEmail());
-                            newPost.child("department").setValue(Dept);
-                            newPost.child("images").setValue(downloadUrl.toString());
-                            newPost.child("username").setValue(dataSnapshot.child("name").getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        if(!TextUtils.isEmpty(title_value) && !TextUtils.isEmpty(desc_value) && imgPreview.getDrawable() != null){
+                            //mProgress.show();
+                            StorageReference filepath = mStoarge.child("Images").child(mImageUri.getLastPathSegment());
+                            filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toasty.success(context,"Upload Successfully").show();
-                                    }
-                                    else
-                                    {
-                                        Toasty.error(context,"Upload Unsuccessful").show();
-                                    }
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+
+                                    mDataUser.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                            final String lvlCheck = dataSnapshot.child("level").getValue().toString().trim();
+
+                                            if (lvlCheck.equals("1")) {
+                                                mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending");
+                                                Approved = "false";
+                                            }
+                                            else if (lvlCheck.equals("2")){
+                                                mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
+                                                Approved = "true";
+                                            }
+
+                                            final DatabaseReference newPost = mData.push();
+
+                                            newPost.child("type").setValue(2);
+                                            newPost.child("label").setValue(noticeType);
+                                            newPost.child("title").setValue(title_value);
+                                            newPost.child("Desc").setValue(desc_value);
+                                            newPost.child("UID").setValue(mAuth.getCurrentUser().getUid());
+                                            newPost.child("email").setValue(mAuth.getCurrentUser().getEmail());
+                                            newPost.child("username").setValue(dataSnapshot.child("name").getValue());
+                                            newPost.child("profileImg").setValue(dataSnapshot.child("images").getValue());
+                                            newPost.child("images").setValue(downloadUrl.toString());
+                                            newPost.child("time").setValue(currentDate);
+                                            newPost.child("servertime").setValue(currentLongTime);
+                                            newPost.child("link").setValue(null);
+                                            newPost.child("department").setValue(Dept);
+                                            newPost.child("approved").setValue(Approved).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        Toasty.success(context,"Upload Successfull").show();
+                                                    }
+                                                    else
+                                                    {
+                                                        Toasty.error(context,"Upload Unsuccessful").show();
+                                                    }
+                                                }
+                                            });
+
+                                            if (lvlCheck.equals("2")) {
+                                                departmentPushDept(title_value, "Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()), Dept, downloadUrl.toString());
+                                            }
+                                            else if (lvlCheck.equals("1")) {
+                                                departmentPushHOD(title_value, "Pending Notice Approval sent by ".concat(dataSnapshot.child("name").getValue().toString()), Dept, downloadUrl.toString());
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            Toasty.error(context,"Connection Error").show();
+                                        }
+                                    });
+
+                                    Toasty.success(context,"Successfully Posted").show();
+                                    dialog1.dismiss();
+                                    startActivity(new Intent(context , AddNoticeTabbed.class));
+                                    getActivity().finish();
                                 }
                             });
-
-
-                            departmentPush(title_value,"Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()),Dept,downloadUrl.toString());
-
                         }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
+                        else if (imgPreview.getDrawable() == null) {
+                            Toasty.error(context,"No image to upload").show();
                         }
-                    });
+                        else if (TextUtils.isEmpty(title_value)) {
+                            Toasty.error(context,"Please Enter Title").show();
+                        }
+                        else if (TextUtils.isEmpty(desc_value)) {
+                            Toasty.error(context,"Please Enter Description").show();
+                        }
+                    }
+                }).show();
 
-
-                    //mProgress.dismiss();
-                    dialog.dismiss();
-                    //startActivity(new Intent(context , AddNoticeTabbed.class));
-                }
-            });
-
-        }
-        else if (imgPreview.getDrawable() == null) {
-            Toasty.error(context,"No image to upload").show();
-        }
     }
 
-    private void departmentPush(final String t,final String m,final String dept,final String i){
+    private void departmentPushDept(final String t,final String m,final String dept,final String i){
         final String title = t;
         final String message = m;
         final String image = i;
@@ -310,7 +387,48 @@ public class AddImageNoticeFragment extends Fragment  {
                         // progressDialog.dismiss();
 
                         //Toast.makeText(AddNoticeActivityAdmin.this, response, Toast.LENGTH_LONG).show();
-                        Toasty.custom(context, "Department Teachers will be notified of your Notice", R.mipmap.ic_launcher, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorBg), 100, false, true).show();
+                        //Toasty.custom(getActivity().getBaseContext(), "Department Teachers will be notified of your Notice", R.mipmap.ic_launcher, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorBg), 100, false, true).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("title", title);
+                params.put("message", message);
+
+                if (!TextUtils.isEmpty(image))
+                    params.put("image", image);
+
+                params.put("email", email);
+                params.put("dept",dept);
+                return params;
+            }
+        };
+
+        MyVolley.getInstance(context).addToRequestQueue(stringRequest);
+    }
+
+    private void departmentPushHOD(final String t,final String m,final String dept,final String i){
+        final String title = t;
+        final String message = m;
+        final String image = i;
+        final String email = "dhanajay@gmail.com";
+        //progressDialog.setMessage("Sending Dept Push");
+        // progressDialog.show();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_HOD,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // progressDialog.dismiss();
+
+                        //Toast.makeText(AddNoticeActivityUser.this, response, Toast.LENGTH_LONG).show();
+                        //Toasty.custom(getActivity().getBaseContext(), "HOD will be notified of your Notice", R.mipmap.ic_launcher, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorBg), 100, false, true).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -342,6 +460,11 @@ public class AddImageNoticeFragment extends Fragment  {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             imgPreview.setImageBitmap(photo);
+            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+            mImageUri = getImageUri(context, photo);
+
+            // CALL THIS METHOD TO GET THE ACTUAL PATH
+            File finalFile = new File(getRealPathFromURI(mImageUri));
         }
 
         try {
@@ -376,6 +499,19 @@ public class AddImageNoticeFragment extends Fragment  {
         }
     }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        //inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
 }
 
 
