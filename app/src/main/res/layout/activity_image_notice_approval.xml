@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rcoem.enotice.enotice_app.ImageNoticeApproval">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:elevation="3dp">
+
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:background="@color/colorBackground"
+            android:orientation="vertical"
+            android:weightSum="1"
+            tools:context="com.rcoem.enotice.enotice_app.Single_Post">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_scrollFlags="scroll|enterAlways"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/user"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="#FFFFFF" />
+
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="15dp"
+                    android:textSize="12sp"
+                    android:hint="Dhananjay"
+                    android:textColor="#000000"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/imageView"
+                    android:id="@+id/profileName"
+                    />
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="20dp"
+                    android:textSize="8sp"
+                    android:layout_marginLeft="75dp"
+                    android:text="on 12.12.2012"
+                    android:id="@+id/date"
+                    android:layout_below="@+id/profileName"
+
+
+                    />
+            </RelativeLayout>
+
+
+
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/select_image_Button1"
+                android:background="#FFFFFF"
+                android:src="@mipmap/add_btn"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="false"
+                android:layout_below="@+id/toolbar" />
+
+            <TextView
+                android:text="Click on &quot;APPROVE&quot; to approve this notice or &quot;REJECT&quot; to reject it.\nOnly notices you approve appear on your department's feed."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:layout_below="@id/select_image_Button1"
+                android:padding="15dp"
+
+                android:background="#FFFFFF"
+                android:id="@+id/textView7" />
+
+            <TextView
+                android:text="Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/colorBg"
+                android:layout_marginLeft="12dp"
+                android:id="@+id/textView6"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:inputType="textMultiLine"
+                android:textSize="16dp"
+                android:id="@+id/Edit_Title_field1"
+                android:paddingTop="6dp"
+                android:paddingLeft="13dp"
+
+                android:textColor="#000000"
+
+
+                android:text = "Post Description"
+                android:layout_below="@+id/Edit_description_field1"
+                android:layout_alignParentStart="true"
+
+                android:layout_marginTop="1dp"
+                android:textStyle="bold"
+                />
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="#FFFFFF"
+
+
+                />
+            <TextView
+                android:text="Description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorBg"
+                android:layout_marginLeft="12dp"
+
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:inputType="textPersonName"
+
+                android:id="@+id/Edit_description_field1"
+                android:text = "Post Description"
+                android:layout_marginTop="20dp"
+                android:textColor="#000000"
+                android:padding="13dp"
+                android:hint="Post Title"
+                android:layout_below="@+id/textView7"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                />
+
+            <LinearLayout
+                android:id="@+id/li_activity_single_post"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:text="Approve"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:id="@+id/Approve_button"
+                    android:layout_margin="16dp"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@color/cardview_light_background"
+                    />
+
+                <Button
+                    android:text="Reject"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:id="@+id/Reject_button"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@color/cardview_light_background"
+                    android:layout_margin="16dp"
+                    />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</android.support.design.widget.CoordinatorLayout>
