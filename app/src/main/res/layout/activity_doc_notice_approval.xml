@@ -119,7 +119,11 @@
 
 
             <ImageButton
+                android:layout_width="64dp"
+                android:layout_height="84dp"
+                android:src="@drawable/pdf_download_button"
                 android:layout_gravity="center_horizontal"
+                android:id="@+id/downloadPDF"
                 android:layout_weight="0.02" />
 
             <TextView
