@@ -35,11 +35,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#424242"
-                    android:layout_marginTop="19dp"
+                    android:layout_marginTop="10dp"
                     android:textSize="13sp"
                     android:text="scw"
                     android:layout_marginStart="8dp"
                     android:layout_toEndOf="@id/profpic_imagecard"/>
+
+                <TextView
+                    android:id="@+id/label_imagecard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:text="scw"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/labelshape"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:layout_toEndOf="@id/profpic_imagecard"/>
+
 
                 <TextView
                     android:id="@+id/date_imagecard"
@@ -70,6 +85,7 @@
                     android:text="Title of the Image Notice goes here making this long enough to test"
                     android:maxLines="1"
                     android:textStyle="bold"
+                    android:textSize="18sp"
                     android:textColor="#000000"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"

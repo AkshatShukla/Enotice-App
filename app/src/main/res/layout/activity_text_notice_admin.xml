@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context="com.rcoem.enotice.enotice_app.Single_Post">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:elevation="3dp">
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:background="@color/colorBackground"
+            android:weightSum="1"
+            tools:context="com.rcoem.enotice.enotice_app.Single_Post"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_scrollFlags="scroll|enterAlways"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/imageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/user"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="#FFFFFF" />
+
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="15dp"
+                    android:textSize="13sp"
+                    android:hint="Dhananjay"
+                    android:textColor="#000000"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/imageView"
+                    android:id="@+id/profileName"
+                    />
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/date"
+                    android:textSize="10sp"
+                    android:layout_marginLeft="75dp"
+                    android:text="on 12.12.2012"
+
+                    android:layout_below="@+id/profileName"
+
+
+                    />
+            </RelativeLayout>
+
+
+            <TextView
+                android:text="You verified this following information.Click on remove button to delete it."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:layout_below="@id/select_image_Button1"
+                android:padding="15dp"
+                android:layout_marginTop="10dp"
+                android:background="#FFFFFF"
+                android:id="@+id/textView7" />
+            <TextView
+                android:text="Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/colorBg"
+                android:layout_marginLeft="12dp"
+                android:id="@+id/textView6"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+
+                android:id="@+id/Edit_Title_field1"
+
+                android:layout_marginLeft="15dp"
+                android:textColor="#000000"
+
+                android:text = "Post Description"
+                android:layout_below="@+id/Edit_description_field1"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="19dp"
+
+                />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp">
+                <TextView
+
+                    android:layout_width="340dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#FFFFFF"
+
+
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:text="Description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorBg"
+                android:layout_marginLeft="12dp"
+
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:inputType="textMultiLine"
+
+                android:id="@+id/Edit_description_field1"
+                android:text = "Post Description"
+                android:layout_marginTop="5dp"
+                android:textColor="#000000"
+                android:padding="15dp"
+                android:hint="Post Title"
+                android:layout_below="@+id/textView7"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                />
+
+            <LinearLayout
+                android:id="@+id/li_activity_single_post"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:text="Remove"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:id="@+id/button2"
+                    android:layout_margin="16dp"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@color/cardview_light_background"
+                    />
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>

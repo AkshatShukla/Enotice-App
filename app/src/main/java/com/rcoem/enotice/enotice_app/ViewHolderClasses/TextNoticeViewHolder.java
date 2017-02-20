@@ -15,6 +15,10 @@ import com.rcoem.enotice.enotice_app.AdminSinglePost;
 import com.rcoem.enotice.enotice_app.BlogModel;
 import com.rcoem.enotice.enotice_app.CircleTransform;
 import com.rcoem.enotice.enotice_app.R;
+import com.rcoem.enotice.enotice_app.TextNoticeAdmin;
+import com.rcoem.enotice.enotice_app.TextNoticeApproval;
+import com.rcoem.enotice.enotice_app.TextNoticeUser;
+import com.rcoem.enotice.enotice_app.Utils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -27,14 +31,14 @@ import com.squareup.picasso.Picasso;
 public class TextNoticeViewHolder extends RecyclerView.ViewHolder {
 
     View mView;
-    ImageView post_image;
-    TextView notice_title;
     CardView textcard;
+    int callingActivity;
+    Intent intent;
 
-    public TextNoticeViewHolder(View itemView) {
+    public TextNoticeViewHolder(View itemView, int callingActivity) {
         super(itemView);
         mView = itemView;
-
+        this.callingActivity = callingActivity;
         textcard = (CardView) mView.findViewById(R.id.card_view_textcard);
     }
 
@@ -56,8 +60,13 @@ public class TextNoticeViewHolder extends RecyclerView.ViewHolder {
 
     public void setTitle(String title){
 
-        notice_title = (TextView) mView.findViewById(R.id.title_textcard);
+        TextView notice_title = (TextView) mView.findViewById(R.id.title_textcard);
         notice_title.setText(title);
+    }
+
+    public void setLabel(String label){
+        TextView notice_label = (TextView) mView.findViewById(R.id.label_textcard);
+        notice_label.setText(label);
     }
 
 
@@ -84,16 +93,64 @@ public class TextNoticeViewHolder extends RecyclerView.ViewHolder {
 
         viewHolder.setTime(model.getTime());
 
+        viewHolder.setLabel(model.getLabel());
+
         viewHolder.setProfname(model.getUsername());
 
         viewHolder.setProfilePic(context, model.getProfileImg());
+
+        final int callingActivity = viewHolder.callingActivity;
 
         viewHolder.textcard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Intent intent;
+
+                switch (callingActivity) {
+                    case Utils.ADMIN_VIEW:
+
+                        intent = new Intent(context, TextNoticeAdmin.class);
+                        intent.putExtra("postkey", Post_Key);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+
+                        break;
+
+                    case Utils.ADMIN_APPROVE:
+
+                        intent = new Intent(context, TextNoticeApproval.class);
+                        intent.putExtra("postkey", Post_Key);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+
+                        break;
+
+                    case Utils.USER_VIEW:
+
+                        intent = new Intent(context, TextNoticeUser.class);
+                        intent.putExtra("postkey", Post_Key);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+
+                        break;
+
+                    case Utils.USER_STATUS:
+
+                        intent = new Intent(context, TextNoticeApproval.class);
+                        intent.putExtra("postkey", Post_Key);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+
+                        break;
+                }
             }
+
         });
+
+
+
+
 
     }
 }

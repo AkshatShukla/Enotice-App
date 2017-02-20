@@ -52,6 +52,7 @@ import com.firebase.ui.database.*;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.rcoem.enotice.enotice_app.ViewHolderClasses.DocumentNoticeViewHolder;
 import com.rcoem.enotice.enotice_app.ViewHolderClasses.ImageNoticeViewHolder;
 import com.rcoem.enotice.enotice_app.ViewHolderClasses.TextNoticeViewHolder;
 import com.squareup.picasso.Callback;
@@ -275,7 +276,6 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
 
 
-        di = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -387,7 +387,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                                 ImageNoticeViewHolder.populateImageNoticeCard((ImageNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
                                 break;
                             case 3 :
-                                populateDocumentNoticeCard((DocumentNoticeViewHolder) viewHolder, model, position, Post_Key);
+                                DocumentNoticeViewHolder.populateDocumentNoticeCard((DocumentNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
                                 break;
                         }
                     }
@@ -396,18 +396,18 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                     @Override
                     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                         switch (viewType) {
-                            case 1:
+                            case Utils.TEXT_NOTICE:
                                 View textNotice = LayoutInflater.from(parent.getContext())
                                         .inflate(R.layout.notice_text_card, parent, false);
-                                return new TextNoticeViewHolder(textNotice);
-                            case 2:
+                                return new TextNoticeViewHolder(textNotice, Utils.ADMIN_VIEW);
+                            case Utils.IMAGE_NOTICE:
                                 View imageNotice = LayoutInflater.from(parent.getContext())
                                         .inflate(R.layout.notice_image_card, parent, false);
-                                return new ImageNoticeViewHolder(imageNotice);
-                            case 3:
+                                return new ImageNoticeViewHolder(imageNotice, Utils.ADMIN_VIEW);
+                            case Utils.DOCUMENT_NOTICE:
                                 View documentNotice = LayoutInflater.from(parent.getContext())
                                         .inflate(R.layout.notice_document_card, parent, false);
-                                return new DocumentNoticeViewHolder(documentNotice);
+                                return new DocumentNoticeViewHolder(documentNotice, Utils.ADMIN_VIEW);
                         }
                         return super.onCreateViewHolder(parent, viewType);
                     }
@@ -416,12 +416,12 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
                     public int getItemViewType(int position) {
                         BlogModel model = getItem(position);
                         switch (model.getType()) {
-                            case 1:
-                                return 1;
-                            case 2:
-                                return 2;
-                            case 3:
-                                return 3;
+                            case Utils.TEXT_NOTICE:
+                                return Utils.TEXT_NOTICE;
+                            case Utils.IMAGE_NOTICE:
+                                return Utils.IMAGE_NOTICE;
+                            case Utils.DOCUMENT_NOTICE:
+                                return Utils.DOCUMENT_NOTICE;
                         }
                         return super.getItemViewType(position);
                     }
@@ -493,86 +493,6 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
 
 
-    //View Holder for Document Notice
-    public static class DocumentNoticeViewHolder extends RecyclerView.ViewHolder {
-
-        View mView;
-
-        public DocumentNoticeViewHolder(View itemView) {
-            super(itemView);
-            mView = itemView;
-        }
-        public void setUsername(String username){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_prof_name);
-            post_Desc.setText(username);
-        }
-        public void setTitle(String title){
-
-            TextView post_title = (TextView) mView.findViewById(R.id.title_card);
-            post_title.setText(title);
-        }
-
-        public void setDesc(String Desc){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_name);
-            post_Desc.setText(Desc);
-        }
-
-        public void setImage(final Context context, final String image){
-
-            final ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
-            //Picasso.with(context).load(image).into(post_image);
-
-            Picasso.with(context).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(post_image, new Callback() {
-                @Override
-                public void onSuccess() {
-                    //Do Nothing
-                }
-
-                @Override
-                public void onError() {
-                    Picasso.with(context).load(image).into(post_image);
-                }
-            });
-
-        }
-
-        public void setTime(String time){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_timestamp);
-            post_Desc.setText(time);
-        }
-
-
-    }
-
-    public  void populateDocumentNoticeCard(DocumentNoticeViewHolder viewHolder, BlogModel model, final int position, String PostKey){
-        final String Post_Key  = PostKey;
-
-        viewHolder.setTitle(model.getTitle());
-
-        viewHolder.setDesc(model.getDesc());
-
-        viewHolder.setImage(getApplicationContext(), model.getImages());
-
-        viewHolder.setDesc(model.getUsername());
-
-        viewHolder.setTime(model.getTime());
-
-        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //Card-expanding Code
-                Intent intent = new Intent(AccountActivityAdmin.this,AdminSinglePost.class);
-                intent.putExtra("postkey",Post_Key);
-                Toast.makeText(AccountActivityAdmin.this,Post_Key, Toast.LENGTH_LONG).show();
-                startActivity(intent);
-
-            }
-        });
-    }
 
 
     //Method to load current user details in the Navigation Bar header
@@ -659,9 +579,9 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         else if (id == R.id.nav_logout) {
             //Log out from account
             mAuth.signOut();
-            Snackbar snackbar = Snackbar
-                    .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);
-            snackbar.show();
+          //  Snackbar snackbar = Snackbar
+            //        .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);
+           // snackbar.show();
             startActivity(new Intent(AccountActivityAdmin.this, MainActivity.class));
 
         } else if (id == R.id.nav_about_us) {

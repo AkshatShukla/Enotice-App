@@ -14,7 +14,14 @@ import com.rcoem.enotice.enotice_app.AccountActivityAdmin;
 import com.rcoem.enotice.enotice_app.AdminSinglePost;
 import com.rcoem.enotice.enotice_app.BlogModel;
 import com.rcoem.enotice.enotice_app.CircleTransform;
+import com.rcoem.enotice.enotice_app.ImageNoticeAdmin;
+import com.rcoem.enotice.enotice_app.ImageNoticeApproval;
+import com.rcoem.enotice.enotice_app.ImageNoticeUser;
 import com.rcoem.enotice.enotice_app.R;
+import com.rcoem.enotice.enotice_app.TextNoticeAdmin;
+import com.rcoem.enotice.enotice_app.TextNoticeApproval;
+import com.rcoem.enotice.enotice_app.UserSinglePost;
+import com.rcoem.enotice.enotice_app.Utils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -30,11 +37,12 @@ public class ImageNoticeViewHolder extends RecyclerView.ViewHolder {
      ImageView post_image;
     TextView notice_title;
     CardView imagecard;
+    int callingActivity;
 
-    public ImageNoticeViewHolder(View itemView) {
+    public ImageNoticeViewHolder(View itemView, int callingActivity) {
         super(itemView);
         mView = itemView;
-
+        this.callingActivity = callingActivity;
         imagecard = (CardView) mView.findViewById(R.id.card_view_imagecard);
     }
 
@@ -58,6 +66,11 @@ public class ImageNoticeViewHolder extends RecyclerView.ViewHolder {
 
         notice_title = (TextView) mView.findViewById(R.id.title_imagecard);
         notice_title.setText(title);
+    }
+
+    public void setLabel(String label){
+        TextView notice_label = (TextView) mView.findViewById(R.id.label_imagecard);
+        notice_label.setText(label);
     }
 
 
@@ -99,34 +112,60 @@ public class ImageNoticeViewHolder extends RecyclerView.ViewHolder {
 
         viewHolder.setProfname(model.getUsername());
 
+        viewHolder.setLabel(model.getLabel());
+
         viewHolder.setProfilePic(context, model.getProfileImg());
+
+        final int callingActivity = viewHolder.callingActivity;
 
         viewHolder.imagecard.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
 
-                //Card-expanding Code
-                Intent intent = new Intent(context, AdminSinglePost.class);
-                intent.putExtra("postkey", Post_Key);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Toast.makeText(context, Post_Key, Toast.LENGTH_LONG).show();
-                context.startActivity(intent);
+                Intent intent;
 
+                switch (callingActivity) {
+                    case Utils.ADMIN_VIEW:
+
+                        intent = new Intent(context, ImageNoticeAdmin.class);
+                        intent.putExtra("postkey", Post_Key);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+
+                        break;
+
+                    case Utils.ADMIN_APPROVE:
+
+                        intent = new Intent(context, ImageNoticeApproval.class);
+                        intent.putExtra("postkey", Post_Key);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+
+                        break;
+
+                    case Utils.USER_VIEW:
+
+                        intent = new Intent(context, ImageNoticeUser.class);
+                        intent.putExtra("postkey", Post_Key);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+
+                        break;
+
+                    case Utils.USER_STATUS:
+
+                        intent = new Intent(context, ImageNoticeApproval.class);
+                        intent.putExtra("postkey", Post_Key);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+
+                        break;
+                }
             }
+
         });
 
-        viewHolder.notice_title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                //Card-expanding Code
-                Intent intent = new Intent(context, AdminSinglePost.class);
-                intent.putExtra("postkey", Post_Key);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                Toast.makeText(context, Post_Key, Toast.LENGTH_LONG).show();
-                context.startActivity(intent);
-
-            }
-        });
     }
+
 }
