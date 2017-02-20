@@ -47,7 +47,6 @@
         <activity android:name=".PostViewActivity" />
         <activity android:name=".AdminSinglePost" />
         <activity android:name=".UserSinglePost" />
-        <activity android:name=".UserStatusViewSinglePost" />
         <activity android:name=".fullScreenImage" />
         <activity android:name=".AwatingForApproval" />
         <activity android:name=".AccountAdminPanel" />
@@ -85,7 +84,13 @@
         <activity android:name=".DocNoticeAdmin" />
         <activity android:name=".DocNoticeUser" />
         <activity android:name=".ImageNoticeAdmin" />
-        <activity android:name=".ImageNoticeUser"></activity>
+        <activity android:name=".ImageNoticeUser" />
+        <activity android:name=".UserTextNoticeStatus" />
+        <activity android:name=".UserImageNoticeStatus" />
+        <activity android:name=".UserDocNoticeStatus" />
+        <activity android:name=".UserImageRejectStatus" />
+        <activity android:name=".UserTextRejectStatus" />
+        <activity android:name=".UserDocRejectStatus"></activity>
     </application>
 
 </manifest>

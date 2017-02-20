@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="com.rcoem.enotice.enotice_app.DocNoticeAdmin">
+    tools:context="com.rcoem.enotice.enotice_app.UserTextRejectStatus">
 
 
     <ScrollView
@@ -35,7 +35,8 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -49,10 +50,22 @@
                     app:civ_border_color="#FFFFFF" />
 
                 <TextView
+                    android:id="@+id/textStatus"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@+id/usernameAdmin"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="6dp"
+                    />
+
+                <TextView
                     android:layout_width="200dp"
                     android:layout_height="20dp"
                     android:layout_marginTop="15dp"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:hint="Name"
                     android:textColor="#000000"
                     android:layout_marginLeft="10dp"
@@ -60,21 +73,22 @@
                     android:id="@+id/profileName"
                     />
                 <TextView
-                android:layout_width="200dp"
-                android:layout_height="20dp"
-                android:textSize="8sp"
-                android:layout_marginLeft="75dp"
-                android:text="on Date"
+                    android:layout_width="200dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/date"
+                    android:textSize="10sp"
+                    android:layout_marginLeft="75dp"
+                    android:text="on Date"
 
-                android:layout_below="@+id/profileName"
+                    android:layout_below="@+id/profileName"
 
 
-                />
+                    />
             </RelativeLayout>
 
 
             <TextView
-                android:text="Click on &quot;APPROVE&quot; to approve this notice or &quot;REJECT&quot; to reject it.\nOnly notices you approve appear on your department's feed."
+                android:text="The following notice has been rejected. Click on remove button to delete it."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#000000"
@@ -83,12 +97,20 @@
                 android:layout_marginTop="10dp"
                 android:background="#FFFFFF"
                 android:id="@+id/textView7" />
-
+            <TextView
+                android:text="Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/colorBg"
+                android:layout_marginLeft="12dp"
+                android:id="@+id/textView6"
+                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:textSize="16dp"
+
                 android:id="@+id/Edit_Title_field1"
 
                 android:layout_marginLeft="15dp"
@@ -98,9 +120,34 @@
                 android:layout_below="@+id/Edit_description_field1"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="19dp"
-                android:textStyle="bold"
-                />
 
+                />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp">
+                <TextView
+
+                    android:layout_width="340dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#FFFFFF"
+
+
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:text="Description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorBg"
+                android:layout_marginLeft="12dp"
+
+                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -109,7 +156,7 @@
 
                 android:id="@+id/Edit_description_field1"
                 android:text = "Post Description"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="5dp"
                 android:textColor="#000000"
                 android:padding="15dp"
                 android:hint="Post Title"
@@ -118,34 +165,13 @@
                 android:layout_alignParentStart="true"
                 />
 
-
-            <ImageButton
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-
-                android:src="@drawable/pdf_download_button2"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/imageButton2"
-                android:layout_weight="0.02" />
-
-            <TextView
-                android:text="Download Attachment"
-                android:textColor="#000000"
-                android:textAlignment="center"
-                android:layout_marginTop="2dp"
-
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView5" />
-
             <LinearLayout
                 android:id="@+id/li_activity_single_post"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center_horizontal">
 
                 <Button
@@ -153,7 +179,7 @@
                     android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:id="@+id/delete"
+                    android:id="@+id/button2"
                     android:layout_margin="16dp"
                     android:background="@color/colorPrimary"
                     android:textColor="@color/cardview_light_background"
@@ -169,4 +195,3 @@
     </ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
-
