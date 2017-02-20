@@ -9,7 +9,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -46,9 +48,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.firebase.ui.database.*;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.rcoem.enotice.enotice_app.ViewHolderClasses.DocumentNoticeViewHolder;
+import com.rcoem.enotice.enotice_app.ViewHolderClasses.ImageNoticeViewHolder;
+import com.rcoem.enotice.enotice_app.ViewHolderClasses.TextNoticeViewHolder;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.OkHttpDownloader;
@@ -117,6 +123,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
     String my_dept = "";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +147,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         });
 
         startService(new Intent(this, MyFirebaseMessagingService.class));
+
 
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("posts");
         mAuth = FirebaseAuth.getInstance();
@@ -268,69 +276,10 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
 
 
-        FirebaseRecyclerAdapter<BlogModel,BlogViewHolder> firebaseRecyclerAdapter =new
-                FirebaseRecyclerAdapter<BlogModel, BlogViewHolder>(
-                        BlogModel.class,
-                        R.layout.blog_row,
-                        BlogViewHolder.class,
-                        mquery
-                ) {
-                    @Override
-                    protected void populateViewHolder(BlogViewHolder viewHolder, BlogModel model, final int position) {
-
-                        final String Post_Key = getRef(position).toString();
-
-                        viewHolder.setTitle(model.getTitle());
-
-                        viewHolder.setDesc(model.getDesc());
-
-                        viewHolder.setImage(getApplicationContext(), model.getImages());
-
-                        viewHolder.setDesc(model.getUsername());
-
-                        viewHolder.setTime(model.getTime());
-
-                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                //Card-expanding Code
-                                Intent intent = new Intent(AccountActivityAdmin.this,AdminSinglePost.class);
-                                intent.putExtra("postkey",Post_Key);
-                                Toast.makeText(AccountActivityAdmin.this,Post_Key, Toast.LENGTH_LONG).show();
-                                startActivity(intent);
-
-                            }
-                        });
-                    }
-                };
-
-        di = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        //Old code for FAB
-        /*
-        addNotice = (com.getbase.floatingactionbutton.FloatingActionButton)findViewById(R.id.fab_addnotice);
-        addNotice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //To add new notice code and shift control to AddNoticeActivityAdmin.
-                Intent intent = new Intent(AccountActivityAdmin.this, AddNoticeActivityAdmin.class);
-                startActivity(intent);
-            }
-        });
-
-        addDocument = (com.getbase.floatingactionbutton.FloatingActionButton)findViewById(R.id.fab_adddocument);
-        addDocument.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AccountActivityAdmin.this,PdfUpload.class);
-                startActivity(intent);
-            }
-        });*/
 
         //Floating Action Button Functionality
         fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
@@ -415,6 +364,70 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
         loadNavHeader();
 
+
+
+        //Firebase Recycler Adapter inflating multiple view types.
+        FirebaseRecyclerAdapter<BlogModel,RecyclerView.ViewHolder> firebaseRecyclerAdapter =new
+                FirebaseRecyclerAdapter<BlogModel, RecyclerView.ViewHolder>(
+                        BlogModel.class,
+                        R.layout.blog_row,
+                        RecyclerView.ViewHolder.class,
+                        mquery
+                ) {
+                    @Override
+                    protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, BlogModel model, final int position) {
+
+                       final String Post_Key = getRef(position).toString();
+
+                        switch(model.getType()){
+                            case 1 :
+                                TextNoticeViewHolder.populateTextNoticeCard((TextNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
+                                break;
+                            case 2 :
+                                ImageNoticeViewHolder.populateImageNoticeCard((ImageNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
+                                break;
+                            case 3 :
+                                DocumentNoticeViewHolder.populateDocumentNoticeCard((DocumentNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
+                                break;
+                        }
+                    }
+
+
+                    @Override
+                    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                        switch (viewType) {
+                            case Utils.TEXT_NOTICE:
+                                View textNotice = LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.notice_text_card, parent, false);
+                                return new TextNoticeViewHolder(textNotice, Utils.ADMIN_VIEW);
+                            case Utils.IMAGE_NOTICE:
+                                View imageNotice = LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.notice_image_card, parent, false);
+                                return new ImageNoticeViewHolder(imageNotice, Utils.ADMIN_VIEW);
+                            case Utils.DOCUMENT_NOTICE:
+                                View documentNotice = LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.notice_document_card, parent, false);
+                                return new DocumentNoticeViewHolder(documentNotice, Utils.ADMIN_VIEW);
+                        }
+                        return super.onCreateViewHolder(parent, viewType);
+                    }
+
+                    @Override
+                    public int getItemViewType(int position) {
+                        BlogModel model = getItem(position);
+                        switch (model.getType()) {
+                            case Utils.TEXT_NOTICE:
+                                return Utils.TEXT_NOTICE;
+                            case Utils.IMAGE_NOTICE:
+                                return Utils.IMAGE_NOTICE;
+                            case Utils.DOCUMENT_NOTICE:
+                                return Utils.DOCUMENT_NOTICE;
+                        }
+                        return super.getItemViewType(position);
+                    }
+
+                };
+
         mBlogList.setAdapter(firebaseRecyclerAdapter);
 
         mAuth = FirebaseAuth.getInstance();
@@ -475,6 +488,12 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
 
     }
+
+
+
+
+
+
 
     //Method to load current user details in the Navigation Bar header
 
@@ -560,9 +579,9 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         else if (id == R.id.nav_logout) {
             //Log out from account
             mAuth.signOut();
-            Snackbar snackbar = Snackbar
-                    .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);
-            snackbar.show();
+          //  Snackbar snackbar = Snackbar
+            //        .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);
+           // snackbar.show();
             startActivity(new Intent(AccountActivityAdmin.this, MainActivity.class));
 
         } else if (id == R.id.nav_about_us) {

@@ -75,6 +75,7 @@
                 android:textSize="8sp"
                 android:layout_marginLeft="75dp"
                 android:text="on 12.12.2012"
+                android:id="@+id/date"
                 android:layout_below="@+id/profileName"
                 />
             </RelativeLayout>

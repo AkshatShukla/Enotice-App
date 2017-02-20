@@ -72,11 +72,11 @@ public class TextNoticeAdmin extends AppCompatActivity {
         mUsername = (TextView) findViewById(R.id.profileName);
         circularImageView = (ImageView) findViewById(R.id.imageView);
         Date = (TextView) findViewById(R.id.date);
-        //  mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
+      //  mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
         delete = (Button) findViewById(R.id.button2);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
-        // mStoarge = FirebaseStorage.getInstance().getReference();
+       // mStoarge = FirebaseStorage.getInstance().getReference();
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

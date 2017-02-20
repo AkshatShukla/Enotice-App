@@ -58,7 +58,7 @@ public class UserDocRejectStatus extends AppCompatActivity {
         status = (TextView) findViewById(R.id.status);
         textStatus = (TextView) findViewById(R.id.textStatus);
         imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
-        delete = (Button) findViewById(R.id.button2);
+        delete = (Button) findViewById(R.id.delete);
         //  mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
 
         mStoarge = FirebaseStorage.getInstance().getReference();

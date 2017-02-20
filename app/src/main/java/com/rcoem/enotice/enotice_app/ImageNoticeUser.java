@@ -19,11 +19,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 public class ImageNoticeUser extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private TextView mPostTitle;
     private TextView mPostDesc;
     private TextView mUsername;
+    private TextView mDate;
     private ImageButton mViewImage;
     private Button Approved;
     private Button Rejected;
@@ -56,10 +59,11 @@ public class ImageNoticeUser extends AppCompatActivity {
         Intent intent = getIntent();
         final String str = intent.getStringExtra("postkey");
 
-        mPostTitle = (TextView) findViewById(R.id.Post_title);
-        mPostDesc = (TextView) findViewById(R.id.Post_Desc);
-        mUsername = (TextView) findViewById(R.id.username);
+        mPostTitle = (TextView) findViewById(R.id.Post_title_User);
+        mPostDesc = (TextView) findViewById(R.id.Post_Desc_User);
+        mUsername = (TextView) findViewById(R.id.usernameUser);
         mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonUser);
+        mDate = (TextView) findViewById(R.id.date_imageuser);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
         mStoarge = FirebaseStorage.getInstance().getReference();
@@ -72,6 +76,8 @@ public class ImageNoticeUser extends AppCompatActivity {
                     mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
                     mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
                     mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
+                    String date = "on " + dataSnapshot.child("time").getValue().toString().trim();
+                    mDate.setText(date);
                     String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
                     Picasso.with(ImageNoticeUser.this).load(imageUrl).into(mViewImage);
                     toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
@@ -85,6 +91,7 @@ public class ImageNoticeUser extends AppCompatActivity {
 
             }
         });
+
         mViewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

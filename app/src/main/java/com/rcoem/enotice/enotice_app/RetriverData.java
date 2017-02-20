@@ -143,7 +143,7 @@ public class RetriverData extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
 
-                                    Intent intent = new Intent(RetriverData.this, Single_Post.class);
+                                    Intent intent = new Intent(RetriverData.this, ImageNoticeApproval.class);
                                     intent.putExtra("postkey", Post_Key);
                                     startActivity(intent);
 

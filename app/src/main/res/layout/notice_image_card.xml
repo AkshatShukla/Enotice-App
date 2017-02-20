@@ -1,5 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp">
 
-</RelativeLayout>
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_imagecard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="#FFFFFF"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardUseCompatPadding="false" >
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/profpic_imagecard"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/art_plane"/>
+
+                <TextView
+                    android:id="@+id/profname_imagecard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#424242"
+                    android:layout_marginTop="10dp"
+                    android:textSize="13sp"
+                    android:text="scw"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@id/profpic_imagecard"/>
+
+                <TextView
+                    android:id="@+id/label_imagecard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:text="scw"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/labelshape"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:layout_toEndOf="@id/profpic_imagecard"/>
+
+
+                <TextView
+                    android:id="@+id/date_imagecard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#424242"
+                    android:layout_marginTop="19dp"
+                    android:textSize="12sp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_alignParentEnd="true" />
+
+                <ImageView
+                    android:id="@+id/pic_imagecard"
+                    android:layout_below="@id/profpic_imagecard"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/title_imagecard"
+                    android:layout_below="@id/pic_imagecard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="Title of the Image Notice goes here making this long enough to test"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:ellipsize="end" />
+
+            </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

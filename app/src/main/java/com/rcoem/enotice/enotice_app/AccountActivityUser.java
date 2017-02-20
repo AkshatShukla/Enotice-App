@@ -16,9 +16,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -36,6 +38,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.rcoem.enotice.enotice_app.ViewHolderClasses.DocumentNoticeViewHolder;
+import com.rcoem.enotice.enotice_app.ViewHolderClasses.ImageNoticeViewHolder;
+import com.rcoem.enotice.enotice_app.ViewHolderClasses.TextNoticeViewHolder;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -51,6 +56,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,7 +115,6 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         mAuth = FirebaseAuth.getInstance();
 
         //SwipeRefresh Code
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -235,10 +240,13 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
     private void viewNotice(String str) {
 
         //To show only the content relevant to the specific department.
-        mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Deptposts");
+        mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Approved");
+
+        long currentTime = -1 * new Date().getTime();
+        String time = "" + currentTime;
 
         //To query and view only those messages which have been APPROVED by the authenticator.
-        mquery =  mDatabaseValidContent.orderByChild("approved").equalTo("true");
+        mquery =  mDatabaseValidContent.orderByChild("servertime");
 
         //Online-Offline Syncing (only strings and not images)
         mDatabaseValidContent.keepSynced(true);
@@ -246,47 +254,6 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         mBlogList = (RecyclerView) findViewById(R.id.blog_recylView_list);
         mBlogList.setHasFixedSize(true);
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
-
-
-        FirebaseRecyclerAdapter<BlogModel,AccountActivityAdmin.BlogViewHolder> firebaseRecyclerAdapter =new
-                FirebaseRecyclerAdapter<BlogModel, AccountActivityAdmin.BlogViewHolder>(
-
-                        BlogModel.class,
-                        R.layout.blog_row,
-                        AccountActivityAdmin.BlogViewHolder.class,
-                        mquery
-                ) {
-                    @Override
-                    protected void populateViewHolder(AccountActivityAdmin.BlogViewHolder viewHolder, BlogModel model, int position) {
-
-                        final String Post_Key = getRef(position).toString();
-                        Intent intent = getIntent();
-                        final String str = intent.getStringExtra("location");
-                        viewHolder.setTitle(model.getTitle());
-                        viewHolder.setDesc(model.getDesc());
-
-                        viewHolder.setImage(getApplicationContext(), model.getImages());
-
-                        viewHolder.setDesc(model.getUsername());
-
-                        viewHolder.setTime(model.getTime());
-
-                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                //Card-expanding Code
-                                Intent intent = new Intent(AccountActivityUser.this,UserSinglePost.class);
-                                intent.putExtra("postkey",Post_Key);
-                                startActivity(intent);
-
-                            }
-                        });
-                    }
-                };
-
-        di = (DrawerLayout) findViewById(R.id.drawer_layout_user);
-
         //  recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         // swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
@@ -344,7 +311,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
                         @Override
                         public void onClick(View v) {
                             //To add new notice code and shift control to AddNoticeActivityAdmin.
-                            Intent intent = new Intent(AccountActivityUser.this, AddNoticeTabbed.class);
+                            Intent intent = new Intent(AccountActivityUser.this, AddNoticeActivityUser.class);
                             startActivity(intent);
                         }
                     });
@@ -383,6 +350,69 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
         //    addContent();
 
+        //Firebase Recycler Adapter inflating multiple view types.
+        FirebaseRecyclerAdapter<BlogModel,RecyclerView.ViewHolder> firebaseRecyclerAdapter =new
+                FirebaseRecyclerAdapter<BlogModel, RecyclerView.ViewHolder>(
+                        BlogModel.class,
+                        R.layout.blog_row,
+                        RecyclerView.ViewHolder.class,
+                        mquery
+                ) {
+                    @Override
+                    protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, BlogModel model, final int position) {
+
+                        final String Post_Key = getRef(position).toString();
+
+                        switch(model.getType()){
+                            case 1 :
+                                TextNoticeViewHolder.populateTextNoticeCard((TextNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
+                                break;
+                            case 2 :
+                                ImageNoticeViewHolder.populateImageNoticeCard((ImageNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
+                                break;
+                            case 3 :
+                                DocumentNoticeViewHolder.populateDocumentNoticeCard((DocumentNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
+                                break;
+                        }
+                    }
+
+
+                    @Override
+                    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                        switch (viewType) {
+                            case Utils.TEXT_NOTICE:
+                                View textNotice = LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.notice_text_card, parent, false);
+                                return new TextNoticeViewHolder(textNotice, Utils.USER_VIEW);
+                            case Utils.IMAGE_NOTICE:
+                                View imageNotice = LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.notice_image_card, parent, false);
+                                return new ImageNoticeViewHolder(imageNotice, Utils.USER_VIEW);
+                            case Utils.DOCUMENT_NOTICE:
+                                View documentNotice = LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.notice_document_card, parent, false);
+                                return new DocumentNoticeViewHolder(documentNotice, Utils.USER_VIEW);
+                        }
+                        return super.onCreateViewHolder(parent, viewType);
+                    }
+
+                    @Override
+                    public int getItemViewType(int position) {
+                        BlogModel model = getItem(position);
+                        switch (model.getType()) {
+                            case Utils.TEXT_NOTICE:
+                                return Utils.TEXT_NOTICE;
+                            case Utils.IMAGE_NOTICE:
+                                return Utils.IMAGE_NOTICE;
+                            case Utils.DOCUMENT_NOTICE:
+                                return Utils.DOCUMENT_NOTICE;
+                        }
+                        return super.getItemViewType(position);
+                    }
+
+                };
+
+
 
         mBlogList.setAdapter(firebaseRecyclerAdapter);
 
@@ -391,55 +421,6 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
     }
 
 
-    public static class BlogViewHolder extends RecyclerView.ViewHolder {
-
-        View mView;
-
-        public BlogViewHolder(View itemView) {
-            super(itemView);
-            mView = itemView;
-        }
-        public void setUsername(String username){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_prof_name);
-            post_Desc.setText(username);
-        }
-        public void setTitle(String title){
-
-            TextView post_title = (TextView) mView.findViewById(R.id.title_card);
-            post_title.setText(title);
-        }
-
-        public void setDesc(String Desc){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_name);
-            post_Desc.setText(Desc);
-        }
-
-        public void setImage(final Context context, final String image){
-
-            final ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
-            //Picasso.with(context).load(image).into(post_image);
-
-            Picasso.with(context).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(post_image, new Callback() {
-                @Override
-                public void onSuccess() {
-                    //Do Nothing
-                }
-
-                @Override
-                public void onError() {
-                    Picasso.with(context).load(image).into(post_image);
-                }
-            });
-        }
-
-        public void setTime(String time){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_timestamp);
-            post_Desc.setText(time);
-        }
-    }
 
     //Method to load current user details in the Navigation Bar header
 

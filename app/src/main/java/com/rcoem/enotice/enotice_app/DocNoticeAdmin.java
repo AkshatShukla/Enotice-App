@@ -104,7 +104,8 @@ public class DocNoticeAdmin extends AppCompatActivity {
                     mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
                     mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
                     String url = dataSnapshot.child("profileImg").getValue().toString().trim();
-                    Date.setText("on " + dataSnapshot.child("time").getValue().toString().trim());
+                    String temp = "on " + dataSnapshot.child("time").getValue().toString().trim() ;
+                    Date.setText(temp);
                     Picasso.with(DocNoticeAdmin.this).load(url).noFade().into(circularImageView);
                     toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                 }

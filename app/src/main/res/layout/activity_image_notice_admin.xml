@@ -63,9 +63,7 @@
                     android:textSize="12sp"
                     android:layout_marginLeft="95dp"
                     android:text="on Date"
-                    android:id="@+id/date"
-
-
+                    android:id="@+id/date_imageadmin"
                     android:layout_below="@+id/usernameAdmin"
                     android:layout_alignStart="@+id/usernameAdmin"
                     android:layout_marginStart="10dp" />

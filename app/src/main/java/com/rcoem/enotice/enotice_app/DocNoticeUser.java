@@ -51,7 +51,7 @@ public class DocNoticeUser extends AppCompatActivity {
         mUsername = (TextView) findViewById(R.id.profileName);
         circularImageView = (ImageView) findViewById(R.id.imageView);
         download = (ImageButton) findViewById(R.id.imageButton2);
-        Date = (TextView) findViewById(R.id.date);
+        Date = (TextView) findViewById(R.id.date_doc_user);
         //  mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
@@ -80,7 +80,8 @@ public class DocNoticeUser extends AppCompatActivity {
                     mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
                     mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
                     String url = dataSnapshot.child("profileImg").getValue().toString().trim();
-                    Date.setText("on " + dataSnapshot.child("time").getValue().toString().trim());
+                    String date = "on " + dataSnapshot.child("time").getValue().toString().trim();
+                    Date.setText(date);
                     Picasso.with(DocNoticeUser.this).load(url).noFade().into(circularImageView);
                     toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                 }

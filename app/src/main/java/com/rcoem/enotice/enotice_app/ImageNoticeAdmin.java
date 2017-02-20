@@ -24,6 +24,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import es.dmoral.toasty.Toasty;
 
 public class ImageNoticeAdmin extends AppCompatActivity {
@@ -31,6 +33,7 @@ public class ImageNoticeAdmin extends AppCompatActivity {
     private TextView mPostTitle;
     private TextView mPostDesc;
     private TextView mUsername;
+    private TextView mDate;
     private Button delete;
     private ImageButton mViewImage;
  //   private Button Approved;
@@ -67,6 +70,7 @@ public class ImageNoticeAdmin extends AppCompatActivity {
         mPostDesc = (TextView) findViewById(R.id.Post_Desc_Admin);
         mUsername = (TextView) findViewById(R.id.usernameAdmin);
         mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
+        mDate = (TextView) findViewById(R.id.date_imageadmin);
         delete = (Button) findViewById(R.id.button2);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
@@ -79,6 +83,8 @@ public class ImageNoticeAdmin extends AppCompatActivity {
                     mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
                     mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
                     mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
+                    String date = "on " + dataSnapshot.child("time").getValue().toString().trim();
+                    mDate.setText(date);
                     String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
                     Picasso.with(ImageNoticeAdmin.this).load(imageUrl).into(mViewImage);
                     toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());

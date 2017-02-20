@@ -90,7 +90,8 @@ public class UserTextNoticeStatus extends AppCompatActivity {
                     if (dataSnapshot.child("approved").getValue().toString().trim().equals("true")) {
                         m = "APPROVED and on Notice Board.";
                         statusReport = "Approved";
-                    } else {
+                    }
+                    else {
                         m = "DUE TO BE APPROVED by your Head of Department.";
                         statusReport = "Pending";
                     }

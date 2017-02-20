@@ -75,7 +75,6 @@ public class TextNoticeApproval extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
         mStoarge = FirebaseStorage.getInstance().getReference();
         mPostDesc.setText(str);
-
         mAuth = FirebaseAuth.getInstance();
 
         //mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
