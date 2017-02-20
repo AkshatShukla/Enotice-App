@@ -216,7 +216,7 @@ public class PdfUpload extends AppCompatActivity {
                                                 newPost.child("servertime").setValue(currentLongTime);
                                                 newPost.child("link").setValue(downloadUrl.toString());
                                                 newPost.child("department").setValue(Dept);
-                                                newPost.child("approved").setValue("true").addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                newPost.child("approved").setValue(Approved).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if(task.isSuccessful()){

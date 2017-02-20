@@ -88,6 +88,7 @@ public class ImageNoticeApproval extends AppCompatActivity {
         mStoarge = FirebaseStorage.getInstance().getReference();
         mPostDesc.setText(str);
 
+        mAuth = FirebaseAuth.getInstance();
         //mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -194,6 +195,7 @@ public class ImageNoticeApproval extends AppCompatActivity {
                                             //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
                                             final String currentDate = day + "/" + month + "/" + year;
 
+                                            String label = dataSnapshot.child("label").getValue().toString().trim();
                                             String title = dataSnapshot.child("title").getValue().toString().trim();
                                             String message = dataSnapshot.child("username").getValue().toString().trim();
                                             String dept = dataSnapshot.child("department").getValue().toString().trim();
@@ -202,6 +204,7 @@ public class ImageNoticeApproval extends AppCompatActivity {
                                             String profileImg = dataSnapshot.child("profileImg").getValue().toString().trim();
 
                                             mDataApproved.child("type").setValue(2);
+                                            mDataApproved.child("label").setValue(label);
                                             mDataApproved.child("title").setValue(title);
                                             mDataApproved.child("Desc").setValue(desc);
                                             mDataApproved.child("UID").setValue(mAuth.getCurrentUser().getUid());
