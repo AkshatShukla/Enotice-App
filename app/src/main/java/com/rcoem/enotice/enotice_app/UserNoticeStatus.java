@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.rcoem.enotice.enotice_app.ViewHolderClasses.DocumentNoticeViewHolder;
+import com.rcoem.enotice.enotice_app.ViewHolderClasses.ImageNoticeViewHolder;
+import com.rcoem.enotice.enotice_app.ViewHolderClasses.TextNoticeViewHolder;
 import com.squareup.picasso.Picasso;
 
 public class UserNoticeStatus extends AppCompatActivity {
@@ -97,7 +102,7 @@ public class UserNoticeStatus extends AppCompatActivity {
     }
 
     private void viewNotices(String str) {
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Deptposts");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Pending");
         mquery =  mDatabase.orderByChild("UID").equalTo(mAuth.getCurrentUser().getUid());
         mStoarge = FirebaseStorage.getInstance().getReference();
 
@@ -106,103 +111,77 @@ public class UserNoticeStatus extends AppCompatActivity {
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
         //  mProgress.setMessage("Uploading Details");
         //   mProgress.show();
-        FirebaseRecyclerAdapter<BlogModel,RetriverData.BlogViewHolder> firebaseRecyclerAdapter =new
-                FirebaseRecyclerAdapter<BlogModel, RetriverData.BlogViewHolder>(
+        //  mProgress.dismiss();
 
+        //Firebase Recycler Adapter inflating multiple view types.
+        FirebaseRecyclerAdapter<BlogModel,RecyclerView.ViewHolder> firebaseRecyclerAdapter =new
+                FirebaseRecyclerAdapter<BlogModel, RecyclerView.ViewHolder>(
                         BlogModel.class,
                         R.layout.blog_row,
-                        RetriverData.BlogViewHolder.class,
+                        RecyclerView.ViewHolder.class,
                         mquery
                 ) {
                     @Override
-                    protected void populateViewHolder(RetriverData.BlogViewHolder viewHolder, BlogModel model, int position) {
+                    protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, BlogModel model, final int position) {
 
                         final String Post_Key = getRef(position).toString();
-                        Intent intent = getIntent();
-                        final String approved = model.getApproved();
-                        final String str = intent.getStringExtra("location");
-                        //   viewHolder.setDesc(model.getUsername());
-                        viewHolder.setTitle(model.getTitle());
 
-
-                        viewHolder.setImage(getApplicationContext(), model.getImages());
-                        if(model.getApproved().equals("false")) {
-                            viewHolder.setDesc("Rejected");
+                        switch(model.getType()){
+                            case 1 :
+                                TextNoticeViewHolder.populateTextNoticeCard((TextNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
+                                break;
+                            case 2 :
+                                ImageNoticeViewHolder.populateImageNoticeCard((ImageNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
+                                break;
+                            case 3 :
+                                DocumentNoticeViewHolder.populateDocumentNoticeCard((DocumentNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
+                                break;
                         }
-                        else if(model.getApproved().equals("pending")){
-                            viewHolder.setDesc("Pending");
-                        }
-                        else{
-                            viewHolder.setDesc("Approved and on Notice Board");
-                        }
-
-                        viewHolder.setTime(model.getTime());
-
-                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                              if (approved.equals("false")){
-
-                                  Intent intent = new Intent(UserNoticeStatus.this,UserRejectSinglePost.class);
-                                  intent.putExtra("postkey",Post_Key);
-                                  startActivity(intent);
-                                  finish();
-                              }
-                                else {
-
-                                  Intent intent = new Intent(UserNoticeStatus.this, UserStatusViewSinglePost.class);
-                                  intent.putExtra("postkey", Post_Key);
-                                  startActivity(intent);
-                                  finish();
-                              }
-
-                            }
-                        });
                     }
+
+
+                    @Override
+                    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                        switch (viewType) {
+                            case Utils.TEXT_NOTICE:
+                                View textNotice = LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.notice_text_card, parent, false);
+                                return new TextNoticeViewHolder(textNotice, Utils.USER_STATUS);
+                            case Utils.IMAGE_NOTICE:
+                                View imageNotice = LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.notice_image_card, parent, false);
+                                return new ImageNoticeViewHolder(imageNotice, Utils.USER_STATUS);
+                            case Utils.DOCUMENT_NOTICE:
+                                View documentNotice = LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.notice_document_card, parent, false);
+                                return new DocumentNoticeViewHolder(documentNotice, Utils.USER_STATUS);
+                        }
+                        return super.onCreateViewHolder(parent, viewType);
+                    }
+
+                    @Override
+                    public int getItemViewType(int position) {
+                        BlogModel model = getItem(position);
+                        switch (model.getType()) {
+                            case Utils.TEXT_NOTICE:
+                                return Utils.TEXT_NOTICE;
+                            case Utils.IMAGE_NOTICE:
+                                return Utils.IMAGE_NOTICE;
+                            case Utils.DOCUMENT_NOTICE:
+                                return Utils.DOCUMENT_NOTICE;
+                        }
+                        return super.getItemViewType(position);
+                    }
+
                 };
-        //  mProgress.dismiss();
+
+
+
+
         mBlogList.setAdapter(firebaseRecyclerAdapter);
     }
 
 
-    public static class BlogViewHolder extends RecyclerView.ViewHolder {
-
-        View mView;
-
-        public BlogViewHolder(View itemView) {
-            super(itemView);
-            mView = itemView;
-        }
-
-        public void setTitle(String title){
-
-            TextView post_title = (TextView) mView.findViewById(R.id.title_card);
-            post_title.setText(title);
-        }
-
-
-
-        public void setImage(Context context, String image){
-
-            ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
-            Picasso.with(context).load(image).into(post_image);
-
-        }
-        public void setApproved(String approved){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_prof_name);
-
-            post_Desc.setText(approved);
-        }
-        public void setTime(String time){
-
-            TextView post_Desc = (TextView) mView.findViewById(R.id.card_timestamp);
-            post_Desc.setText(time);
-        }
-
-
-    }
 
     @Override
     public void onBackPressed() {
