@@ -77,9 +77,15 @@
 
         <activity android:name=".UserRejectSinglePost" />
         <activity android:name=".AddNoticeTabbed" />
-        <activity android:name=".TextNoticeApproval"></activity>
-        <activity android:name=".ImageNoticeApproval"></activity>
-        <activity android:name=".DocNoticeApproval"></activity>
+        <activity android:name=".TextNoticeApproval" />
+        <activity android:name=".ImageNoticeApproval" />
+        <activity android:name=".DocNoticeApproval" />
+        <activity android:name=".TextNoticeAdmin" />
+        <activity android:name=".TextNoticeUser" />
+        <activity android:name=".DocNoticeAdmin" />
+        <activity android:name=".DocNoticeUser" />
+        <activity android:name=".ImageNoticeAdmin" />
+        <activity android:name=".ImageNoticeUser"></activity>
     </application>
 
 </manifest>
