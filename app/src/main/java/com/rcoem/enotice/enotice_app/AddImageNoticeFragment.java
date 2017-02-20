@@ -104,8 +104,8 @@ public class AddImageNoticeFragment extends Fragment  {
     private ImageView circularImageView;
 
     private String [] typeArray =
-            {       "For Teachers",
-                    "For Students",
+            {       "For Students",
+                    "For Teachers",
                     "Urgent",
                     "Normal",
                     "Assignment",
@@ -307,7 +307,7 @@ public class AddImageNoticeFragment extends Fragment  {
 
                                             if (lvlCheck.equals("1")) {
                                                 mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending");
-                                                Approved = "false";
+                                                Approved = "pending";
                                             }
                                             else if (lvlCheck.equals("2")){
                                                 mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
@@ -508,6 +508,7 @@ public class AddImageNoticeFragment extends Fragment  {
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
     }
+
 }
 
 

@@ -76,8 +76,8 @@ public class AddTextNoticeFragment extends Fragment {
     private String noticeType;
 
     private String [] typeArray =
-            {       "For Teachers",
-                    "For Students",
+            {       "For Students",
+                    "For Teachers",
                     "Urgent",
                     "Normal",
                     "Assignment",
@@ -182,7 +182,7 @@ public class AddTextNoticeFragment extends Fragment {
 
                                                 if (lvlCheck.equals("1")) {
                                                     mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending").push();
-                                                    Approved = "false";
+                                                    Approved = "pending";
                                                 } else if (lvlCheck.equals("2")) {
                                                     mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved").push();
                                                     Approved = "true";

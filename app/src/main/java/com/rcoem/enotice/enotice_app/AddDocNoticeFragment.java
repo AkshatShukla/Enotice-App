@@ -58,8 +58,8 @@ public class AddDocNoticeFragment extends Fragment {
     private boolean docOK;
 
     private String [] typeArray =
-            {       "For Teachers",
-                    "For Students",
+            {       "For Students",
+                    "For Teachers",
                     "Urgent",
                     "Normal",
                     "Assignment",

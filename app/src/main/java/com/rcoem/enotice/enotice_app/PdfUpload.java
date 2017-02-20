@@ -193,7 +193,7 @@ public class PdfUpload extends AppCompatActivity {
 
                                                 if (lvlCheck.equals("1")) {
                                                     mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending");
-                                                    Approved = "false";
+                                                    Approved = "pending";
                                                 }
                                                 else if (lvlCheck.equals("2")){
                                                     mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");

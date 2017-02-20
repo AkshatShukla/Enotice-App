@@ -90,12 +90,13 @@
             android:id="@+id/descImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="10dp"
             android:hint="Enter Description"
             android:textSize="16sp"
             app:met_floatingLabel="highlight"
             app:met_floatingLabelText="Description"
-            app:met_floatingLabelTextSize="14sp"/>
+            app:met_floatingLabelTextSize="14sp"
+            android:layout_below="@+id/titleImage"/>
 
         <TextView
             android:id="@+id/messageType"
