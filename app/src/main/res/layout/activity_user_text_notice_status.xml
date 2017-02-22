@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context="com.rcoem.enotice.enotice_app.UserTextNoticeStatus">
+    tools:context="com.rcoem.enotice.enotice_app.UserNoticeStatusClasses.UserTextNoticeStatus">
 
 
     <ScrollView
@@ -53,10 +53,11 @@
                     android:id="@+id/textStatus"
                     android:layout_width="80dp"
                     android:layout_height="30dp"
+                    android:paddingTop="5dp"
+                    android:textAlignment="center"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="25dp"
+                    android:layout_marginRight="20dp"
                     android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@+id/profileName"
                     />
 
                 <TextView

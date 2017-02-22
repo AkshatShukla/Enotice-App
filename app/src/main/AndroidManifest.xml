@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoginSignUpClasses.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,65 +32,36 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".AccountActivityAdmin" />
-        <activity android:name=".AccountActivityUser" />
-        <activity android:name=".MainIntroActivity" />
-        <activity android:name=".SignUp" />
-        <activity android:name=".RetriverData" />
-        <activity android:name=".AddNoticeActivityAdmin" />
-        <activity android:name=".AddNoticeActivityUser" />
+        <activity android:name=".AdminClasses.AccountActivityAdmin" />
+        <activity android:name=".UserClasses.AccountActivityUser" />
+        <activity android:name=".LoginSignUpClasses.MainIntroActivity" />
+        <activity android:name=".LoginSignUpClasses.SignUp" />
+        <activity android:name=".AdminApprovalClasses.RetriverData" />
         <activity
             android:name=".EditViewProfile"
             android:label="Profile" />
         />
-        <activity android:name=".UserNoticeStatus" />
-        <activity android:name=".PostViewActivity" />
-        <activity android:name=".AdminSinglePost" />
-        <activity android:name=".UserSinglePost" />
+        <activity android:name=".UserNoticeStatusClasses.UserNoticeStatus" />
         <activity android:name=".fullScreenImage" />
-        <activity android:name=".AwatingForApproval" />
-        <activity android:name=".AccountAdminPanel" />
-        <activity android:name=".AdminApprove" />
+        <activity android:name=".LoginSignUpClasses.AwatingForApproval" />
+        <activity android:name=".AuthorityClasses.AccountAdminPanel" />
+        <activity android:name=".AuthorityClasses.AdminApprove" />
         <activity
-            android:name=".PdfUpload"
+            android:name=".AddNoticeClasses.PdfUpload"
             android:label="Select a Document" />
         <activity android:name=".pdfview" />
         <activity android:name=".PdfDownload" />
-        <activity android:name=".BlockUserPlanel" />
-        <activity android:name=".BlockContactsPanel" />
-        <activity android:name=".CrossDept" />
-        <activity android:name=".AccountCrossDept" />
-        <activity android:name=".ActivitySendPushNotification" />
 
         <!-- Services -->
-        <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <activity android:name=".UserRejectSinglePost" />
-        <activity android:name=".AddNoticeTabbed" />
-        <activity android:name=".TextNoticeApproval" />
-        <activity android:name=".ImageNoticeApproval" />
-        <activity android:name=".DocNoticeApproval" />
-        <activity android:name=".TextNoticeAdmin" />
-        <activity android:name=".TextNoticeUser" />
-        <activity android:name=".DocNoticeAdmin" />
-        <activity android:name=".DocNoticeUser" />
-        <activity android:name=".ImageNoticeAdmin" />
-        <activity android:name=".ImageNoticeUser" />
-        <activity android:name=".UserTextNoticeStatus" />
-        <activity android:name=".UserImageNoticeStatus" />
-        <activity android:name=".UserDocNoticeStatus" />
-        <activity android:name=".UserImageRejectStatus" />
-        <activity android:name=".UserTextRejectStatus" />
-        <activity android:name=".UserDocRejectStatus"></activity>
     </application>
 
 </manifest>

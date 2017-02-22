@@ -7,27 +7,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.rcoem.enotice.enotice_app.AccountActivityAdmin;
-import com.rcoem.enotice.enotice_app.AdminSinglePost;
 import com.rcoem.enotice.enotice_app.BlogModel;
 import com.rcoem.enotice.enotice_app.CircleTransform;
-import com.rcoem.enotice.enotice_app.DocNoticeAdmin;
-import com.rcoem.enotice.enotice_app.DocNoticeApproval;
-import com.rcoem.enotice.enotice_app.DocNoticeUser;
+import com.rcoem.enotice.enotice_app.AdminClasses.DocNoticeAdmin;
+import com.rcoem.enotice.enotice_app.AdminApprovalClasses.DocNoticeApproval;
+import com.rcoem.enotice.enotice_app.UserClasses.DocNoticeUser;
 import com.rcoem.enotice.enotice_app.R;
-import com.rcoem.enotice.enotice_app.TextNoticeAdmin;
-import com.rcoem.enotice.enotice_app.TextNoticeApproval;
-import com.rcoem.enotice.enotice_app.UserDocNoticeStatus;
-import com.rcoem.enotice.enotice_app.UserDocRejectStatus;
-import com.rcoem.enotice.enotice_app.UserSinglePost;
-import com.rcoem.enotice.enotice_app.UserTextNoticeStatus;
-import com.rcoem.enotice.enotice_app.UserTextRejectStatus;
+import com.rcoem.enotice.enotice_app.UserNoticeStatusClasses.UserDocNoticeStatus;
+import com.rcoem.enotice.enotice_app.UserNoticeStatusClasses.UserDocRejectStatus;
 import com.rcoem.enotice.enotice_app.Utils;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by E-Notice on 2/17/2017.

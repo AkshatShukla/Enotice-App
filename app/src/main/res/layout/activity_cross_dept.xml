@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
 
 
-    tools:context="com.rcoem.enotice.enotice_app.CrossDept">
+    tools:context="com.rcoem.enotice.enotice_app.AdminClasses.CrossDept">
 
     <RelativeLayout
         android:layout_height="match_parent"

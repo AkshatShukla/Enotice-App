@@ -7,23 +7,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.rcoem.enotice.enotice_app.AccountActivityAdmin;
-import com.rcoem.enotice.enotice_app.AdminSinglePost;
 import com.rcoem.enotice.enotice_app.BlogModel;
 import com.rcoem.enotice.enotice_app.CircleTransform;
 import com.rcoem.enotice.enotice_app.R;
-import com.rcoem.enotice.enotice_app.TextNoticeAdmin;
-import com.rcoem.enotice.enotice_app.TextNoticeApproval;
-import com.rcoem.enotice.enotice_app.TextNoticeUser;
-import com.rcoem.enotice.enotice_app.UserTextNoticeStatus;
-import com.rcoem.enotice.enotice_app.UserTextRejectStatus;
+import com.rcoem.enotice.enotice_app.AdminClasses.TextNoticeAdmin;
+import com.rcoem.enotice.enotice_app.AdminApprovalClasses.TextNoticeApproval;
+import com.rcoem.enotice.enotice_app.UserClasses.TextNoticeUser;
+import com.rcoem.enotice.enotice_app.UserNoticeStatusClasses.UserTextNoticeStatus;
+import com.rcoem.enotice.enotice_app.UserNoticeStatusClasses.UserTextRejectStatus;
 import com.rcoem.enotice.enotice_app.Utils;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
 /**
  * Created by E-Notice on 2/16/2017.

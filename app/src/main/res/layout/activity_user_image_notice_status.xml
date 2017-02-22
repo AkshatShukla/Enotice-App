@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rcoem.enotice.enotice_app.ImageNoticeUser">
+    tools:context="com.rcoem.enotice.enotice_app.UserClasses.ImageNoticeUser">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -50,11 +50,10 @@
                     android:layout_width="80dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="25dp"
+                    android:layout_marginRight="20dp"
                     android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@+id/usernameAdmin"
                     android:paddingTop="5dp"
-                    android:paddingLeft="6dp"
+                    android:textAlignment="center"
                     />
 
                 <TextView
