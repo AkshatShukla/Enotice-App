@@ -73,22 +73,6 @@ public class EditViewProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_view_profile);
 
-
-
-
-
-/*
-        Toolbar myChildToolbar =
-                (Toolbar) findViewById(R.id.toolbar111);
-        setSupportActionBar(myChildToolbar);
-
-        // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
-
-        // Enable the Up button
-      ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle("Profile");
-        */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar111);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -103,32 +87,15 @@ public class EditViewProfile extends AppCompatActivity {
         getSupportActionBar().setTitle("Profile");
 
 
-
-
-
-
-
-
-
-
-
-
         mAuth = FirebaseAuth.getInstance();
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users");
         txt_desig = (TextView)findViewById(R.id.des_ok_input);
         dept_disp = (TextView)findViewById(R.id.dept_display);
         mStorage = FirebaseStorage.getInstance().getReference();
-        //   Bitmap bm = BitmapFactory.decodeResource(getResources(),
-        //    R.drawable.profile_pic);
         mprogress =  new ProgressDialog(this);
-        //  mprogress.setMessage("loading");
-        //// mprogress.show();
+
+
         String path  ="photos/"+mAuth.getCurrentUser().getUid().toString();
-//mprogress.setMessage("loading");
-        // mprogress.show();
-        // Create a reference with an initial file path and name
-        //StorageReference path = mStorage.child("images/stars.jpg");
-        //StorageReference islandRef = mStorage.child(path);
         try {
             final File localFile ;
 
