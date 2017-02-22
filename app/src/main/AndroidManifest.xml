@@ -50,13 +50,34 @@
             android:name=".AddNoticeClasses.PdfUpload"
             android:label="Select a Document" />
         <activity android:name=".pdfview" />
-        <activity android:name=".PdfDownload" />
+        <activity android:name=".AdminClasses.BlockUserPlanel" />
+        <activity android:name=".AdminClasses.CrossDept" />
+        <activity android:name=".AdminClasses.AccountCrossDept" />
+        <activity android:name=".NotificationClasses.ActivitySendPushNotification" />
+        <activity android:name=".AddNoticeClasses.AddNoticeTabbed" />
+        <activity android:name=".AdminApprovalClasses.TextNoticeApproval" />
+        <activity android:name=".AdminApprovalClasses.ImageNoticeApproval" />
+        <activity android:name=".AdminApprovalClasses.DocNoticeApproval" />
+        <activity android:name=".AdminClasses.TextNoticeAdmin" />
+        <activity android:name=".UserClasses.TextNoticeUser" />
+        <activity android:name=".AdminClasses.DocNoticeAdmin" />
+        <activity android:name=".UserClasses.DocNoticeUser" />
+        <activity android:name=".AdminClasses.ImageNoticeAdmin" />
+        <activity android:name=".UserClasses.ImageNoticeUser" />
+        <activity android:name=".UserNoticeStatusClasses.UserTextNoticeStatus" />
+        <activity android:name=".UserNoticeStatusClasses.UserImageNoticeStatus" />
+        <activity android:name=".UserNoticeStatusClasses.UserDocNoticeStatus" />
+        <activity android:name=".UserNoticeStatusClasses.UserImageRejectStatus" />
+        <activity android:name=".UserNoticeStatusClasses.UserTextRejectStatus" />
+        <activity android:name=".UserNoticeStatusClasses.UserDocRejectStatus" />
 
         <!-- Services -->
+        <service android:name=".NotificationClasses.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".NotificationClasses.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
