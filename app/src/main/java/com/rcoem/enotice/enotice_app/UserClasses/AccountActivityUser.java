@@ -139,6 +139,8 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
         startService(new Intent(this, MyFirebaseMessagingService.class));
 
+        di = (DrawerLayout) findViewById(R.id.drawer_layout_user);
+
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         //Code to send user token and details to hosted MySQL server
@@ -520,10 +522,9 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             startActivity(new Intent(getApplicationContext(),pdfview.class));
         } else if (id == R.id.nav_logout) {
             mAuth.signOut();
-            /*Snackbar snackbar = Snackbar
+            Snackbar snackbar = Snackbar
                     .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);
-            snackbar.show();*/
-            Toast.makeText(AccountActivityUser.this, R.string.sign_out, Toast.LENGTH_LONG).show();
+            snackbar.show();
             startActivity(new Intent(AccountActivityUser.this, MainActivity.class));
         } else if (id == R.id.nav_about_us) {
             Snackbar snackbar = Snackbar

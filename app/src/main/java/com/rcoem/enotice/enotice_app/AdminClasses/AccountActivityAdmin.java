@@ -79,6 +79,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import es.dmoral.toasty.Toasty;
+
 public class AccountActivityAdmin extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView recyclerView;
@@ -154,6 +156,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         startService(new Intent(this, MyFirebaseMessagingService.class));
 
 
+        di = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("posts");
         mAuth = FirebaseAuth.getInstance();
         mDatabaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
@@ -595,9 +598,9 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         else if (id == R.id.nav_logout) {
             //Log out from account
             mAuth.signOut();
-          //  Snackbar snackbar = Snackbar
-            //        .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);
-           // snackbar.show();
+            Snackbar snackbar = Snackbar
+                    .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);
+            snackbar.show();
             startActivity(new Intent(AccountActivityAdmin.this, MainActivity.class));
 
         } else if (id == R.id.nav_about_us) {
@@ -646,9 +649,11 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             }
             else{
                 back_pressed = System.currentTimeMillis();
+
                 Snackbar snackbar = Snackbar
                         .make(di, R.string.backpress, Snackbar.LENGTH_LONG);
                 snackbar.show();
+
             }
         }
     }
