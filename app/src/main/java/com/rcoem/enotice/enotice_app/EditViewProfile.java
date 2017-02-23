@@ -56,6 +56,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import dmax.dialog.SpotsDialog;
+
 
 public class EditViewProfile extends AppCompatActivity {
     private static int RESULT_LOAD_IMAGE = 1;
@@ -93,6 +95,8 @@ public class EditViewProfile extends AppCompatActivity {
         dept_disp = (TextView)findViewById(R.id.dept_display);
         mStorage = FirebaseStorage.getInstance().getReference();
         mprogress =  new ProgressDialog(this);
+        final AlertDialog dialog1 = new SpotsDialog(this, R.style.CustomProgress);
+        //dialog1.show();
 
 
         String path  ="photos/"+mAuth.getCurrentUser().getUid().toString();
@@ -100,7 +104,6 @@ public class EditViewProfile extends AppCompatActivity {
             final File localFile ;
 
             localFile = File.createTempFile("images", "jpg");
-
             mDatabase1.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -119,11 +122,17 @@ public class EditViewProfile extends AppCompatActivity {
 
                         }
                         try {
-                            ImageView circularImageView = (ImageView) findViewById(R.id.imageView);
+
+                            ImageView circularImageView = (ImageView) findViewById(R.id.imageView_imagggggggg);
                             String url = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("images").getValue().toString().trim();
-                            Picasso.with(EditViewProfile.this).load(url).into(circularImageView);
+
+                            Glide.with(getApplicationContext()).load(url)
+                                    .crossFade()
+                                    .thumbnail(0.5f)
+                                    .bitmapTransform(new CircleTransform(getApplicationContext()))
+                                    .into(circularImageView);
                         } catch (Exception e) {
-                            // Toast.makeText(getApplicationContext(),e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),e.getMessage().toString(),Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
                     }
@@ -184,8 +193,9 @@ public class EditViewProfile extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog,int id) {
                                         // get user input and set it to result
                                         // edit text
-                                        mprogress.setMessage("Updating");
-                                        mprogress.show();
+                                        //mprogress.setMessage("Updating");
+                                      /// mprogress.show();
+                                        dialog1.show();
 
                                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -198,13 +208,14 @@ public class EditViewProfile extends AppCompatActivity {
                                                             TextView txt  = (TextView)findViewById(R.id.email_input);
                                                             txt.setText(userInput.getText().toString().trim());
                                                             Toast.makeText(context, "Email updated succcessfully", Toast.LENGTH_SHORT).show();
-                                                            mprogress.dismiss();
+                                                          dialog1.dismiss();
+                                                            //  mprogress.dismiss();
                                                         }
                                                         else
                                                         {
                                                             Toast.makeText(context, task.getException().toString(), Toast.LENGTH_LONG).show();
-                                                            mprogress.dismiss();
-
+                                                         //   mprogress.dismiss();
+dialog1.dismiss();
                                                         }
                                                     }
                                                 });
@@ -248,8 +259,9 @@ public class EditViewProfile extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog,int id) {
                                         // get user input and set it to result
                                         // edit text
-                                        mprogress.setMessage("Updating");
-                                        mprogress.show();
+                                       // mprogress.setMessage("Updating");
+                                        //mprogress.show();
+                                        dialog1.show();
                                         final String user_id = mAuth.getCurrentUser().getUid();
 
 
@@ -272,7 +284,8 @@ public class EditViewProfile extends AppCompatActivity {
                                                             TextView txt  = (TextView)findViewById(R.id.name_input);
                                                             txt.setText(userInput.getText().toString());
                                                             Toast.makeText(context, "Name updated succcessfully", Toast.LENGTH_SHORT).show();
-                                                            mprogress.dismiss();
+                                                            //mprogress.dismiss();
+                                                        dialog1.dismiss();
                                                         }
                                                     }
                                                 });
@@ -319,50 +332,48 @@ public class EditViewProfile extends AppCompatActivity {
             Uri uri = data.getData();
             mAuth = FirebaseAuth.getInstance();
             mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users");
-            Toast.makeText(getApplicationContext(),uri.getLastPathSegment().toString(),Toast.LENGTH_LONG).show();
+         //   Toast.makeText(getApplicationContext(),uri.getLastPathSegment().toString(),Toast.LENGTH_LONG).show();
 
             StorageReference mStoarge = FirebaseStorage.getInstance().getReference();
 
 
-            mprogress.setMessage("uploading");
-            mprogress.show();
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            final String user_id1 = mAuth.getCurrentUser().getUid();
-            final String dadada=uri.toString();
 
-            mprogress.setMessage("Updating");
-            mprogress.show();
+            final AlertDialog dialog1 = new SpotsDialog(this, R.style.CustomProgress);
+            dialog1.show();
 
+            try {
 
-            StorageReference filepath = mStoarge.child("Images").child(uri.getLastPathSegment());
-            filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+    StorageReference filepath = mStoarge.child("Images").child(uri.getLastPathSegment().toString());
+    filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        @Override
+        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            mDatabase1.child(mAuth.getCurrentUser().getUid()).child("images").setValue(downloadUrl.toString());
+
+            Toast.makeText(getApplicationContext(), "Successfully uploaded", Toast.LENGTH_LONG).show();
+           // mprogress.dismiss();
+            dialog1.dismiss();
+
+        }
+    })
+
+            .addOnFailureListener(new OnFailureListener() {
                 @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    final Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    mDatabase1.child(user_id1).child("images").setValue(downloadUrl.toString());
-
-                    Toast.makeText(getApplicationContext(),"Successfully uploaded",Toast.LENGTH_LONG).show();
-                    mprogress.dismiss();
-
+                public void onFailure(@NonNull Exception exception) {
+                    dialog1.dismiss();
+                    //  mprogress.dismiss();
+                    Toast.makeText(getApplicationContext(), exception.getMessage().toString(), Toast.LENGTH_LONG).show();
                 }
             });
 
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-
-
-            Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+}catch (Exception e){
+    //Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
+e.printStackTrace();
+}
 
         }
 

@@ -48,8 +48,8 @@
                     android:layout_marginBottom="60dp"
                     android:layout_gravity="center"
                     >
-                    <com.rcoem.enotice.enotice_app.RoundedImageView
-                        android:id="@+id/imageView"
+                    <ImageView
+                        android:id="@+id/imageView_imagggggggg"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:layout_marginTop="15dp"
