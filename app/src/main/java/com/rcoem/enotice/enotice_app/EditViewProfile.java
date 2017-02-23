@@ -25,6 +25,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.rcoem.enotice.enotice_app.UserClasses.ImageNoticeUser;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -67,7 +69,7 @@ public class EditViewProfile extends AppCompatActivity {
     private DatabaseReference mDataUser;
     TextView txt_desig,dept_disp;
     private DatabaseReference mDatabase1;
-
+    private boolean zoomOut =  false;
     private FirebaseAuth mAuth;
     final Context context = this;
     @Override
@@ -150,6 +152,55 @@ public class EditViewProfile extends AppCompatActivity {
 
                 }
             });
+
+
+
+
+
+           // mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users");
+
+/*
+          final   ImageView imageView = (ImageView) findViewById(R.id.imageView_imagggggggg);
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mDatabase1.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                        //    String imageUrl = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("images").getValue().toString().trim();
+
+                            String url = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("images").getValue().toString().trim();
+
+                            Intent intent = new Intent(getApplicationContext(), fullScreenImage.class);
+                            intent.putExtra("imageUrl", url);
+                            startActivity(intent);
+                           // Toast.makeText(getApplicationContext(),"success",Toast.LENGTH_LONG).show();
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(getApplicationContext(),databaseError.getMessage().toString(),Toast.LENGTH_LONG).show();
+
+
+                        }
+                    });
+                }
+            });
+*/
+
+
+
+
+
+
+
+
+
+
+
+
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
@@ -377,6 +428,10 @@ e.printStackTrace();
 
         }
 
+
+    }
+    private void viewImage(String imageUrl) {
+        // Toast.makeText(AdminSinglePost.this,imageUrl, Toast.LENGTH_LONG).show();
 
     }
 }
