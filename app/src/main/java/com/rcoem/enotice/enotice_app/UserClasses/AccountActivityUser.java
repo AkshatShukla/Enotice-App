@@ -71,6 +71,8 @@ import java.util.Map;
 
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 public class AccountActivityUser extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
 
     private RecyclerView recyclerView;
@@ -85,6 +87,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
     private RecyclerView mBlogList;
     private DatabaseReference mDatabase1;
     private DatabaseReference mCurrentUser;
+    private DatabaseReference currentUserStatus;
 
     FloatingActionButton fabplus;
     FloatingActionButton fabaddNotice;
@@ -333,11 +336,32 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
         */
 
+        currentUserStatus = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
         fabplus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountActivityUser.this, AddNoticeTabbed.class);
-                startActivity(intent);
+                currentUserStatus.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String status = dataSnapshot.child("block").getValue().toString().trim();
+
+                        if (status.equals("No")) {
+                            Intent intent = new Intent(AccountActivityUser.this, AddNoticeTabbed.class);
+                            startActivity(intent);
+                        }
+                        else {
+                            Snackbar snackbar = Snackbar
+                                    .make(di, "You are unauthorized to generate notices. Please contact your HOD.", Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
