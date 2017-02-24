@@ -335,11 +335,7 @@ public class PdfUpload extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // progressDialog.dismiss();
-
-                        //Toast.makeText(AddNoticeActivityUser.this, response, Toast.LENGTH_LONG).show();
-                        //Toasty.custom(getActivity().getApplicationContext(), "HOD will be notified of your Notice", R.mipmap.ic_launcher, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorBg), 100, false, true).show();
-                    }
+                        }
                 },
                 new Response.ErrorListener() {
                     @Override

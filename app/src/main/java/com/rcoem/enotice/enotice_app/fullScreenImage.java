@@ -21,6 +21,7 @@ public class fullScreenImage extends AppCompatActivity {
         setContentView(R.layout.activity_full_screen_image);
         Intent intent = getIntent();
         final String str = intent.getStringExtra("imageUrl");
+        Toast.makeText(getApplicationContext(), str,Toast.LENGTH_LONG).show();
 
         mViewImage = (ImageView) findViewById(R.id.FullScreenImageView);
         Picasso.with(fullScreenImage.this).load(str).into(mViewImage);
