@@ -200,6 +200,7 @@ public class ImageNoticeApproval extends AppCompatActivity {
                                             String label = dataSnapshot.child("label").getValue().toString().trim();
                                             String title = dataSnapshot.child("title").getValue().toString().trim();
                                             String message = dataSnapshot.child("username").getValue().toString().trim();
+                                            String uid = dataSnapshot.child("UID").getValue().toString().trim();
                                             String dept = dataSnapshot.child("department").getValue().toString().trim();
                                             String image = dataSnapshot.child("images").getValue().toString().trim();
                                             String desc = dataSnapshot.child("Desc").getValue().toString().trim();
@@ -209,7 +210,7 @@ public class ImageNoticeApproval extends AppCompatActivity {
                                             mDataApproved.child("label").setValue(label);
                                             mDataApproved.child("title").setValue(title);
                                             mDataApproved.child("Desc").setValue(desc);
-                                            mDataApproved.child("UID").setValue(mAuth.getCurrentUser().getUid());
+                                            mDataApproved.child("UID").setValue(uid);
                                             //Missing email Attribute
                                             mDataApproved.child("username").setValue(message);
                                             mDataApproved.child("profileImg").setValue(profileImg);
