@@ -37,7 +37,7 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:layout_marginLeft="10dp"
-                    android:id="@+id/imageView"
+                    android:id="@+id/profileViewImage"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"
@@ -53,8 +53,8 @@
                     android:hint="Name"
                     android:textColor="#000000"
                     android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/imageView"
-                    android:id="@+id/usernameAdmin"
+                    android:layout_toRightOf="@+id/profileViewImage"
+                    android:id="@+id/usernameImage"
                     />
 
                 <TextView
@@ -64,23 +64,39 @@
                     android:layout_marginLeft="95dp"
                     android:text="on Date"
                     android:id="@+id/date_imageadmin"
-                    android:layout_below="@+id/usernameAdmin"
-                    android:layout_alignStart="@+id/usernameAdmin"
-                    android:layout_marginStart="10dp" />
+                    android:layout_below="@+id/usernameImage"
+                    android:layout_alignStart="@+id/usernameImage"
+                    android:layout_marginStart="12dp" />
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <ProgressBar
+                android:id="@+id/progress"
+                android:visibility="visible"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerCrop"/>
 
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/select_image_ButtonAdmin"
+                android:id="@+id/imageViewAdmin"
                 android:background="@color/cardview_light_background"
-                android:src="@mipmap/add_btn"
+
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="false"
                 />
 
+            </RelativeLayout>
 
 
             <TextView
@@ -170,7 +186,7 @@
                     android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:id="@+id/button2"
+                    android:id="@+id/deleteButtonImage"
                     android:layout_margin="16dp"
                     android:background="@color/colorPrimary"
                     android:textColor="@color/cardview_light_background"

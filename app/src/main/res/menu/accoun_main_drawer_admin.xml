@@ -16,11 +16,6 @@
             android:title="@string/nav_approve" />
 
         <item
-            android:id="@+id/nav_documents"
-            android:icon="@drawable/document48"
-            android:title="@string/nav_documents" />
-
-        <item
             android:id="@+id/ViewUsers"
             android:icon="@drawable/usegroupmanman48"
             android:title="@string/nav_User" />

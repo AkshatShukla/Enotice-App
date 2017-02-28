@@ -147,7 +147,7 @@ public class AccountAdminPanel extends AppCompatActivity implements  NavigationV
                         final String str = intent.getStringExtra("location");
                         viewHolder.setTitle(model.getName());
                         if(model.getDEST().equals("AP")){
-                            viewHolder.setName("Rights :          Assitant Prof");
+                            viewHolder.setName("Rights : Assistant Prof");
                         }
                         else {
                             viewHolder.setName("Rights : Head of Department");

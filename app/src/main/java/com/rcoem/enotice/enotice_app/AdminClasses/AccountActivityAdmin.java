@@ -588,14 +588,9 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
         } else if (id == R.id.nav_approval) {
             //goto Pending Approvals activity
-            startActivity(new Intent(AccountActivityAdmin.this,RetriverData.class));
+            startActivity(new Intent(AccountActivityAdmin.this, RetriverData.class));
 
-        } else if(id == R.id.nav_documents){
-            //goto New Documents Activity
-            startActivity(new Intent(getApplicationContext(),pdfview.class));
-
-        }
-        else if (id == R.id.nav_logout) {
+        } else if (id == R.id.nav_logout) {
             //Log out from account
             mAuth.signOut();
             Snackbar snackbar = Snackbar
