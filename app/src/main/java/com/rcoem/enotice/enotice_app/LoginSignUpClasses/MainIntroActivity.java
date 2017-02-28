@@ -24,6 +24,7 @@ import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 import com.heinrichreimersoftware.materialintro.slide.Slide;
 import com.rcoem.enotice.enotice_app.AdminClasses.AccountActivityAdmin;
+import com.rcoem.enotice.enotice_app.HighAuthorityClasses.AccountActivityAuthority;
 import com.rcoem.enotice.enotice_app.R;
 import com.rcoem.enotice.enotice_app.UserClasses.AccountActivityUser;
 
@@ -235,7 +236,13 @@ public class MainIntroActivity extends IntroActivity {
                                     Intent intent1 = new Intent(getApplicationContext(),AccountActivityAdmin.class);
                                     startActivity(intent1);
                                     finish();
-                                } else {
+                                }
+                                else if (string.equals("3")) {
+                                    Intent intent1 = new Intent(getApplicationContext(), AccountActivityAuthority.class);
+                                    startActivity(intent1);
+                                    finish();
+                                }
+                                else {
                                     Intent intent1 = new Intent(getApplicationContext(),AccountActivityUser.class);
                                     startActivity(intent1);
                                     finish();

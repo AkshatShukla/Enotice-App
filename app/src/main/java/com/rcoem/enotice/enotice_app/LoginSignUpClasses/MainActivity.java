@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ldoublem.loadingviewlib.view.LVBlock;
 import com.rcoem.enotice.enotice_app.AdminClasses.AccountActivityAdmin;
 import com.rcoem.enotice.enotice_app.AuthorityClasses.AccountAdminPanel;
+import com.rcoem.enotice.enotice_app.HighAuthorityClasses.AccountActivityAuthority;
 import com.rcoem.enotice.enotice_app.R;
 import com.rcoem.enotice.enotice_app.UserClasses.AccountActivityUser;
 
@@ -111,6 +112,12 @@ public class MainActivity extends AppCompatActivity {
                             if(string.equals("4")){
                                 mProgress.dismiss();
                                 Intent intent = new Intent(MainActivity.this, AccountAdminPanel.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else if (string.equals("3")) {
+                                mProgress.dismiss();
+                                Intent intent = new Intent(MainActivity.this, AccountActivityAuthority.class);
                                 startActivity(intent);
                                 finish();
                             }

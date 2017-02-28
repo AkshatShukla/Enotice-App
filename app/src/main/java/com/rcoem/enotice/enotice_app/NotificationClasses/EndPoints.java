@@ -13,4 +13,5 @@ public class EndPoints {
 
     public static final String URL_SEND_SINGLE_PUSH_DEPT = "http://polarisrcoem.in/sendSinglePushDept.php";
     public static final String URL_SEND_SINGLE_PUSH_HOD = "http://polarisrcoem.in/sendSinglePushHOD.php";
+    public static final String URL_SEND_SINGLE_PUSH_AUTHORITY = "http://polarisrcoem.in/sendSinglePushAuthority.php";
 }

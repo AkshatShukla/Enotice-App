@@ -83,6 +83,9 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".HighAuthorityClasses.AccountActivityAuthority" />
+        <activity android:name=".HighAuthorityClasses.AddNoticeTabbedAuthority" />
+        <activity android:name=".HighAuthorityClasses.PdfUploadAuthority"></activity>
     </application>
 
 </manifest>
