@@ -1,4 +1,4 @@
-package com.rcoem.enotice.enotice_app.UserClasses;
+package com.rcoem.enotice.enotice_app.AdminClasses;
 
 /**
  * Created by Akshat Shukla on 28-02-2017.
@@ -35,7 +35,7 @@ import java.util.Date;
 import es.dmoral.toasty.Toasty;
 
 
-public class AccountAllPostsUser extends Fragment {
+public class AccountAllPostsAdmin extends Fragment {
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
@@ -51,7 +51,7 @@ public class AccountAllPostsUser extends Fragment {
     View allView;
     Activity context;
 
-    public AccountAllPostsUser() {
+    public AccountAllPostsAdmin() {
         // Required empty public constructor
     }
 

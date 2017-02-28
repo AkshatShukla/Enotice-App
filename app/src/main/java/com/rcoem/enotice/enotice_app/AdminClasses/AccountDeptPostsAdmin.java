@@ -1,8 +1,4 @@
-package com.rcoem.enotice.enotice_app.UserClasses;
-
-/**
- * Created by Akshat Shukla on 28-02-2017.
- */
+package com.rcoem.enotice.enotice_app.AdminClasses;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -34,8 +30,11 @@ import java.util.Date;
 
 import es.dmoral.toasty.Toasty;
 
+/**
+ * Created by Akshat Shukla on 28-02-2017.
+ */
 
-public class AccountAllPostsUser extends Fragment {
+public class AccountDeptPostsAdmin extends Fragment {
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
@@ -48,10 +47,10 @@ public class AccountAllPostsUser extends Fragment {
 
     Query mquery;
 
-    View allView;
+    View deptView;
     Activity context;
 
-    public AccountAllPostsUser() {
+    public AccountDeptPostsAdmin() {
         // Required empty public constructor
     }
 
@@ -64,10 +63,10 @@ public class AccountAllPostsUser extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getActivity();
-        allView = inflater.inflate(R.layout.activity_account_user_all, container, false);
+        deptView = inflater.inflate(R.layout.activity_account_user_dept, container, false);
 
         // Inflate the layout for this fragment
-        return allView;
+        return deptView;
     }
 
     @Override
@@ -76,10 +75,10 @@ public class AccountAllPostsUser extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
-        mBlogList = (RecyclerView) context.findViewById(R.id.blog_recylView_all_list);
+        mBlogList = (RecyclerView) context.findViewById(R.id.blog_recylView_dept_list);
 
         //SwipeRefresh Code
-        swipeRefreshLayout = (SwipeRefreshLayout) context.findViewById(R.id.swipe_refresh_layout_all);
+        swipeRefreshLayout = (SwipeRefreshLayout) context.findViewById(R.id.swipe_refresh_layout_dept);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -104,7 +103,7 @@ public class AccountAllPostsUser extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.hasChildren()) {
-                    String Str = "ALL";
+                    String Str = dataSnapshot.child("department").getValue().toString();
                     viewNotice(Str);
                 }
                 else {
@@ -117,6 +116,7 @@ public class AccountAllPostsUser extends Fragment {
                 //Do nothing
             }
         });
+
     }
 
     //Method to view department specific notices in feed
@@ -175,15 +175,15 @@ public class AccountAllPostsUser extends Fragment {
                             case Utils.TEXT_NOTICE:
                                 View textNotice = LayoutInflater.from(parent.getContext())
                                         .inflate(R.layout.notice_text_card, parent, false);
-                                return new TextNoticeViewHolder(textNotice, Utils.USER_VIEW);
+                                return new TextNoticeViewHolder(textNotice, Utils.ADMIN_VIEW);
                             case Utils.IMAGE_NOTICE:
                                 View imageNotice = LayoutInflater.from(parent.getContext())
                                         .inflate(R.layout.notice_image_card, parent, false);
-                                return new ImageNoticeViewHolder(imageNotice, Utils.USER_VIEW);
+                                return new ImageNoticeViewHolder(imageNotice, Utils.ADMIN_VIEW);
                             case Utils.DOCUMENT_NOTICE:
                                 View documentNotice = LayoutInflater.from(parent.getContext())
                                         .inflate(R.layout.notice_document_card, parent, false);
-                                return new DocumentNoticeViewHolder(documentNotice, Utils.USER_VIEW);
+                                return new DocumentNoticeViewHolder(documentNotice, Utils.ADMIN_VIEW);
                         }
                         return super.onCreateViewHolder(parent, viewType);
                     }
