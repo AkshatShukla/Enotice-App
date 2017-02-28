@@ -9,8 +9,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +40,7 @@ public class ImageNoticeAdmin extends AppCompatActivity {
     private TextView mDate;
     private Button delete;
     private ImageButton mViewImage;
+    private ImageView circularImageView;
  //   private Button Approved;
   //  private Button Rejected;
     private Button Share;
@@ -65,11 +73,11 @@ public class ImageNoticeAdmin extends AppCompatActivity {
         final String str = intent.getStringExtra("postkey");
         mPostTitle = (TextView) findViewById(R.id.Post_title_Admin);
         mPostDesc = (TextView) findViewById(R.id.Post_Desc_Admin);
-        mUsername = (TextView) findViewById(R.id.usernameAdmin);
-        mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
+        mUsername = (TextView) findViewById(R.id.usernameImage);
+        mViewImage = (ImageButton) findViewById(R.id.imageViewAdmin);
         mDate = (TextView) findViewById(R.id.date_imageadmin);
-        delete = (Button) findViewById(R.id.button2);
-
+        delete = (Button) findViewById(R.id.deleteButtonImage);
+        circularImageView = (ImageView) findViewById(R.id.profileViewImage);
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
         mStoarge = FirebaseStorage.getInstance().getReference();
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -82,8 +90,32 @@ public class ImageNoticeAdmin extends AppCompatActivity {
                     mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
                     String date = "on " + dataSnapshot.child("time").getValue().toString().trim();
                     mDate.setText(date);
+                    String profilePic = dataSnapshot.child("profileImg").getValue().toString().trim();
                     String imageUrl = dataSnapshot.child("images").getValue().toString().trim();
-                    Picasso.with(ImageNoticeAdmin.this).load(imageUrl).into(mViewImage);
+                    //Picasso.with(ImageNoticeAdmin.this).load(imageUrl).into(mViewImage);
+
+                    final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress);
+
+                    Glide.with(ImageNoticeAdmin.this)
+                            .load(imageUrl)
+                            .listener(new RequestListener<String, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                    progressBar.setVisibility(View.GONE);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                    progressBar.setVisibility(View.GONE);
+                                    return false;
+                                }
+                            })
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontAnimate()
+                            .into(mViewImage);
+
+                    Glide.with(ImageNoticeAdmin.this).load(profilePic).crossFade().into(circularImageView);
                     toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                 }
             }

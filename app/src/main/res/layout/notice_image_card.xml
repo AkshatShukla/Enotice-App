@@ -66,9 +66,25 @@
                     android:layout_marginEnd="16dp"
                     android:layout_alignParentEnd="true" />
 
+                <RelativeLayout
+                    android:id="@+id/relLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/profpic_imagecard">
+
+                <ProgressBar
+                    android:id="@+id/progress"
+                    android:visibility="visible"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="45dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerCrop"/>
+
                 <ImageView
                     android:id="@+id/pic_imagecard"
-                    android:layout_below="@id/profpic_imagecard"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_marginTop="8dp"
@@ -76,9 +92,11 @@
                     android:layout_marginEnd="16dp"
                     android:scaleType="centerCrop" />
 
+                </RelativeLayout>
+
                 <TextView
                     android:id="@+id/title_imagecard"
-                    android:layout_below="@id/pic_imagecard"
+                    android:layout_below="@id/relLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="start"

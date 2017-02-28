@@ -20,6 +20,8 @@
         android:src="@drawable/ic_action_plus"
         app:pressedTranslationZ="12dp"/>
 
+    <!-- Deprecated FABs
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_document_fab"
         android:layout_width="wrap_content"
@@ -77,7 +79,7 @@
         android:layout_marginBottom="164dp"
         android:elevation="6dp"
         android:visibility="invisible"/>
-
+    -->
 
     <LinearLayout
         android:layout_height="match_parent"

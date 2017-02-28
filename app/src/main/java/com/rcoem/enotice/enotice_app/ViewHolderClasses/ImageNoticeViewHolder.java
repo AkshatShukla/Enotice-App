@@ -6,9 +6,13 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.rcoem.enotice.enotice_app.BlogModel;
 import com.rcoem.enotice.enotice_app.CircleTransform;
 import com.rcoem.enotice.enotice_app.AdminClasses.ImageNoticeAdmin;
@@ -75,6 +79,26 @@ public class ImageNoticeViewHolder extends RecyclerView.ViewHolder {
          post_image = (ImageView) mView.findViewById(R.id.pic_imagecard);
         //Picasso.with(context).load(image).into(post_image);
 
+        final ProgressBar progressBar = (ProgressBar) mView.findViewById(R.id.progress);
+
+        Glide.with(context)
+                .load(image)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(post_image);
+
+        /*
         Picasso.with(context).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(post_image, new Callback() {
             @Override
             public void onSuccess() {
@@ -86,7 +110,7 @@ public class ImageNoticeViewHolder extends RecyclerView.ViewHolder {
                 Picasso.with(context).load(image).into(post_image);
             }
         });
-
+        */
     }
 
     public void setTime(String time){
