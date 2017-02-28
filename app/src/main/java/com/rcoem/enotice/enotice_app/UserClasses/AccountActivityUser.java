@@ -208,7 +208,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new AccountDeptPostsUser(), "Department Feed");
-        adapter.addFragment(new AccountAllPostsUser(), "College Feed");
+        adapter.addFragment(new AccountAllPostsUser(), "University Feed");
         viewPager.setAdapter(adapter);
     }
 

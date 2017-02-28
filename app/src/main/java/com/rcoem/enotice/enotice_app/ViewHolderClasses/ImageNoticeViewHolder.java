@@ -96,6 +96,8 @@ public class ImageNoticeViewHolder extends RecyclerView.ViewHolder {
                         return false;
                     }
                 })
+                .thumbnail(0.5f)
+                .fitCenter()
                 .into(post_image);
 
         /*
