@@ -2,56 +2,27 @@ package com.rcoem.enotice.enotice_app.UserClasses;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.rcoem.enotice.enotice_app.AddNoticeClasses.AddNoticeTabbed;
-import com.rcoem.enotice.enotice_app.BlogModel;
-import com.rcoem.enotice.enotice_app.CircleTransform;
-import com.rcoem.enotice.enotice_app.EditViewProfile;
-import com.rcoem.enotice.enotice_app.NotificationClasses.EndPoints;
-import com.rcoem.enotice.enotice_app.LoginSignUpClasses.MainActivity;
-import com.rcoem.enotice.enotice_app.NoticeCard;
-import com.rcoem.enotice.enotice_app.NoticeCardAdapter;
-import com.rcoem.enotice.enotice_app.NotificationClasses.ActivitySendPushNotification;
-import com.rcoem.enotice.enotice_app.NotificationClasses.MyFirebaseMessagingService;
-import com.rcoem.enotice.enotice_app.R;
-import com.rcoem.enotice.enotice_app.NotificationClasses.SharedPrefManager;
-import com.rcoem.enotice.enotice_app.UserNoticeStatusClasses.UserNoticeStatus;
-import com.rcoem.enotice.enotice_app.Utils;
-import com.rcoem.enotice.enotice_app.ViewHolderClasses.DocumentNoticeViewHolder;
-import com.rcoem.enotice.enotice_app.ViewHolderClasses.ImageNoticeViewHolder;
-import com.rcoem.enotice.enotice_app.ViewHolderClasses.TextNoticeViewHolder;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -60,18 +31,35 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.rcoem.enotice.enotice_app.pdfview;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.rcoem.enotice.enotice_app.AddNoticeClasses.AddNoticeTabbed;
+import com.rcoem.enotice.enotice_app.CircleTransform;
+import com.rcoem.enotice.enotice_app.EditViewProfile;
+import com.rcoem.enotice.enotice_app.LoginSignUpClasses.MainActivity;
+import com.rcoem.enotice.enotice_app.NoticeCard;
+import com.rcoem.enotice.enotice_app.NoticeCardAdapter;
+import com.rcoem.enotice.enotice_app.NotificationClasses.ActivitySendPushNotification;
+import com.rcoem.enotice.enotice_app.NotificationClasses.EndPoints;
+import com.rcoem.enotice.enotice_app.NotificationClasses.MyFirebaseMessagingService;
+import com.rcoem.enotice.enotice_app.NotificationClasses.SharedPrefManager;
+import com.rcoem.enotice.enotice_app.R;
+import com.rcoem.enotice.enotice_app.UserNoticeStatusClasses.UserNoticeStatus;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-
 import java.util.List;
-
-import es.dmoral.toasty.Toasty;
+import java.util.Map;
 
 public class AccountActivityUser extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener{
 
@@ -93,6 +81,16 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
     FirebaseAuth mAuth;
 
+    private String dept;
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+    private int[] tabIcons = {
+            R.drawable.text_notice,
+            R.drawable.image_notice
+    };
+
     DrawerLayout di;
     private DatabaseReference mDatabaseValidContent;
     Query mquery;
@@ -104,6 +102,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         setContentView(R.layout.activity_account_user);
         mAuth = FirebaseAuth.getInstance();
 
+        /*
         //SwipeRefresh Code
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -120,6 +119,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
                 },1000);
             }
         });
+        */
 
         startService(new Intent(this, MyFirebaseMessagingService.class));
 
@@ -134,7 +134,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //check if user exists in the firebase real-time database
                 if(dataSnapshot.hasChildren()) {
-                    String dept = dataSnapshot.child("department").getValue().toString();
+                    dept = dataSnapshot.child("department").getValue().toString();
                     sendTokenToServer(dept);
                 }
                 else {
@@ -148,27 +148,97 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
             }
         });
 
-        //Code to display notices according to current user department
-        //viewNotices method is called here
-        mDatabase1.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-                if (dataSnapshot.hasChildren()) {
-                    String Str = dataSnapshot.child("department").getValue().toString();
-                    viewNotice(Str);
-                }
-                else {
-                    finish();
-                }
-            }
+        fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
 
+        currentUserStatus = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        fabplus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //Do nothing
+            public void onClick(View v) {
+                currentUserStatus.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String status = dataSnapshot.child("block").getValue().toString().trim();
+
+                        if (status.equals("No")) {
+                            Intent intent = new Intent(AccountActivityUser.this, AddNoticeTabbed.class);
+                            startActivity(intent);
+                        }
+                        else {
+                            Snackbar snackbar = Snackbar
+                                    .make(di, "You are unauthorized to generate notices. Please contact your HOD.", Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_user);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        navHeader = navigationView.getHeaderView(0);
+        txtName = (TextView) navHeader.findViewById(R.id.name);
+        txtWebsite = (TextView) navHeader.findViewById(R.id.website);
+        imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
+        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
+        loadNavHeader();
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new AccountDeptPostsUser(), "Department Feed");
+        adapter.addFragment(new AccountAllPostsUser(), "College Feed");
+        viewPager.setAdapter(adapter);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
     //Method to get token from firebase server and send token to MySQL server
@@ -226,163 +296,6 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
-    //Method to view department specific notices in feed
-
-    private void viewNotice(String str) {
-
-        //To show only the content relevant to the specific department.
-        mDatabaseValidContent = FirebaseDatabase.getInstance().getReference().child("posts").child(str).child("Approved");
-
-        long currentTime = -1 * new Date().getTime();
-        String time = "" + currentTime;
-
-        //To query and view only those messages which have been APPROVED by the authenticator.
-        mquery =  mDatabaseValidContent.orderByChild("servertime");
-
-        //Online-Offline Syncing (only strings and not images)
-        mDatabaseValidContent.keepSynced(true);
-
-        mBlogList = (RecyclerView) findViewById(R.id.blog_recylView_list);
-        mBlogList.setHasFixedSize(true);
-        mBlogList.setLayoutManager(new LinearLayoutManager(this));
-        //  recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        // swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
-
-        currentUserStatus = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-
-        fabplus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentUserStatus.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String status = dataSnapshot.child("block").getValue().toString().trim();
-
-                        if (status.equals("No")) {
-                            Intent intent = new Intent(AccountActivityUser.this, AddNoticeTabbed.class);
-                            startActivity(intent);
-                        }
-                        else {
-                            Snackbar snackbar = Snackbar
-                                    .make(di, "You are unauthorized to generate notices. Please contact your HOD.", Snackbar.LENGTH_LONG);
-                            snackbar.show();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-        });
-
-        //  randomListing = new ArrayList<NoticeCard>();
-        // adapter = new NoticeCardAdapter(this, randomListing);
-
-        // swipeRefreshLayout.setOnRefreshListener(this);
-
-        /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-*/
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_user);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        navHeader = navigationView.getHeaderView(0);
-        txtName = (TextView) navHeader.findViewById(R.id.name);
-        txtWebsite = (TextView) navHeader.findViewById(R.id.website);
-        imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
-        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
-        loadNavHeader();
-
-        //    addContent();
-
-        //Firebase Recycler Adapter inflating multiple view types.
-        FirebaseRecyclerAdapter<BlogModel,RecyclerView.ViewHolder> firebaseRecyclerAdapter =new
-                FirebaseRecyclerAdapter<BlogModel, RecyclerView.ViewHolder>(
-                        BlogModel.class,
-                        R.layout.blog_row,
-                        RecyclerView.ViewHolder.class,
-                        mquery
-                ) {
-                    @Override
-                    protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, BlogModel model, final int position) {
-
-                        final String Post_Key = getRef(position).toString();
-
-                        switch(model.getType()){
-                            case 1 :
-                                TextNoticeViewHolder.populateTextNoticeCard((TextNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
-                                break;
-                            case 2 :
-                                ImageNoticeViewHolder.populateImageNoticeCard((ImageNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
-                                break;
-                            case 3 :
-                                DocumentNoticeViewHolder.populateDocumentNoticeCard((DocumentNoticeViewHolder) viewHolder, model, position, Post_Key, getApplicationContext());
-                                break;
-                        }
-                    }
-
-
-                    @Override
-                    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                        switch (viewType) {
-                            case Utils.TEXT_NOTICE:
-                                View textNotice = LayoutInflater.from(parent.getContext())
-                                        .inflate(R.layout.notice_text_card, parent, false);
-                                return new TextNoticeViewHolder(textNotice, Utils.USER_VIEW);
-                            case Utils.IMAGE_NOTICE:
-                                View imageNotice = LayoutInflater.from(parent.getContext())
-                                        .inflate(R.layout.notice_image_card, parent, false);
-                                return new ImageNoticeViewHolder(imageNotice, Utils.USER_VIEW);
-                            case Utils.DOCUMENT_NOTICE:
-                                View documentNotice = LayoutInflater.from(parent.getContext())
-                                        .inflate(R.layout.notice_document_card, parent, false);
-                                return new DocumentNoticeViewHolder(documentNotice, Utils.USER_VIEW);
-                        }
-                        return super.onCreateViewHolder(parent, viewType);
-                    }
-
-                    @Override
-                    public int getItemViewType(int position) {
-                        BlogModel model = getItem(position);
-                        switch (model.getType()) {
-                            case Utils.TEXT_NOTICE:
-                                return Utils.TEXT_NOTICE;
-                            case Utils.IMAGE_NOTICE:
-                                return Utils.IMAGE_NOTICE;
-                            case Utils.DOCUMENT_NOTICE:
-                                return Utils.DOCUMENT_NOTICE;
-                        }
-                        return super.getItemViewType(position);
-                    }
-
-                };
-
-
-
-        mBlogList.setAdapter(firebaseRecyclerAdapter);
-
-        mAuth = FirebaseAuth.getInstance();
-
-    }
-
-
 
     //Method to load current user details in the Navigation Bar header
 
