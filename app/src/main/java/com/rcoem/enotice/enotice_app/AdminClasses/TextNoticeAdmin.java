@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -81,8 +82,9 @@ public class TextNoticeAdmin extends AppCompatActivity {
                     mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
                     mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
                     String url = dataSnapshot.child("profileImg").getValue().toString().trim();
-                    Date.setText("on " + dataSnapshot.child("time").getValue().toString().trim());
-                    Picasso.with(TextNoticeAdmin.this).load(url).noFade().into(circularImageView);
+                    String date = "on " + dataSnapshot.child("time").getValue().toString().trim();
+                    Date.setText(date);
+                    Glide.with(TextNoticeAdmin.this).load(url).crossFade().into(circularImageView);
                     toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                 }
                 else {

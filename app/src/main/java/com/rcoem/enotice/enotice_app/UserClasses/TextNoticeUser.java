@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -78,7 +79,7 @@ public class TextNoticeUser extends AppCompatActivity {
                     String url = dataSnapshot.child("profileImg").getValue().toString().trim();
                     String date = "on " + dataSnapshot.child("time").getValue().toString().trim();
                     Date.setText(date);
-                    Picasso.with(TextNoticeUser.this).load(url).noFade().into(circularImageView);
+                    Glide.with(TextNoticeUser.this).load(url).crossFade().into(circularImageView);
                     toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                 } else {
                     finish();

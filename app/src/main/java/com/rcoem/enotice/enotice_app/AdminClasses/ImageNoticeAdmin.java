@@ -112,7 +112,7 @@ public class ImageNoticeAdmin extends AppCompatActivity {
                                 }
                             })
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .dontAnimate()
+                            .thumbnail(0.5f)
                             .into(mViewImage);
 
                     Glide.with(ImageNoticeAdmin.this).load(profilePic).crossFade().into(circularImageView);

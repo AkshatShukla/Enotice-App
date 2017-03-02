@@ -232,20 +232,25 @@ public class MainIntroActivity extends IntroActivity {
 
                                 final String string = dataSnapshot.child("level").getValue().toString().trim();
 
-                                if (string.equals("2")) {
-                                    Intent intent1 = new Intent(getApplicationContext(),AccountActivityAdmin.class);
-                                    startActivity(intent1);
-                                    finish();
-                                }
-                                else if (string.equals("3")) {
-                                    Intent intent1 = new Intent(getApplicationContext(), AccountActivityAuthority.class);
-                                    startActivity(intent1);
-                                    finish();
-                                }
-                                else {
-                                    Intent intent1 = new Intent(getApplicationContext(),AccountActivityUser.class);
-                                    startActivity(intent1);
-                                    finish();
+                                switch (string) {
+                                    case "2": {
+                                        Intent intent1 = new Intent(getApplicationContext(), AccountActivityAdmin.class);
+                                        startActivity(intent1);
+                                        finish();
+                                        break;
+                                    }
+                                    case "3": {
+                                        Intent intent1 = new Intent(getApplicationContext(), AccountActivityAuthority.class);
+                                        startActivity(intent1);
+                                        finish();
+                                        break;
+                                    }
+                                    default: {
+                                        Intent intent1 = new Intent(getApplicationContext(), AccountActivityUser.class);
+                                        startActivity(intent1);
+                                        finish();
+                                        break;
+                                    }
                                 }
                             }
 

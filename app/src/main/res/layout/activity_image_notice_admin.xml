@@ -77,7 +77,6 @@
                 android:visibility="visible"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_centerInParent="true"
@@ -100,7 +99,7 @@
 
 
             <TextView
-                android:text="You verified this following information.Click on remove button to delete it."
+                android:text="You verified this following information. Click on remove button to delete it."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp"

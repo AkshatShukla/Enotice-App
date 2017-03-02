@@ -69,6 +69,20 @@
                     android:layout_marginStart="10dp" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <ProgressBar
+                android:id="@+id/progress"
+                android:visibility="visible"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerCrop"/>
+
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
@@ -81,7 +95,7 @@
                 android:adjustViewBounds="false"
                 />
 
-
+            </RelativeLayout>
 
             <TextView
                 android:text="You verified this following information.Click on remove button to delete it."

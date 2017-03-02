@@ -1,76 +1,28 @@
 package com.rcoem.enotice.enotice_app.AdminClasses;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.Button;
-import android.widget.Toast;
-
-
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.rcoem.enotice.enotice_app.AddNoticeClasses.AddNoticeTabbed;
-import com.rcoem.enotice.enotice_app.AdminApprovalClasses.RetriverData;
-import com.rcoem.enotice.enotice_app.BlogModel;
-import com.rcoem.enotice.enotice_app.CircleTransform;
-import com.rcoem.enotice.enotice_app.EditViewProfile;
-import com.rcoem.enotice.enotice_app.NotificationClasses.EndPoints;
-import com.rcoem.enotice.enotice_app.LoginSignUpClasses.MainActivity;
-import com.rcoem.enotice.enotice_app.NoticeCard;
-import com.rcoem.enotice.enotice_app.NoticeCardAdapter;
-import com.rcoem.enotice.enotice_app.NotificationClasses.ActivitySendPushNotification;
-import com.rcoem.enotice.enotice_app.NotificationClasses.MyFirebaseMessagingService;
-import com.rcoem.enotice.enotice_app.R;
-import com.rcoem.enotice.enotice_app.NotificationClasses.SharedPrefManager;
-import com.rcoem.enotice.enotice_app.UserClasses.AccountActivityUser;
-import com.rcoem.enotice.enotice_app.Utils;
-import com.rcoem.enotice.enotice_app.ViewHolderClasses.DocumentNoticeViewHolder;
-import com.rcoem.enotice.enotice_app.ViewHolderClasses.ImageNoticeViewHolder;
-import com.rcoem.enotice.enotice_app.ViewHolderClasses.TextNoticeViewHolder;
-import com.rcoem.enotice.enotice_app.pdfview;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -79,14 +31,35 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.rcoem.enotice.enotice_app.AddNoticeClasses.AddNoticeTabbed;
+import com.rcoem.enotice.enotice_app.AdminApprovalClasses.RetriverData;
+import com.rcoem.enotice.enotice_app.CircleTransform;
+import com.rcoem.enotice.enotice_app.EditViewProfile;
+import com.rcoem.enotice.enotice_app.LoginSignUpClasses.MainActivity;
+import com.rcoem.enotice.enotice_app.NoticeCard;
+import com.rcoem.enotice.enotice_app.NoticeCardAdapter;
+import com.rcoem.enotice.enotice_app.NotificationClasses.ActivitySendPushNotification;
+import com.rcoem.enotice.enotice_app.NotificationClasses.EndPoints;
+import com.rcoem.enotice.enotice_app.NotificationClasses.MyFirebaseMessagingService;
+import com.rcoem.enotice.enotice_app.NotificationClasses.SharedPrefManager;
+import com.rcoem.enotice.enotice_app.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import es.dmoral.toasty.Toasty;
 
 public class AccountActivityAdmin extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener {
 

@@ -109,43 +109,50 @@ public class MainActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                             final String string = dataSnapshot.child("level").getValue().toString().trim();
-                            if(string.equals("4")){
-                                mProgress.dismiss();
-                                Intent intent = new Intent(MainActivity.this, AccountAdminPanel.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                            else if (string.equals("3")) {
-                                mProgress.dismiss();
-                                Intent intent = new Intent(MainActivity.this, AccountActivityAuthority.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                            else if(string.equals("99")){
-                                mProgress.dismiss();
-                                Intent intent = new Intent(MainActivity.this, AwatingForApproval.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                            else if (string.equals("2")) {
-                                mProgress.dismiss();
-                                Intent intent = new Intent(MainActivity.this, AccountActivityAdmin.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                mProgress.dismiss();
-                                Intent intent = getIntent();
-                                final String fBack = intent.getStringExtra("fBack");
+                            switch (string) {
+                                case "4": {
+                                    mProgress.dismiss();
+                                    Intent intent = new Intent(MainActivity.this, AccountAdminPanel.class);
+                                    startActivity(intent);
+                                    finish();
+                                    break;
+                                }
+                                case "3": {
+                                    mProgress.dismiss();
+                                    Intent intent = new Intent(MainActivity.this, AccountActivityAuthority.class);
+                                    startActivity(intent);
+                                    finish();
+                                    break;
+                                }
+                                case "99": {
+                                    mProgress.dismiss();
+                                    Intent intent = new Intent(MainActivity.this, AwatingForApproval.class);
+                                    startActivity(intent);
+                                    finish();
+                                    break;
+                                }
+                                case "2": {
+                                    mProgress.dismiss();
+                                    Intent intent = new Intent(MainActivity.this, AccountActivityAdmin.class);
+                                    startActivity(intent);
+                                    finish();
+                                    break;
+                                }
+                                default: {
+                                    mProgress.dismiss();
+                                    Intent intent = getIntent();
+                                    final String fBack = intent.getStringExtra("fBack");
 
-                                if (intent.getStringExtra("fBack") != null) {
-                                    Toasty.info(MainActivity.this, fBack, Toast.LENGTH_LONG, true).show();
+                                    if (intent.getStringExtra("fBack") != null) {
+                                        Toasty.info(MainActivity.this, fBack, Toast.LENGTH_LONG, true).show();
+                                    } else {
+                                        //Do Nothing
+                                    }
+                                    intent = new Intent(MainActivity.this, AccountActivityUser.class);
+                                    startActivity(intent);
+                                    finish();
+                                    break;
                                 }
-                                else {
-                                    //Do Nothing
-                                }
-                                intent = new Intent(MainActivity.this, AccountActivityUser.class);
-                                startActivity(intent);
-                                finish();
                             }
                         }
 
