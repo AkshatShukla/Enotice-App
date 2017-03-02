@@ -52,7 +52,6 @@
         <activity android:name=".pdfview" />
         <activity android:name=".AdminClasses.BlockUserPlanel" />
         <activity android:name=".AdminClasses.CrossDept" />
-        <activity android:name=".AdminClasses.AccountCrossDept" />
         <activity android:name=".NotificationClasses.ActivitySendPushNotification" />
         <activity android:name=".AddNoticeClasses.AddNoticeTabbed" />
         <activity android:name=".AdminApprovalClasses.TextNoticeApproval" />

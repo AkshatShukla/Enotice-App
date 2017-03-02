@@ -21,6 +21,8 @@ import com.rcoem.enotice.enotice_app.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
+
 public class AddNoticeTabbed extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -38,6 +40,9 @@ public class AddNoticeTabbed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_notice_tabbed);
+
+        Intent intent = getIntent();
+        final String strDepartment = intent.getStringExtra("postkey");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

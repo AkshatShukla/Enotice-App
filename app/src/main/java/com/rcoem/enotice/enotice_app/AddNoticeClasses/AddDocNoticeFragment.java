@@ -46,6 +46,7 @@ public class AddDocNoticeFragment extends Fragment {
     private Spinner spinnerDoc;
 
     private String noticeType;
+    private String strdept;
     private String titleDoc_value;
     private String descDoc_value;
 
@@ -74,6 +75,7 @@ public class AddDocNoticeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        strdept = getActivity().getIntent().getStringExtra("postkey");
     }
 
     @Override
@@ -142,6 +144,7 @@ public class AddDocNoticeFragment extends Fragment {
                     intent.putExtra("title_value",titleDoc_value);
                     intent.putExtra("desc_value",descDoc_value);
                     intent.putExtra("noticeType",noticeType);
+                    intent.putExtra("strdept",strdept);
                     startActivity(intent);
                 }
                 else if (TextUtils.isEmpty((titleDoc_value))) {

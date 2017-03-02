@@ -48,6 +48,12 @@
             android:layout_height="wrap_content"
             android:text="Send to Mech Department" />
 
+        <RadioButton
+            android:id="@+id/radioALL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send to Vice Chancellor" />
+
     </RadioGroup>
 
     <ImageButton

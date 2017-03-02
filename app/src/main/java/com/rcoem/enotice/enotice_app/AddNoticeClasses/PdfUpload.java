@@ -71,6 +71,7 @@ public class PdfUpload extends AppCompatActivity {
     private String DescText;
     private String noticeType;
     private String Approved;
+    private String strdept;
 
     private DatePicker datePicker;
     private Calendar calendar;
@@ -85,6 +86,7 @@ public class PdfUpload extends AppCompatActivity {
         TitleText = intent.getStringExtra("title_value");
         DescText = intent.getStringExtra("desc_value");
         noticeType = intent.getStringExtra("noticeType");
+        strdept = intent.getStringExtra("strdept");
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -197,8 +199,14 @@ public class PdfUpload extends AppCompatActivity {
                                                     Approved = "pending";
                                                 }
                                                 else if (lvlCheck.equals("2")){
-                                                    mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
-                                                    Approved = "true";
+                                                    if (strdept == null) {
+                                                        mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
+                                                        Approved = "true";
+                                                    }
+                                                    else {
+                                                        mData = FirebaseDatabase.getInstance().getReference().child("posts").child(strdept).child("Pending");
+                                                        Approved = "pending";
+                                                    }
                                                 }
 
                                                 final DatabaseReference newPost = mData.push();

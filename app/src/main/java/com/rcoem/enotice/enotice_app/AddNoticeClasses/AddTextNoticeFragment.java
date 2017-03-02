@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -65,6 +66,7 @@ public class AddTextNoticeFragment extends Fragment {
     private String titleText;
     private String descText;
 
+    private String strdept;
     private String noticeType;
 
     private String [] typeArray =
@@ -83,6 +85,9 @@ public class AddTextNoticeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        strdept = getActivity().getIntent().getStringExtra("postkey");
+
     }
 
     @Override
@@ -98,6 +103,7 @@ public class AddTextNoticeFragment extends Fragment {
 
     public void onStart(){
         super.onStart();
+
         title = (EditText) context.findViewById(R.id.titleText);
         desc = (EditText) context.findViewById(R.id.descText);
         btnsubmit = (Button) context.findViewById(R.id.btnSubmitText);
@@ -176,8 +182,14 @@ public class AddTextNoticeFragment extends Fragment {
                                                     mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending").push();
                                                     Approved = "pending";
                                                 } else if (lvlCheck.equals("2")) {
-                                                    mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved").push();
-                                                    Approved = "true";
+                                                    if (strdept == null) {
+                                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved").push();
+                                                        Approved = "true";
+                                                    }
+                                                    else {
+                                                        mDatabase = FirebaseDatabase.getInstance().getReference().child("posts").child(strdept).child("Pending").push();
+                                                        Approved = "pending";
+                                                    }
                                                 }
 
                                                 mDatabase.child("type").setValue(1);

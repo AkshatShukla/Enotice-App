@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.rcoem.enotice.enotice_app.AdminClasses.AccountActivityAdmin;
+import com.rcoem.enotice.enotice_app.HighAuthorityClasses.AccountActivityAuthority;
 import com.rcoem.enotice.enotice_app.NotificationClasses.EndPoints;
 import com.rcoem.enotice.enotice_app.NotificationClasses.MyVolley;
 import com.rcoem.enotice.enotice_app.R;
@@ -46,8 +50,13 @@ import es.dmoral.toasty.Toasty;
 public class TextNoticeApproval extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase1;
+    private DatabaseReference mDataApproved;
     private TextView mPostTitle;
     private TextView mPostDesc;
+    private TextView profileName;
+    private TextView Date;
+    private ImageView circularImageView;
 
     private Button Approved;
     private Button Rejected;
@@ -68,12 +77,36 @@ public class TextNoticeApproval extends AppCompatActivity {
         Intent intent = getIntent();
         final String str = intent.getStringExtra("postkey");
 
+        mAuth = FirebaseAuth.getInstance();
+
         mPostTitle = (TextView) findViewById(R.id.Edit_Title_field1) ;
         mPostDesc = (TextView) findViewById(R.id.Edit_description_field1);
+        profileName = (TextView) findViewById(R.id.profileName);
+        Date = (TextView) findViewById(R.id.date);
+        circularImageView = (ImageView) findViewById(R.id.imageView);
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
+        mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
         mStoarge = FirebaseStorage.getInstance().getReference();
         mPostDesc.setText(str);
-        mAuth = FirebaseAuth.getInstance();
+
+        mDatabase1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final String string1 = dataSnapshot.child("level").getValue().toString().trim();
+
+                if (string1.equals("2")) {
+                    mDataApproved = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved").push();
+                }
+                else {
+                    mDataApproved = FirebaseDatabase.getInstance().getReference().child("posts").child("ALL").child("Approved").push();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         //mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -102,6 +135,11 @@ public class TextNoticeApproval extends AppCompatActivity {
                 if(dataSnapshot.hasChildren()) {
                     mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
                     mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
+                    profileName.setText(dataSnapshot.child("username").getValue().toString().trim());
+                    String date = "on " + dataSnapshot.child("time").getValue().toString().trim();
+                    Date.setText(date);
+                    String profilePic = dataSnapshot.child("profileImg").getValue().toString().trim();
+                    Glide.with(TextNoticeApproval.this).load(profilePic).crossFade().into(circularImageView);
                     //mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                     toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
                 }
@@ -142,7 +180,7 @@ public class TextNoticeApproval extends AppCompatActivity {
                                         public void onClick(BottomDialog dialog) {
                                             mDatabase.child("approved").setValue("true");
                                             process = false;
-                                            final DatabaseReference mDataApproved = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved").push();
+
                                             long serverTime = -1 * new Date().getTime();
 
                                             Calendar calendar = Calendar.getInstance();
@@ -182,9 +220,30 @@ public class TextNoticeApproval extends AppCompatActivity {
                                             departmentPush(title,message,dept);
 
                                             Toasty.custom(TextNoticeApproval.this, "Notice has been Approved", R.drawable.ok, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.unblocked), 100, true, true).show();
-                                            Intent intent = new Intent(TextNoticeApproval.this, AccountActivityAdmin.class);
-                                            startActivity(intent);
-                                            finish();
+
+                                            mDatabase1.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    final String string = dataSnapshot.child("level").getValue().toString().trim();
+
+                                                    if (string.equals("2")) {
+                                                        Intent intent = new Intent(TextNoticeApproval.this, AccountActivityAdmin.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                    else {
+                                                        Intent intent = new Intent(TextNoticeApproval.this, AccountActivityAuthority.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+
                                         }
                                     }).show();
 

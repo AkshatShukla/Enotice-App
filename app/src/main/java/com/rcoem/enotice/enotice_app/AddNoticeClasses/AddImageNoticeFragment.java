@@ -91,6 +91,7 @@ public class AddImageNoticeFragment extends Fragment  {
 
     private Spinner spinnerImage;
     private String noticeType;
+    private String strdept;
     private ImageView circularImageView;
 
     private String [] typeArray =
@@ -122,6 +123,7 @@ public class AddImageNoticeFragment extends Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        strdept = getActivity().getIntent().getStringExtra("postkey");
     }
 
     @Override
@@ -300,8 +302,14 @@ public class AddImageNoticeFragment extends Fragment  {
                                                 Approved = "pending";
                                             }
                                             else if (lvlCheck.equals("2")){
-                                                mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
-                                                Approved = "true";
+                                                if (strdept == null) {
+                                                    mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
+                                                    Approved = "true";
+                                                }
+                                                else {
+                                                    mData = FirebaseDatabase.getInstance().getReference().child("posts").child(strdept).child("Pending");
+                                                    Approved = "pending";
+                                                }
                                             }
 
                                             final DatabaseReference newPost = mData.push();
@@ -323,7 +331,7 @@ public class AddImageNoticeFragment extends Fragment  {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if(task.isSuccessful()){
-                                                        Toasty.success(context,"Upload Successfull").show();
+                                                        Toasty.success(context,"Upload Successful").show();
                                                     }
                                                     else
                                                     {
