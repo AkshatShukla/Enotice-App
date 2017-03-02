@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.rcoem.enotice.enotice_app.AddNoticeClasses.AddNoticeTabbed;
 import com.rcoem.enotice.enotice_app.R;
 
 public class CrossDept extends AppCompatActivity {
@@ -57,17 +58,21 @@ public class CrossDept extends AppCompatActivity {
 
 
                 if(radioButton.getText().toString().equals("Send to CSE Department")) {
-                    Toast.makeText(CrossDept.this,
-                            "CSE", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(CrossDept.this,AccountCrossDept.class);
+
+                    Intent intent = new Intent(CrossDept.this,AddNoticeTabbed.class);
                     intent.putExtra("postkey","CSE");
                     startActivity(intent);
                 }
                 if(radioButton.getText().toString().equals("Send to Mech Department")) {
-                    Toast.makeText(CrossDept.this,
-                            "Mech", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(CrossDept.this,AccountCrossDept.class);
+
+                    Intent intent = new Intent(CrossDept.this,AddNoticeTabbed.class);
                     intent.putExtra("postkey","Mech");
+                    startActivity(intent);
+                }
+                if(radioButton.getText().toString().equals("Send to Vice Chancellor")) {
+
+                    Intent intent = new Intent(CrossDept.this,AddNoticeTabbed.class);
+                    intent.putExtra("postkey","ALL");
                     startActivity(intent);
                 }
 
