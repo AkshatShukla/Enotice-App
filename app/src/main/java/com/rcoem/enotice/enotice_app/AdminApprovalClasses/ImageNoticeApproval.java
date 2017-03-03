@@ -351,7 +351,7 @@ public class ImageNoticeApproval extends AppCompatActivity {
                                                     .positiveColor(getResources().getColor(R.color.colorBg))
                                                     .positiveText("Send")
                                                     .negativeText("Dismiss")
-                                                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE)
+                                                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
                                                     .input("Reason", "", new MaterialDialog.InputCallback() {
                                                         @Override
                                                         public void onInput(MaterialDialog dialog, CharSequence input) {
