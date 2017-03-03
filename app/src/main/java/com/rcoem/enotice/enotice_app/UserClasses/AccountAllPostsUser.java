@@ -207,6 +207,7 @@ public class AccountAllPostsUser extends Fragment {
 
 
         mBlogList.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.notifyDataSetChanged();
 
     }
 

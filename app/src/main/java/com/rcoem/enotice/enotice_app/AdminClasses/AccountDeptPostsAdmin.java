@@ -207,6 +207,7 @@ public class AccountDeptPostsAdmin extends Fragment {
 
 
         mBlogList.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.notifyDataSetChanged();
 
     }
 
