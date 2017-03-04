@@ -85,7 +85,8 @@
         <activity android:name=".HighAuthorityClasses.AccountActivityAuthority" />
         <activity android:name=".HighAuthorityClasses.AddNoticeTabbedAuthority" />
         <activity android:name=".HighAuthorityClasses.PdfUploadAuthority" />
-        <activity android:name=".LoginSignUpClasses.PasswordResetActivity"></activity>
+        <activity android:name=".LoginSignUpClasses.PasswordResetActivity" />
+        <activity android:name=".AuthorityClasses.AdminNotApproved"></activity>
     </application>
 
 </manifest>

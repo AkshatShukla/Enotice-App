@@ -97,7 +97,6 @@ public class AccountAdminPanel extends AppCompatActivity implements  NavigationV
             }
         });
 
-
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         mDatabase1.addValueEventListener(new ValueEventListener() {
@@ -140,17 +139,20 @@ public class AccountAdminPanel extends AppCompatActivity implements  NavigationV
                         mquery
                 ) {
                     @Override
-                    protected void populateViewHolder(AccountAdminPanel.BlogViewHolder viewHolder, BlogModel model, int position) {
+                    protected void populateViewHolder(final AccountAdminPanel.BlogViewHolder viewHolder, final BlogModel model, int position) {
 
                         final String Post_Key = getRef(position).toString();
                         Intent intent = getIntent();
                         final String str = intent.getStringExtra("location");
                         viewHolder.setTitle(model.getName());
-                        if(model.getDEST().equals("AP")){
-                            viewHolder.setName("Rights : Assistant Prof");
+                        if(model.getLevel() == 1){
+                            viewHolder.setName("Rights : Assistant Professor");
                         }
-                        else {
+                        else if (model.getLevel() == 2){
                             viewHolder.setName("Rights : Head of Department");
+                        }
+                        else if (model.getLevel() == 99){
+                            viewHolder.setName("Rights : Not Assigned");
                         }
 
                         viewHolder.setTime(model.getTime());
@@ -166,10 +168,17 @@ public class AccountAdminPanel extends AppCompatActivity implements  NavigationV
                             @Override
                             public void onClick(View view) {
 
-                                Toast.makeText(AccountAdminPanel.this,Post_Key,Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(AccountAdminPanel.this,AdminApprove.class);
-                                intent.putExtra("postkey",Post_Key);
-                                startActivity(intent);
+                                if (model.getLevel() == 99) {
+                                    //Toast.makeText(AccountAdminPanel.this,Post_Key,Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(AccountAdminPanel.this, AdminApprove.class);
+                                    intent.putExtra("postkey", Post_Key);
+                                    startActivity(intent);
+                                }
+                                else {
+                                    Intent intent = new Intent(AccountAdminPanel.this,AdminNotApproved.class);
+                                    intent.putExtra("postkey", Post_Key);
+                                    startActivity(intent);
+                                }
 
 
                             }
@@ -299,7 +308,11 @@ public class AccountAdminPanel extends AppCompatActivity implements  NavigationV
         public void setImage(Context context, String image){
 
             ImageView post_image = (ImageView) mView.findViewById(R.id.card_thumbnail123);
-            Picasso.with(context).load(image).into(post_image);
+            Glide.with(context).load(image)
+                    .crossFade()
+                    .thumbnail(0.5f)
+                    .bitmapTransform(new CircleTransform(context))
+                    .into(post_image);
 
         }
 

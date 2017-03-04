@@ -18,7 +18,7 @@ public class BlogModel {
     private int type;
     private String profileImg;
     private String label;
-
+    private int level;
 
 
 
@@ -27,7 +27,7 @@ public class BlogModel {
 
 
 
-    public BlogModel(String image, String desc, String username, String title, String approved, String name, String time, String DEST, String block, int type, String profileImg, String label) {
+    public BlogModel(String image, String desc, String username, String title, String approved, String name, String time, String DEST, String block, int type, String profileImg, String label, int level) {
         this.images = image;
         this.Desc = desc;
         this.approved = approved;
@@ -40,7 +40,7 @@ public class BlogModel {
         this.type = type;
         this.profileImg = profileImg;
         this.label = label;
-
+        this.level = level;
     }
 
     public String getDEST() {
@@ -128,5 +128,9 @@ public class BlogModel {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public int getLevel() {
+        return level;
     }
 }
