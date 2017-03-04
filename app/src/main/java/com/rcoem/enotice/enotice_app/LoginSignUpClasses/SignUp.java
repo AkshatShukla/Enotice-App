@@ -43,6 +43,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rcoem.enotice.enotice_app.Animations.LoginLoadingView;
@@ -365,6 +366,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
             //Initializing FireBase Auth object
             firebaseAuth = FirebaseAuth.getInstance();
 
+            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             //creating a new user in FireBase Auth Database
             firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -395,7 +397,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                         Toast.makeText(SignUp.this,"",Toast.LENGTH_LONG).show();
                     }
                 }
-            }, 3500);
+            }, 4500);
 
 
 

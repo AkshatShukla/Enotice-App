@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -92,8 +94,8 @@ public class UserImageRejectStatus extends AppCompatActivity {
                     String imageUri = dataSnapshot.child("images").getValue().toString().trim();
                     String url = dataSnapshot.child("profileImg").getValue().toString().trim();
                     Date.setText("on " + dataSnapshot.child("time").getValue().toString().trim());
-                    Picasso.with(UserImageRejectStatus.this).load(url).noFade().into(circularImageView);
-                    Picasso.with(UserImageRejectStatus.this).load(imageUri).into(mViewImage);
+                    Glide.with(UserImageRejectStatus.this).load(url).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(circularImageView);
+                    Glide.with(UserImageRejectStatus.this).load(imageUri).diskCacheStrategy(DiskCacheStrategy.ALL).into(mViewImage);
                     toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
 
                     String m;
