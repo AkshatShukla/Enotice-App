@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private View mLoginBtn;
     private TextView mSignupBtn;
+    private TextView forgotPass;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         mLoginBtn = (View) findViewById(R.id.loginBtn);
         mSignupBtn = (TextView) findViewById(R.id.signupBtn);
         mProgress  = new ProgressDialog(this);
+        forgotPass = (TextView) findViewById(R.id.forgotPass);
         mProgress.setCancelable(false);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -176,6 +178,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, PasswordResetActivity.class));
+            }
+        });
+
         mSignupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
 
             progressDialog.setMessage("Logging in...");
             progressDialog.setIndeterminate(true);
+            progressDialog.setCancelable(false);
             progressDialog.show();
 
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
