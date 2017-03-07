@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -86,7 +87,10 @@
         <activity android:name=".HighAuthorityClasses.AddNoticeTabbedAuthority" />
         <activity android:name=".HighAuthorityClasses.PdfUploadAuthority" />
         <activity android:name=".LoginSignUpClasses.PasswordResetActivity" />
-        <activity android:name=".AuthorityClasses.AdminNotApproved"></activity>
+        <activity android:name=".AuthorityClasses.AdminNotApproved" />
+        <activity
+            android:name=".AboutUs"
+            android:theme="@style/AppTheme.MaterialAboutActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -95,8 +99,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity android:name=".Licenses" />
     </application>
 
 </manifest>

@@ -1,8 +1,10 @@
 package com.rcoem.enotice.enotice_app.AdminApprovalClasses;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.rcoem.enotice.enotice_app.AdminClasses.AccountActivityAdmin;
 import com.rcoem.enotice.enotice_app.HighAuthorityClasses.AccountActivityAuthority;
+import com.rcoem.enotice.enotice_app.LoginSignUpClasses.MainActivity;
 import com.rcoem.enotice.enotice_app.NotificationClasses.EndPoints;
 import com.rcoem.enotice.enotice_app.NotificationClasses.MyVolley;
 import com.rcoem.enotice.enotice_app.R;
@@ -46,6 +49,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
+import ng.max.slideview.SlideView;
 
 public class TextNoticeApproval extends AppCompatActivity {
 
@@ -157,6 +161,112 @@ public class TextNoticeApproval extends AppCompatActivity {
 
         Approved = (Button) findViewById(R.id.Approve_button);
         process = true;
+
+        ((SlideView) findViewById(R.id.slideView)).setOnSlideCompleteListener(new SlideView.OnSlideCompleteListener() {
+            @Override
+            public void onSlideComplete(SlideView slideView) {
+                // vibrate the device
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                vibrator.vibrate(100);
+
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        if(process) {
+
+                            new BottomDialog.Builder(TextNoticeApproval.this)
+                                    .setTitle("Approve Notice")
+                                    .setContent("Approved Notices appear on the News Feed as well as on Notice Boards across your department. Are you sure you want to Approve?")
+                                    .setPositiveText("Approve")
+                                    .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                                    .setCancelable(false)
+                                    .setNegativeText("No")
+                                    .setPositiveTextColorResource(android.R.color.white)
+                                    //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                                    .onPositive(new BottomDialog.ButtonCallback() {
+                                        @Override
+                                        public void onClick(BottomDialog dialog) {
+                                            mDatabase.child("approved").setValue("true");
+                                            process = false;
+
+                                            long serverTime = -1 * new Date().getTime();
+
+                                            Calendar calendar = Calendar.getInstance();
+                                            int year = calendar.get(Calendar.YEAR);
+
+                                            int month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
+                                            int day = calendar.get(Calendar.DAY_OF_MONTH);
+                                            //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+                                            final String currentDate = day + "/" + month + "/" + year;
+
+                                            String label = dataSnapshot.child("label").getValue().toString().trim();
+                                            String title = dataSnapshot.child("title").getValue().toString().trim();
+                                            String desc = dataSnapshot.child("Desc").getValue().toString().trim();
+                                            String uid = dataSnapshot.child("UID").getValue().toString().trim();
+                                            String message = dataSnapshot.child("username").getValue().toString().trim();
+                                            String profileImg = dataSnapshot.child("profileImg").getValue().toString().trim();
+                                            String dept = dataSnapshot.child("department").getValue().toString().trim();
+
+
+                                            mDataApproved.child("type").setValue(1);
+                                            mDataApproved.child("label").setValue(label);
+                                            mDataApproved.child("title").setValue(title);
+                                            mDataApproved.child("Desc").setValue(desc);
+                                            mDataApproved.child("UID").setValue(uid);
+                                            //Missing email Attribute
+                                            mDataApproved.child("username").setValue(message);
+                                            mDataApproved.child("profileImg").setValue(profileImg);
+                                            //Passing Default Text Image for Web App Viewing
+                                            mDataApproved.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
+                                            mDataApproved.child("time").setValue(currentDate);
+                                            mDataApproved.child("servertime").setValue(serverTime);
+                                            //Passing Default Text Doc Link for Web App Viewing
+                                            mDataApproved.child("link").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
+                                            mDataApproved.child("department").setValue(dept);
+                                            mDataApproved.child("approved").setValue("true");
+
+                                            departmentPush(title,message,dept);
+
+                                            Toasty.custom(TextNoticeApproval.this, "Notice has been Approved", R.drawable.ok, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.unblocked), 100, true, true).show();
+
+                                            mDatabase1.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    final String string = dataSnapshot.child("level").getValue().toString().trim();
+
+                                                    if (string.equals("2")) {
+                                                        Intent intent = new Intent(TextNoticeApproval.this, AccountActivityAdmin.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                    else {
+                                                        Intent intent = new Intent(TextNoticeApproval.this, AccountActivityAuthority.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+
+                                        }
+                                    }).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
+
         Approved.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -118,6 +118,16 @@
                 android:layout_alignParentStart="true"
                 />
 
+            <ng.max.slideview.SlideView
+                android:id="@+id/slideView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:buttonBackgroundColor="@color/colorBg"
+                app:buttonImage="@drawable/user"
+                app:slideBackgroundColor="@color/colorPrimary"
+                app:slideText="Approve"
+                app:slideTextColor="@color/colorWhite" />
+
             <LinearLayout
                 android:id="@+id/li_activity_single_post"
                 android:layout_width="match_parent"

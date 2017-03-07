@@ -40,6 +40,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.rcoem.enotice.enotice_app.AboutUs;
 import com.rcoem.enotice.enotice_app.AddNoticeClasses.AddNoticeTabbed;
 import com.rcoem.enotice.enotice_app.AdminApprovalClasses.RetriverData;
 import com.rcoem.enotice.enotice_app.CircleTransform;
@@ -388,10 +389,8 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             startActivity(new Intent(AccountActivityAdmin.this, MainActivity.class));
 
         } else if (id == R.id.nav_about_us) {
-            Snackbar snackbar = Snackbar
-                    .make(di, "Coded with love by CSE, RCOEM", Snackbar.LENGTH_LONG);
-            snackbar.show();
-            startActivity(new Intent(getApplicationContext(),ActivitySendPushNotification.class));
+            //startActivity(new Intent(getApplicationContext(),ActivitySendPushNotification.class));
+            startActivity(new Intent(getApplicationContext(),AboutUs.class));
 
         }
         else if (id == R.id.ViewUsers) {

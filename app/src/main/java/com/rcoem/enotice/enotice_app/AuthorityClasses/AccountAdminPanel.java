@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.rcoem.enotice.enotice_app.AboutUs;
 import com.rcoem.enotice.enotice_app.BlogModel;
 import com.rcoem.enotice.enotice_app.CircleTransform;
 import com.rcoem.enotice.enotice_app.EditViewProfile;
@@ -400,9 +401,7 @@ public class AccountAdminPanel extends AppCompatActivity implements  NavigationV
             //Toast.makeText(AccountActivity.this, R.string.sign_out, Toast.LENGTH_LONG).show();
             startActivity(new Intent(AccountAdminPanel.this, MainActivity.class));
         } else if (id == R.id.nav_about_us) {
-            Snackbar snackbar = Snackbar
-                    .make(di, "Developed by CSE, RCOEM", Snackbar.LENGTH_LONG);
-            snackbar.show();
+            startActivity(new Intent(getApplicationContext(),AboutUs.class));
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_user);
         drawer.closeDrawer(GravityCompat.START);
