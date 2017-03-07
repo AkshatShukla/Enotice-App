@@ -7,6 +7,7 @@ package com.rcoem.enotice.enotice_app.UserClasses;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,6 +46,7 @@ public class AccountAllPostsUser extends Fragment {
     private DatabaseReference currentUserStatus;
 
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FloatingActionButton fab;
 
     Query mquery;
 
@@ -77,6 +79,29 @@ public class AccountAllPostsUser extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 
         mBlogList = (RecyclerView) context.findViewById(R.id.blog_recylView_all_list);
+
+        //FAB Animation, Hide when Scrolling Down, Scroll Up to Show.
+        fab = (FloatingActionButton)  context.findViewById(R.id.main_fab);
+        mBlogList.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                if (dy > 1) {
+                    // Scroll Down
+                    if (fab.isShown()) {
+                        fab.hide();
+                    }
+                }
+                else if (dy < 0) {
+                    // Scroll Up
+                    if (!fab.isShown()) {
+                        fab.show();
+                    }
+                }
+            }
+        });
+
 
         //SwipeRefresh Code
         swipeRefreshLayout = (SwipeRefreshLayout) context.findViewById(R.id.swipe_refresh_layout_all);
