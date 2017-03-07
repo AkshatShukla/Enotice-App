@@ -16,9 +16,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -86,8 +88,10 @@ public class AddImageNoticeFragment extends Fragment  {
     private Button btnChooseImage;
     private Button btnSubmit;
     private ImageView imgPreview;
-    private static final int CAMERA_REQUEST = 1888;
+    private static final int CAMERA_REQUEST = 0;
     private Uri mImageUri = null;
+    private Uri downloadUrl;
+    private File file;
 
     private Spinner spinnerImage;
     private String noticeType;
@@ -196,7 +200,11 @@ public class AddImageNoticeFragment extends Fragment  {
                 */
 
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                file = new File(Environment.getExternalStorageDirectory()+File.separator + System.currentTimeMillis() + "image.jpg");
+                Uri photoUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
             }
 
         });
@@ -288,7 +296,7 @@ public class AddImageNoticeFragment extends Fragment  {
                             filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    downloadUrl = taskSnapshot.getDownloadUrl();
 
 
                                     mDataUser.addValueEventListener(new ValueEventListener() {
@@ -452,13 +460,75 @@ public class AddImageNoticeFragment extends Fragment  {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            /*
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             imgPreview.setImageBitmap(photo);
             // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+
+
             mImageUri = getImageUri(context, photo);
 
             // CALL THIS METHOD TO GET THE ACTUAL PATH
             File finalFile = new File(getRealPathFromURI(mImageUri));
+            */
+
+            mImageUri = Uri.fromFile(file);
+            Log.d("APP_DEBUG",mImageUri.toString());
+            Toast.makeText(context,mImageUri.toString(),Toast.LENGTH_LONG).show();
+
+            //use imageUri here to access the image
+
+            /*
+            // Describe the columns you'd like to have returned. Selecting from the Thumbnails location gives you both the Thumbnail Image ID, as well as the original image ID
+            String[] projection = {
+                    MediaStore.Images.Thumbnails._ID,  // The columns we want
+                    MediaStore.Images.Thumbnails.IMAGE_ID,
+                    MediaStore.Images.Thumbnails.KIND,
+                    MediaStore.Images.Thumbnails.DATA};
+            String selection = MediaStore.Images.Thumbnails.KIND + "="  + // Select only mini's
+                    MediaStore.Images.Thumbnails.MINI_KIND;
+
+            String sort = MediaStore.Images.Thumbnails._ID + " DESC";
+
+            //At the moment, this is a bit of a hack, as I'm returning ALL images, and just taking the latest one. There is a better way to narrow this down I think with a WHERE clause which is currently the selection variable
+            Cursor myCursor = context.managedQuery(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection, selection, null, sort);
+
+            long imageId = 0l;
+            long thumbnailImageId = 0l;
+            String thumbnailPath = "";
+
+            try{
+                myCursor.moveToFirst();
+                imageId = myCursor.getLong(myCursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails.IMAGE_ID));
+                thumbnailImageId = myCursor.getLong(myCursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID));
+                thumbnailPath = myCursor.getString(myCursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails.DATA));
+            }
+            finally{myCursor.close();}
+
+            //Create new Cursor to obtain the file Path for the large image
+
+            String[] largeFileProjection = {
+                    MediaStore.Images.ImageColumns._ID,
+                    MediaStore.Images.ImageColumns.DATA
+            };
+
+            String largeFileSort = MediaStore.Images.ImageColumns._ID + " DESC";
+            myCursor = context.managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, largeFileProjection, null, null, largeFileSort);
+            String largeImagePath = "";
+
+            try{
+                myCursor.moveToFirst();
+
+            //This will actually give you the file path location of the image.
+                largeImagePath = myCursor.getString(myCursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DATA));
+            }
+            finally{myCursor.close();}
+            // These are the two URI's you'll be interested in. They give you a handle to the actual images
+            mImageUri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(imageId));
+            Uri uriThumbnailImage = Uri.withAppendedPath(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, String.valueOf(thumbnailImageId));
+            imgPreview.setImageURI(uriThumbnailImage);
+            // I've left out the remaining code, as all I do is assign the URI's to my own objects anyways...
+            */
         }
 
         try {
