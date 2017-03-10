@@ -145,125 +145,122 @@ public class PdfUpload extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             // argument position gives the index of item which is clicked
-            public void onItemClick(AdapterView<?> arg0, View v, final int position, long arg3)
-            {
+            public void onItemClick(AdapterView<?> arg0, View v, final int position, long arg3) {
+                if (!PdfUpload.this.isFinishing()) {
+                    new BottomDialog.Builder(PdfUpload.this)
+                            .setTitle("Upload Document (" + noticeType + ")")
+                            .setContent("Upload the document and submit the notice. Are you sure you want to upload this document as your notice?")
+                            .setPositiveText("Approve")
+                            .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                            .setCancelable(false)
+                            .setNegativeText("No")
+                            .setPositiveTextColorResource(android.R.color.white)
+                            //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                            .onPositive(new BottomDialog.ButtonCallback() {
+                                @Override
+                                public void onClick(BottomDialog dialog) {
+                                    String selectedmovie = arr.get(position).toString();
+                                    final String okk = selectedmovie.substring(selectedmovie.lastIndexOf("/") + 1, selectedmovie.length());
+                                    Toast.makeText(getApplicationContext(), okk, Toast.LENGTH_LONG).show();
+                                    Uri mImageUri = Uri.fromFile(new File(selectedmovie));
 
-                new BottomDialog.Builder(PdfUpload.this)
-                        .setTitle("Upload Document ("+noticeType+")")
-                        .setContent("Upload the document and submit the notice. Are you sure you want to upload this document as your notice?")
-                        .setPositiveText("Approve")
-                        .setPositiveBackgroundColorResource(R.color.colorPrimary)
-                        .setCancelable(false)
-                        .setNegativeText("No")
-                        .setPositiveTextColorResource(android.R.color.white)
-                        //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
-                        .onPositive(new BottomDialog.ButtonCallback() {
-                            @Override
-                            public void onClick(BottomDialog dialog) {
-                                String selectedmovie = arr.get(position).toString();
-                                final String okk = selectedmovie.substring(selectedmovie.lastIndexOf("/")+1,selectedmovie.length());
-                                Toast.makeText(getApplicationContext(), okk,   Toast.LENGTH_LONG).show();
-                                Uri mImageUri = Uri.fromFile(new File(selectedmovie));
+                                    calendar = Calendar.getInstance();
+                                    year = calendar.get(Calendar.YEAR);
 
-                                calendar = Calendar.getInstance();
-                                year = calendar.get(Calendar.YEAR);
+                                    month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
+                                    day = calendar.get(Calendar.DAY_OF_MONTH);
+                                    //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+                                    final String currentDate = day + "/" + month + "/" + year;
+                                    final long currentLongTime = -1 * new Date().getTime();
+                                    final String currentTime = "" + currentLongTime;
 
-                                month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
-                                day = calendar.get(Calendar.DAY_OF_MONTH);
-                                //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
-                                final String currentDate = day + "/" + month + "/" + year;
-                                final long currentLongTime = -1 * new Date().getTime();
-                                final String currentTime = "" + currentLongTime;
-
-                                final AlertDialog dialog1 = new SpotsDialog(PdfUpload.this, R.style.CustomProgress);
-                                dialog1.show();
-
-
-                                StorageReference filepath = mStoarge.child("pdf").child(mImageUri.getLastPathSegment());
-                                filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
-                                        final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    final AlertDialog dialog1 = new SpotsDialog(PdfUpload.this, R.style.CustomProgress);
+                                    dialog1.show();
 
 
-                                        mDataUser.addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(final DataSnapshot dataSnapshot) {
+                                    StorageReference filepath = mStoarge.child("pdf").child(mImageUri.getLastPathSegment());
+                                    filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                                            final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                                                final String Dept = dataSnapshot.child("department").getValue().toString().trim();
-                                                final String lvlCheck = dataSnapshot.child("level").getValue().toString().trim();
 
-                                                if (lvlCheck.equals("1")) {
-                                                    mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending");
-                                                    Approved = "pending";
-                                                }
-                                                else if (lvlCheck.equals("2")){
-                                                    if (strdept == null) {
-                                                        mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
-                                                        Approved = "true";
-                                                    }
-                                                    else {
-                                                        mData = FirebaseDatabase.getInstance().getReference().child("posts").child(strdept).child("Pending");
+                                            mDataUser.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(final DataSnapshot dataSnapshot) {
+
+                                                    final String Dept = dataSnapshot.child("department").getValue().toString().trim();
+                                                    final String lvlCheck = dataSnapshot.child("level").getValue().toString().trim();
+
+                                                    if (lvlCheck.equals("1")) {
+                                                        mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending");
                                                         Approved = "pending";
-                                                    }
-                                                }
-
-                                                final DatabaseReference newPost = mData.push();
-
-                                                newPost.child("type").setValue(3);
-                                                newPost.child("label").setValue(noticeType);
-                                                newPost.child("title").setValue(TitleText);
-                                                newPost.child("Desc").setValue(DescText);
-                                                newPost.child("UID").setValue(mAuth.getCurrentUser().getUid());
-                                                newPost.child("email").setValue(mAuth.getCurrentUser().getEmail());
-                                                newPost.child("username").setValue(dataSnapshot.child("name").getValue());
-                                                newPost.child("profileImg").setValue(dataSnapshot.child("images").getValue());
-                                                //Passing Default PDF Image for Web App Viewing
-                                                newPost.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/pdf-file-format-symbol.png?alt=media&token=b9661fd2-0644-4340-82e8-c96662db26dc");
-                                                newPost.child("time").setValue(currentDate);
-                                                newPost.child("servertime").setValue(currentLongTime);
-                                                newPost.child("link").setValue(downloadUrl.toString());
-                                                newPost.child("department").setValue(Dept);
-                                                newPost.child("approved").setValue(Approved).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if(task.isSuccessful()){
-                                                            Toast.makeText(PdfUpload.this,"Uploaded Successfully", Toast.LENGTH_LONG).show();
-                                                            if (lvlCheck.equals("2")) {
-                                                                departmentPushDept(TitleText,"Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()),Dept);
-                                                            }
-                                                            else if (lvlCheck.equals("1")) {
-                                                                departmentPushHOD(TitleText,"Pending Notice Approval sent by ".concat(dataSnapshot.child("name").getValue().toString()),Dept);
-                                                            }
+                                                    } else if (lvlCheck.equals("2")) {
+                                                        if (strdept == null) {
+                                                            mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
+                                                            Approved = "true";
+                                                        } else {
+                                                            mData = FirebaseDatabase.getInstance().getReference().child("posts").child(strdept).child("Pending");
+                                                            Approved = "pending";
                                                         }
                                                     }
-                                                });
-                                            }
 
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-                                                Toasty.error(PdfUpload.this,"Connection Error").show();
-                                            }
-                                        });
+                                                    final DatabaseReference newPost = mData.push();
 
-                                        dialog1.dismiss();
-                                        startActivity(new Intent(PdfUpload.this,AddNoticeTabbed.class));
-                                        finish();
+                                                    newPost.child("type").setValue(3);
+                                                    newPost.child("label").setValue(noticeType);
+                                                    newPost.child("title").setValue(TitleText);
+                                                    newPost.child("Desc").setValue(DescText);
+                                                    newPost.child("UID").setValue(mAuth.getCurrentUser().getUid());
+                                                    newPost.child("email").setValue(mAuth.getCurrentUser().getEmail());
+                                                    newPost.child("username").setValue(dataSnapshot.child("name").getValue());
+                                                    newPost.child("profileImg").setValue(dataSnapshot.child("images").getValue());
+                                                    //Passing Default PDF Image for Web App Viewing
+                                                    newPost.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/pdf-file-format-symbol.png?alt=media&token=b9661fd2-0644-4340-82e8-c96662db26dc");
+                                                    newPost.child("time").setValue(currentDate);
+                                                    newPost.child("servertime").setValue(currentLongTime);
+                                                    newPost.child("link").setValue(downloadUrl.toString());
+                                                    newPost.child("department").setValue(Dept);
+                                                    newPost.child("approved").setValue(Approved).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Toast.makeText(PdfUpload.this, "Uploaded Successfully", Toast.LENGTH_LONG).show();
+                                                                if (lvlCheck.equals("2")) {
+                                                                    departmentPushDept(TitleText, "Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()), Dept);
+                                                                } else if (lvlCheck.equals("1")) {
+                                                                    departmentPushHOD(TitleText, "Pending Notice Approval sent by ".concat(dataSnapshot.child("name").getValue().toString()), Dept);
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
 
-                                    }
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+                                                    Toasty.error(PdfUpload.this, "Connection Error").show();
+                                                }
+                                            });
 
-                                })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getApplicationContext(),e.getMessage().toString(),Toast.LENGTH_LONG).show();
-                                                mProgress.dismiss();
-                                            }
-                                        });
-                            }
-                        }).show();
+                                            dialog1.dismiss();
+                                            startActivity(new Intent(PdfUpload.this, AddNoticeTabbed.class));
+                                            finish();
 
+                                        }
+
+                                    })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                                                    mProgress.dismiss();
+                                                }
+                                            });
+                                }
+                            }).show();
+
+                }
             }
         });
 
