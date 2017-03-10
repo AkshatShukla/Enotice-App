@@ -21,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.rcoem.enotice.enotice_app.R;
-import com.squareup.picasso.Picasso;
 
 import es.dmoral.toasty.Toasty;
 

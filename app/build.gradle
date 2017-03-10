@@ -101,7 +101,9 @@ dependencies {
     compile 'com.mikepenz:google-material-typeface:3.0.1.0.original@aar'
     compile 'com.mikepenz:material-design-iconic-typeface:2.2.0.2@aar'
     compile 'com.webianks.library:easy-feedback:1.0.0'
-    compile 'com.github.MAXDeliveryNG:slideview:1.0.0'
+    compile 'com.github.matecode:Snacky:1.0.2'
+    compile 'com.github.marcoscgdev:EasyLicensesDialog:2.0.0'
+    compile 'com.getkeepsafe.taptargetview:taptargetview:1.8.0'
     testCompile 'junit:junit:4.12'
 }
 
@@ -110,6 +112,7 @@ apply plugin: 'com.google.gms.google-services'
 
 allprojects {
     repositories {
+        jcenter()
         maven { url 'https://jitpack.io' }
     }
 }

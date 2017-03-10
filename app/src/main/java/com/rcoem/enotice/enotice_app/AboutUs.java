@@ -15,6 +15,7 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickListen
 import com.danielstone.materialaboutlibrary.items.MaterialAboutTitleItem;
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard;
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList;
+import com.marcoscg.easylicensesdialog.EasyLicensesDialogCompat;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -70,7 +71,11 @@ public class AboutUs extends MaterialAboutActivity {
                 .setOnClickListener(new MaterialAboutItemOnClickListener() {
                     @Override
                     public void onClick(boolean longClick) {
-                        startActivity(new Intent(getApplicationContext(),Licenses.class));
+                        //startActivity(new Intent(getApplicationContext(),Licenses.class));
+                        new EasyLicensesDialogCompat(context)
+                                .setTitle("Licenses")
+                                .setPositiveButton(android.R.string.ok, null)
+                                .show();
                     }
                 })
                 .build());

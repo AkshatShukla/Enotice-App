@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -262,34 +263,35 @@ public class AddImageNoticeFragment extends Fragment  {
 
     private void startPosting(final String Dept) {
 
-        new BottomDialog.Builder(context)
-                .setTitle("Upload ("+noticeType+") Image Notice")
-                .setContent("Are you sure you want to submit it as your notice?")
-                .setPositiveText("Approve")
-                .setPositiveBackgroundColorResource(R.color.colorPrimary)
-                .setCancelable(false)
-                .setNegativeText("No")
-                .setPositiveTextColorResource(android.R.color.white)
-                //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
-                .onPositive(new BottomDialog.ButtonCallback() {
-                    @Override
-                    public void onClick(BottomDialog dialog) {
+        if (!context.isFinishing()) {
+            new BottomDialog.Builder(context)
+                    .setTitle("Upload (" + noticeType + ") Image Notice")
+                    .setContent("Are you sure you want to submit it as your notice?")
+                    .setPositiveText("Approve")
+                    .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                    .setCancelable(false)
+                    .setNegativeText("No")
+                    .setPositiveTextColorResource(android.R.color.white)
+                    //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                    .onPositive(new BottomDialog.ButtonCallback() {
+                        @Override
+                        public void onClick(BottomDialog dialog) {
 
-                        final String user_id =  mAuth.getCurrentUser().getUid();
-                        calendar = Calendar.getInstance();
-                        year = calendar.get(Calendar.YEAR);
+                            final String user_id = mAuth.getCurrentUser().getUid();
+                            calendar = Calendar.getInstance();
+                            year = calendar.get(Calendar.YEAR);
 
-                        month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
-                        day = calendar.get(Calendar.DAY_OF_MONTH);
-                        //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
-                        final String currentDate = day + "/" + month + "/" + year;
-                        final long currentLongTime = -1 * new Date().getTime();
-                        final String currentTime = "" + currentLongTime;
+                            month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
+                            day = calendar.get(Calendar.DAY_OF_MONTH);
+                            //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+                            final String currentDate = day + "/" + month + "/" + year;
+                            final long currentLongTime = -1 * new Date().getTime();
+                            final String currentTime = "" + currentLongTime;
 
 
-                        //mProgress.setMessage("Uploading Notice...");
-                        final AlertDialog dialog1 = new SpotsDialog(context, R.style.CustomProgress);
-                        dialog1.show();
+                            //mProgress.setMessage("Uploading Notice...");
+                            final AlertDialog dialog1 = new SpotsDialog(context, R.style.CustomProgress);
+                            dialog1.show();
 
                             //mProgress.show();
                             StorageReference filepath = mStoarge.child("Images").child(mImageUri.getLastPathSegment());
@@ -308,13 +310,11 @@ public class AddImageNoticeFragment extends Fragment  {
                                             if (lvlCheck.equals("1")) {
                                                 mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending");
                                                 Approved = "pending";
-                                            }
-                                            else if (lvlCheck.equals("2")){
+                                            } else if (lvlCheck.equals("2")) {
                                                 if (strdept == null) {
                                                     mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
                                                     Approved = "true";
-                                                }
-                                                else {
+                                                } else {
                                                     mData = FirebaseDatabase.getInstance().getReference().child("posts").child(strdept).child("Pending");
                                                     Approved = "pending";
                                                 }
@@ -333,25 +333,23 @@ public class AddImageNoticeFragment extends Fragment  {
                                             newPost.child("images").setValue(downloadUrl.toString());
                                             newPost.child("time").setValue(currentDate);
                                             newPost.child("servertime").setValue(currentLongTime);
-                                            newPost.child("link").setValue(null);
+                                            //Default link
+                                            newPost.child("link").setValue("gs://e-notice-board-83d16.appspot.com/pdf/debug.txt");
                                             newPost.child("department").setValue(Dept);
                                             newPost.child("approved").setValue(Approved).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
-                                                    if(task.isSuccessful()){
-                                                        Toasty.success(context,"Upload Successful").show();
-                                                    }
-                                                    else
-                                                    {
-                                                        Toasty.error(context,"Upload Unsuccessful").show();
+                                                    if (task.isSuccessful()) {
+                                                        Toasty.success(context, "Upload Successful").show();
+                                                    } else {
+                                                        Toasty.error(context, "Upload Unsuccessful").show();
                                                     }
                                                 }
                                             });
 
                                             if (lvlCheck.equals("2")) {
                                                 departmentPushDept(title_value, "Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()), Dept, downloadUrl.toString());
-                                            }
-                                            else if (lvlCheck.equals("1")) {
+                                            } else if (lvlCheck.equals("1")) {
                                                 departmentPushHOD(title_value, "Pending Notice Approval sent by ".concat(dataSnapshot.child("name").getValue().toString()), Dept, downloadUrl.toString());
                                             }
 
@@ -359,20 +357,21 @@ public class AddImageNoticeFragment extends Fragment  {
 
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
-                                            Toasty.error(context,"Connection Error").show();
+                                            Toasty.error(context, "Connection Error").show();
                                         }
                                     });
 
-                                    Toasty.success(context,"Successfully Posted").show();
+                                    Toasty.success(context, "Successfully Posted").show();
                                     dialog1.dismiss();
-                                    startActivity(new Intent(context , AddNoticeTabbed.class));
+                                    startActivity(new Intent(context, AddNoticeTabbed.class));
                                     getActivity().finish();
                                 }
                             });
 
-                    }
-                }).show();
+                        }
+                    }).show();
 
+        }
     }
 
     private void departmentPushDept(final String t,final String m,final String dept,final String i){
@@ -474,6 +473,7 @@ public class AddImageNoticeFragment extends Fragment  {
 
             mImageUri = Uri.fromFile(file);
             Log.d("APP_DEBUG",mImageUri.toString());
+            imgPreview.setImageURI(mImageUri);
             Toast.makeText(context,mImageUri.toString(),Toast.LENGTH_LONG).show();
 
             //use imageUri here to access the image

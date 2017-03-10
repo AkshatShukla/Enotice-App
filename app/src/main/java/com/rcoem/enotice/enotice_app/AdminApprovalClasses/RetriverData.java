@@ -130,7 +130,7 @@ public class RetriverData extends AppCompatActivity {
         String time = "" + currentTime;
 
 
-        //To query and view only those messages which have been APPROVED by the authenticator.
+        //To query and view only those messages which are Pending.
         mquery = mDatabase.orderByChild("approved").equalTo("pending");
 
         //Online-Offline Syncing (only strings and not images)

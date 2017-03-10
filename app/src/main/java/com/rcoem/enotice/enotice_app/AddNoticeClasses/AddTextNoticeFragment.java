@@ -148,7 +148,7 @@ public class AddTextNoticeFragment extends Fragment {
                     new BottomDialog.Builder(context)
                             .setTitle("Upload (" + noticeType + ") Text Notice")
                             .setContent("Are you sure you want to submit it as your notice?")
-                            .setPositiveText("Approve")
+                            .setPositiveText("Yes")
                             .setPositiveBackgroundColorResource(R.color.colorPrimary)
                             .setCancelable(false)
                             .setNegativeText("No")
@@ -204,7 +204,8 @@ public class AddTextNoticeFragment extends Fragment {
                                                 mDatabase.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
                                                 mDatabase.child("time").setValue(currentDate);
                                                 mDatabase.child("servertime").setValue(currentLongTime);
-                                                mDatabase.child("link").setValue(null);
+                                                //Default Link
+                                                mDatabase.child("link").setValue("gs://e-notice-board-83d16.appspot.com/pdf/debug.txt");
                                                 mDatabase.child("department").setValue(dataSnapshot.child("department").getValue().toString().trim());
                                                 mDatabase.child("approved").setValue(Approved);
 
