@@ -29,33 +29,26 @@ public class DocNoticeUser extends AppCompatActivity {
     private TextView mPostDesc;
     private TextView mUsername;
     private TextView Date;
-    private Button delete;
-    private ImageButton mViewImage;
-    private Button Approved;
     private ImageView circularImageView;
-    private Button Rejected;
-    private Button Share;
-    private Uri mImageUri = null;
-    private StorageReference mStoarge;
-    private boolean process;
     private ImageButton download;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doc_notice_user);
+
         Intent intent = getIntent();
         final String str = intent.getStringExtra("postkey");
+
         mPostTitle = (TextView) findViewById(R.id.Edit_Title_field1) ;
         mPostDesc = (TextView) findViewById(R.id.Edit_description_field1);
         mUsername = (TextView) findViewById(R.id.profileName);
         circularImageView = (ImageView) findViewById(R.id.imageView);
         download = (ImageButton) findViewById(R.id.imageButton2);
         Date = (TextView) findViewById(R.id.date_doc_user);
-        //  mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
-        // mStoarge = FirebaseStorage.getInstance().getReference();
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

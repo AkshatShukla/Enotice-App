@@ -28,15 +28,7 @@ public class TextNoticeUser extends AppCompatActivity {
     private TextView mPostDesc;
     private TextView mUsername;
     private TextView Date;
-    private Button delete;
-    private ImageButton mViewImage;
-    private Button Approved;
     private ImageView circularImageView;
-    private Button Rejected;
-    private Button Share;
-    private Uri mImageUri = null;
-    private StorageReference mStoarge;
-    private boolean process;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +41,9 @@ public class TextNoticeUser extends AppCompatActivity {
         mUsername = (TextView) findViewById(R.id.profileName_textuser);
         circularImageView = (ImageView) findViewById(R.id.imageView);
         Date = (TextView) findViewById(R.id.date_textuser);
-        //  mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
-        // mStoarge = FirebaseStorage.getInstance().getReference();
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -64,9 +55,6 @@ public class TextNoticeUser extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-
-
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override

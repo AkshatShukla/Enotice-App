@@ -53,8 +53,8 @@
                     android:layout_width="200dp"
                     android:layout_height="20dp"
                     android:layout_marginTop="15dp"
-                    android:textSize="14sp"
-                    android:hint="Dhananjay"
+                    android:textSize="13sp"
+                    android:hint="Name"
                     android:textColor="#000000"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/imageView"
@@ -63,9 +63,9 @@
                 <TextView
                     android:layout_width="200dp"
                     android:layout_height="20dp"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:layout_marginLeft="75dp"
-                    android:text="on 12.12.2012"
+                    android:text="on date"
                     android:id="@+id/date_textuser"
                     android:layout_below="@+id/profileName_textuser"
 
@@ -86,6 +86,16 @@
                 android:id="@+id/approve_message_text_user" />
 
             <TextView
+                android:text="Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorBg"
+                android:layout_marginLeft="12dp"
+                android:id="@+id/textView6"
+                />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
@@ -96,8 +106,30 @@
                 android:text = "Post Description"
                 android:layout_below="@+id/Edit_description_field1"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="10dp"
                 android:textStyle="bold"
+                />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+                <TextView
+                    android:layout_width="340dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#FFFFFF"
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:text="Description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorBg"
+                android:layout_marginLeft="12dp"
                 />
 
             <TextView
@@ -106,7 +138,7 @@
                 android:inputType="textPersonName"
                 android:id="@+id/Edit_description_field1"
                 android:text = "Post Description"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="10dp"
                 android:textColor="#000000"
                 android:padding="15dp"
                 android:hint="Post Title"

@@ -37,20 +37,12 @@ public class ImageNoticeUser extends AppCompatActivity {
     private TextView mDate;
     private ImageButton mViewImage;
     private ImageView circularImageView;
-    private Button Approved;
-    private Button Rejected;
-    private Button Share;
-    private Uri mImageUri = null;
-    private StorageReference mStoarge;
-    private boolean process;
-    //Toolbar mActionBarToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_notice_user);
-        //   mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        //  mActionBarToolbar.setTitle("Post");
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -62,8 +54,6 @@ public class ImageNoticeUser extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        //getSupportActionBar().setTitle("Post");
-
 
         Intent intent = getIntent();
         final String str = intent.getStringExtra("postkey");
@@ -75,8 +65,6 @@ public class ImageNoticeUser extends AppCompatActivity {
         mDate = (TextView) findViewById(R.id.date_imageuser);
         circularImageView = (ImageView) findViewById(R.id.imageView);
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
-        mStoarge = FirebaseStorage.getInstance().getReference();
-
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override

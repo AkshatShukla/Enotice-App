@@ -36,15 +36,6 @@ public class UserTextRejectStatus extends AppCompatActivity {
     private TextView Date;
     private TextView textStatus;
     private Button deleteTextReject;
-    private ImageButton mViewImage;
-    private Button Approved;
-    private Button Rejected;
-    private Button Share;
-    private Uri mImageUri = null;
-    private StorageReference mStoarge;
-    private boolean process;
-
-    Toolbar mActionBarToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
