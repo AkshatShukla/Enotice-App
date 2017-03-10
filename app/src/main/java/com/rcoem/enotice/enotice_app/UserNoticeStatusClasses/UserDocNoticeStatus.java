@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,15 +34,7 @@ public class UserDocNoticeStatus extends AppCompatActivity {
     private TextView textStatus;
     private ImageView circularImageView;
     private TextView Date;
-    private ImageButton imageButton2;
-    private Button Approved;
-    private Button Rejected;
-    private Button Share;
-    private Uri mImageUri = null;
-    private StorageReference mStoarge;
-    private boolean process;
-
-    Toolbar mActionBarToolbar;
+    private ImageButton deleteDocUserStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +43,17 @@ public class UserDocNoticeStatus extends AppCompatActivity {
         Intent intent = getIntent();
         final String str = intent.getStringExtra("postkey");
 
-        mPostTitle = (TextView) findViewById(R.id.Edit_Title_field1);
-        mPostDesc = (TextView) findViewById(R.id.Edit_description_field1);
-        mUsername = (TextView) findViewById(R.id.profileName);
-        circularImageView = (ImageView) findViewById(R.id.imageView);
-        Date = (TextView) findViewById(R.id.date);
-        status = (TextView) findViewById(R.id.status);
-        textStatus = (TextView) findViewById(R.id.textStatus);
-        imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
-        //  mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
-
-        mStoarge = FirebaseStorage.getInstance().getReference();
-
+        circularImageView = (ImageView) findViewById(R.id.profileViewDocUserStatus);
+        mUsername = (TextView) findViewById(R.id.profileNameDocUserStatus);
+        Date = (TextView) findViewById(R.id.dateDocUserStatus);
+        textStatus = (TextView) findViewById(R.id.textStatusDocUserStatus);
+        status = (TextView) findViewById(R.id.statusDocUserStatus);
+        mPostTitle = (TextView) findViewById(R.id.noticeTitleDocUserStatus);
+        mPostDesc = (TextView) findViewById(R.id.noticeDescDocUserStatus);
+        deleteDocUserStatus = (ImageButton) findViewById(R.id.downloadPdfDocUserStatus);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
-        // mStoarge = FirebaseStorage.getInstance().getReference();
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -88,7 +78,7 @@ public class UserDocNoticeStatus extends AppCompatActivity {
                     String imageUri = dataSnapshot.child("images").getValue().toString().trim();
                     String url = dataSnapshot.child("profileImg").getValue().toString().trim();
                     Date.setText("on " + dataSnapshot.child("time").getValue().toString().trim());
-                    Picasso.with(UserDocNoticeStatus.this).load(url).noFade().into(circularImageView);
+                    Glide.with(UserDocNoticeStatus.this).load(url).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(circularImageView);
                     toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
 
                     String statusReport;
@@ -123,7 +113,7 @@ public class UserDocNoticeStatus extends AppCompatActivity {
             }
         });
 
-        imageButton2.setOnClickListener(new View.OnClickListener() {
+        deleteDocUserStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mDatabase.addValueEventListener(new ValueEventListener() {

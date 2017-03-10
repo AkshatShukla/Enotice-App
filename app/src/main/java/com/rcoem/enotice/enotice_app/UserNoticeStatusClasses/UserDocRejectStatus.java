@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,16 +35,8 @@ public class UserDocRejectStatus extends AppCompatActivity {
     private TextView textStatus;
     private ImageView circularImageView;
     private TextView Date;
-    private ImageButton imageButton2;
-    private Button delete;
-    private Button Approved;
-    private Button Rejected;
-    private Button Share;
-    private Uri mImageUri = null;
-    private StorageReference mStoarge;
-    private boolean process;
-
-    Toolbar mActionBarToolbar;
+    private ImageButton downloadPdfDocReject;
+    private Button deleteDocReject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,22 +45,18 @@ public class UserDocRejectStatus extends AppCompatActivity {
         Intent intent = getIntent();
         final String str = intent.getStringExtra("postkey");
 
-        mPostTitle = (TextView) findViewById(R.id.Edit_Title_field1);
-        mPostDesc = (TextView) findViewById(R.id.Edit_description_field1);
-        mUsername = (TextView) findViewById(R.id.profileName);
-        circularImageView = (ImageView) findViewById(R.id.imageView);
-        Date = (TextView) findViewById(R.id.date);
-        status = (TextView) findViewById(R.id.status);
-        textStatus = (TextView) findViewById(R.id.textStatus);
-        imageButton2 = (ImageButton) findViewById(R.id.imageButton2);
-        delete = (Button) findViewById(R.id.delete);
-        //  mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
-
-        mStoarge = FirebaseStorage.getInstance().getReference();
-
+        circularImageView = (ImageView) findViewById(R.id.profileViewDocReject);
+        mUsername = (TextView) findViewById(R.id.profileNameDocReject);
+        Date = (TextView) findViewById(R.id.dateDocReject);
+        textStatus = (TextView) findViewById(R.id.textStatusDocReject);
+        status = (TextView) findViewById(R.id.statusDocReject);
+        mPostTitle = (TextView) findViewById(R.id.noticeTitleDocReject);
+        mPostDesc = (TextView) findViewById(R.id.noticeDescDocReject);
+        downloadPdfDocReject = (ImageButton) findViewById(R.id.downloadPdfDocReject);
+        deleteDocReject = (Button) findViewById(R.id.deleteDocReject);
 
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
-        // mStoarge = FirebaseStorage.getInstance().getReference();
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,26 +74,29 @@ public class UserDocRejectStatus extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChildren()) {
-                    mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
-                    mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
-                    mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
-                    String imageUri = dataSnapshot.child("images").getValue().toString().trim();
-                    String url = dataSnapshot.child("profileImg").getValue().toString().trim();
-                    Date.setText("on " + dataSnapshot.child("time").getValue().toString().trim());
-                    Picasso.with(UserDocRejectStatus.this).load(url).noFade().into(circularImageView);
-                    toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                if (!UserDocRejectStatus.this.isFinishing()) {
+                    if (dataSnapshot.hasChildren()) {
+                        mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
+                        mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
+                        mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
+                        String imageUri = dataSnapshot.child("images").getValue().toString().trim();
+                        String url = dataSnapshot.child("profileImg").getValue().toString().trim();
+                        Date.setText("on " + dataSnapshot.child("time").getValue().toString().trim());
+                        Glide.with(UserDocRejectStatus.this).load(url).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(circularImageView);
+                        toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
 
-                    String m;
-                    m = "REJECTED by your Head of Department.";
-                    status.setText("Your following post has been ".concat(m));
+                        String m;
+                        m = "REJECTED by your Head of Department.";
+                        status.setText("Your following post has been ".concat(m));
 
-                    textStatus.setText("Rejected");
-                    textStatus.setBackgroundColor(getResources().getColor(R.color.blocked));
-                    textStatus.setTextColor(getResources().getColor(R.color.colorWhite));
+                        textStatus.setText("Rejected");
+                        textStatus.setBackgroundColor(getResources().getColor(R.color.blocked));
+                        textStatus.setTextColor(getResources().getColor(R.color.colorWhite));
 
-                } else {
-                    finish();
+                    } else {
+                        isFinishing();
+                        //finish();
+                    }
                 }
             }
 
@@ -113,7 +106,7 @@ public class UserDocRejectStatus extends AppCompatActivity {
             }
         });
 
-        imageButton2.setOnClickListener(new View.OnClickListener() {
+        downloadPdfDocReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mDatabase.addValueEventListener(new ValueEventListener() {
@@ -136,28 +129,30 @@ public class UserDocRejectStatus extends AppCompatActivity {
             }
         });
 
-        delete.setOnClickListener(new View.OnClickListener() {
+        deleteDocReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                new BottomDialog.Builder(UserDocRejectStatus.this)
-                        .setTitle("Delete Notice Permanently")
-                        .setContent("Are you sure you want to remove this notice completely?")
-                        .setPositiveText("Yes")
-                        .setPositiveBackgroundColorResource(R.color.colorPrimary)
-                        .setCancelable(false)
-                        .setNegativeText("No")
-                        .setPositiveTextColorResource(android.R.color.white)
-                        //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
-                        .onPositive(new BottomDialog.ButtonCallback() {
-                            @Override
-                            public void onClick(BottomDialog dialog) {
-                                Toasty.success(UserDocRejectStatus.this, "Notice Deleted").show();
-                                mDatabase.removeValue();
-                                Intent intent = new Intent(UserDocRejectStatus.this, UserNoticeStatus.class);
-                                startActivity(intent);
-                            }
-                        }).show();
+                if (!UserDocRejectStatus.this.isFinishing()) {
+                    new BottomDialog.Builder(UserDocRejectStatus.this)
+                            .setTitle("Delete Notice Permanently")
+                            .setContent("Are you sure you want to remove this notice completely?")
+                            .setPositiveText("Yes")
+                            .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                            .setCancelable(false)
+                            .setNegativeText("No")
+                            .setPositiveTextColorResource(android.R.color.white)
+                            //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                            .onPositive(new BottomDialog.ButtonCallback() {
+                                @Override
+                                public void onClick(BottomDialog dialog) {
+                                    Toasty.success(UserDocRejectStatus.this, "Notice Deleted").show();
+                                    mDatabase.removeValue();
+                                    Intent intent = new Intent(UserDocRejectStatus.this, UserNoticeStatus.class);
+                                    startActivity(intent);
+                                }
+                            }).show();
+                }
 
             }
         });

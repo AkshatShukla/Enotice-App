@@ -35,14 +35,7 @@ public class UserImageNoticeStatus extends AppCompatActivity {
     private ImageView circularImageView;
     private TextView Date;
     private ImageButton mViewImage;
-    private Button Approved;
-    private Button Rejected;
-    private Button Share;
-    private Uri mImageUri = null;
     private StorageReference mStoarge;
-    private boolean process;
-
-    Toolbar mActionBarToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +44,19 @@ public class UserImageNoticeStatus extends AppCompatActivity {
         Intent intent = getIntent();
         final String str = intent.getStringExtra("postkey");
 
-        mPostTitle = (TextView) findViewById(R.id.Post_title_Admin);
-        mPostDesc = (TextView) findViewById(R.id.Post_Desc_Admin);
-        mUsername = (TextView) findViewById(R.id.usernameAdmin);
-        circularImageView = (ImageView) findViewById(R.id.imageView);
-        Date = (TextView) findViewById(R.id.date);
-        status = (TextView) findViewById(R.id.status);
-        textStatus = (TextView) findViewById(R.id.textStatus);
-        mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
-        //  mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
+        circularImageView = (ImageView) findViewById(R.id.profileViewImageUserStatus);
+        mUsername = (TextView) findViewById(R.id.profileNameImageUserStatus);
+        Date = (TextView) findViewById(R.id.dateImageUserStatus);
+        textStatus = (TextView) findViewById(R.id.textStatusImageUserStatus);
+        mViewImage = (ImageButton) findViewById(R.id.imageUserStatus);
+        status = (TextView) findViewById(R.id.statusImageUserStatus);
+        mPostTitle = (TextView) findViewById(R.id.noticeTitleImageUserStatus);
+        mPostDesc = (TextView) findViewById(R.id.noticeDescImageUserStatus);
 
         mStoarge = FirebaseStorage.getInstance().getReference();
 
-
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
-        // mStoarge = FirebaseStorage.getInstance().getReference();
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -37,15 +37,8 @@ public class UserImageRejectStatus extends AppCompatActivity {
     private ImageView circularImageView;
     private TextView Date;
     private ImageButton mViewImage;
-    private Button delete;
-    private Button Approved;
-    private Button Rejected;
-    private Button Share;
-    private Uri mImageUri = null;
+    private Button deleteImageReject;
     private StorageReference mStoarge;
-    private boolean process;
-
-    Toolbar mActionBarToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,22 +47,20 @@ public class UserImageRejectStatus extends AppCompatActivity {
         Intent intent = getIntent();
         final String str = intent.getStringExtra("postkey");
 
-        mPostTitle = (TextView) findViewById(R.id.Post_title_Admin);
-        mPostDesc = (TextView) findViewById(R.id.Post_Desc_Admin);
-        mUsername = (TextView) findViewById(R.id.usernameAdmin);
-        circularImageView = (ImageView) findViewById(R.id.imageView);
-        Date = (TextView) findViewById(R.id.date);
-        status = (TextView) findViewById(R.id.status);
-        textStatus = (TextView) findViewById(R.id.textStatus);
+        circularImageView = (ImageView) findViewById(R.id.profileViewImageReject);
+        mUsername = (TextView) findViewById(R.id.profileNameImageReject);
+        Date = (TextView) findViewById(R.id.dateImageReject);
+        textStatus = (TextView) findViewById(R.id.textStatusImageReject);
         mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
-        delete = (Button) findViewById(R.id.button2);
-        //  mViewImage = (ImageButton) findViewById(R.id.select_image_ButtonAdmin);
+        status = (TextView) findViewById(R.id.statusImageReject);
+        mPostTitle = (TextView) findViewById(R.id.noticeTitleImageReject);
+        mPostDesc = (TextView) findViewById(R.id.noticeDescImageReject);
+        deleteImageReject = (Button) findViewById(R.id.deleteImageReject);
 
         mStoarge = FirebaseStorage.getInstance().getReference();
 
-
         mDatabase = FirebaseDatabase.getInstance().getReferenceFromUrl(str);
-        // mStoarge = FirebaseStorage.getInstance().getReference();
+
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -87,27 +78,30 @@ public class UserImageRejectStatus extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChildren()) {
-                    mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
-                    mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
-                    mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
-                    String imageUri = dataSnapshot.child("images").getValue().toString().trim();
-                    String url = dataSnapshot.child("profileImg").getValue().toString().trim();
-                    Date.setText("on " + dataSnapshot.child("time").getValue().toString().trim());
-                    Glide.with(UserImageRejectStatus.this).load(url).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(circularImageView);
-                    Glide.with(UserImageRejectStatus.this).load(imageUri).diskCacheStrategy(DiskCacheStrategy.ALL).into(mViewImage);
-                    toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                if (!UserImageRejectStatus.this.isFinishing()) {
+                    if (dataSnapshot.hasChildren()) {
+                        mUsername.setText(dataSnapshot.child("username").getValue().toString().trim());
+                        mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
+                        mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
+                        String imageUri = dataSnapshot.child("images").getValue().toString().trim();
+                        String url = dataSnapshot.child("profileImg").getValue().toString().trim();
+                        Date.setText("on " + dataSnapshot.child("time").getValue().toString().trim());
+                        Glide.with(UserImageRejectStatus.this).load(url).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(circularImageView);
+                        Glide.with(UserImageRejectStatus.this).load(imageUri).diskCacheStrategy(DiskCacheStrategy.ALL).into(mViewImage);
+                        toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
 
-                    String m;
-                    m = "REJECTED by your Head of Department.";
-                    status.setText("Your following post has been ".concat(m));
+                        String m;
+                        m = "REJECTED by your Head of Department.";
+                        status.setText("Your following post has been ".concat(m));
 
                         textStatus.setText("Rejected");
                         textStatus.setBackgroundColor(getResources().getColor(R.color.blocked));
                         textStatus.setTextColor(getResources().getColor(R.color.colorWhite));
 
-                } else {
-                    finish();
+                    } else {
+                        isFinishing();
+                        //finish();
+                    }
                 }
             }
 
@@ -135,28 +129,30 @@ public class UserImageRejectStatus extends AppCompatActivity {
             }
         });
 
-        delete.setOnClickListener(new View.OnClickListener() {
+        deleteImageReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                new BottomDialog.Builder(UserImageRejectStatus.this)
-                        .setTitle("Delete Notice Permanently")
-                        .setContent("Are you sure you want to remove this notice completely?")
-                        .setPositiveText("Yes")
-                        .setPositiveBackgroundColorResource(R.color.colorPrimary)
-                        .setCancelable(false)
-                        .setNegativeText("No")
-                        .setPositiveTextColorResource(android.R.color.white)
-                        //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
-                        .onPositive(new BottomDialog.ButtonCallback() {
-                            @Override
-                            public void onClick(BottomDialog dialog) {
-                                Toasty.success(UserImageRejectStatus.this, "Notice Deleted").show();
-                                mDatabase.removeValue();
-                                Intent intent = new Intent(UserImageRejectStatus.this, UserNoticeStatus.class);
-                                startActivity(intent);
-                            }
-                        }).show();
+                if (!UserImageRejectStatus.this.isFinishing()) {
+                    new BottomDialog.Builder(UserImageRejectStatus.this)
+                            .setTitle("Delete Notice Permanently")
+                            .setContent("Are you sure you want to remove this notice completely?")
+                            .setPositiveText("Yes")
+                            .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                            .setCancelable(false)
+                            .setNegativeText("No")
+                            .setPositiveTextColorResource(android.R.color.white)
+                            //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                            .onPositive(new BottomDialog.ButtonCallback() {
+                                @Override
+                                public void onClick(BottomDialog dialog) {
+                                    Toasty.success(UserImageRejectStatus.this, "Notice Deleted").show();
+                                    mDatabase.removeValue();
+                                    Intent intent = new Intent(UserImageRejectStatus.this, UserNoticeStatus.class);
+                                    startActivity(intent);
+                                }
+                            }).show();
+                }
 
             }
         });
