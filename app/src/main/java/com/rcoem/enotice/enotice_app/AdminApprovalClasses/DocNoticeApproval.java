@@ -5,6 +5,7 @@ package com.rcoem.enotice.enotice_app.AdminApprovalClasses;
  */
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -22,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -143,19 +145,21 @@ public class DocNoticeApproval extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.hasChildren()) {
-                    mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
-                    mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
-                    profileName.setText(dataSnapshot.child("username").getValue().toString().trim());
-                    String date = "on " + dataSnapshot.child("time").getValue().toString().trim();
-                    Date.setText(date);
-                    String profilePic = dataSnapshot.child("profileImg").getValue().toString().trim();
-                    Glide.with(DocNoticeApproval.this).load(profilePic).crossFade().into(circularImageView);
-                    //mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
-                    toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
-                }
-                else {
-                    finish();
+                if (!DocNoticeApproval.this.isFinishing()) {
+                    if (dataSnapshot.hasChildren()) {
+                        mPostTitle.setText(dataSnapshot.child("title").getValue().toString().trim());
+                        mPostDesc.setText(dataSnapshot.child("Desc").getValue().toString().trim());
+                        profileName.setText(dataSnapshot.child("username").getValue().toString().trim());
+                        String date = "on " + dataSnapshot.child("time").getValue().toString().trim();
+                        Date.setText(date);
+                        String profilePic = dataSnapshot.child("profileImg").getValue().toString().trim();
+                        Glide.with(DocNoticeApproval.this).load(profilePic).crossFade().into(circularImageView);
+                        //mActionBarToolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                        toolbar.setTitle(dataSnapshot.child("title").getValue().toString().trim());
+                    } else {
+                        isFinishing();
+                        //finish();
+                    }
                 }
             }
 
@@ -198,89 +202,91 @@ public class DocNoticeApproval extends AppCompatActivity {
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(final DataSnapshot dataSnapshot) {
-                        if(process) {
 
-                            new BottomDialog.Builder(DocNoticeApproval.this)
-                                    .setTitle("Approve Notice")
-                                    .setContent("Approved Notices appear on the News Feed as well as on Notice Boards across your department. Are you sure you want to Approve?")
-                                    .setPositiveText("Approve")
-                                    .setPositiveBackgroundColorResource(R.color.colorPrimary)
-                                    .setCancelable(false)
-                                    .setNegativeText("No")
-                                    .setPositiveTextColorResource(android.R.color.white)
-                                    //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
-                                    .onPositive(new BottomDialog.ButtonCallback() {
-                                        @Override
-                                        public void onClick(BottomDialog dialog) {
-                                            mDatabase.child("approved").setValue("true");
-                                            process = false;
+                        if (!DocNoticeApproval.this.isFinishing()) {
+                            if (process) {
 
-                                            long serverTime = -1 * new Date().getTime();
+                                new BottomDialog.Builder(DocNoticeApproval.this)
+                                        .setTitle("Approve Notice")
+                                        .setContent("Approved Notices appear on the News Feed as well as on Notice Boards across your department. Are you sure you want to Approve?")
+                                        .setPositiveText("Approve")
+                                        .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                                        .setCancelable(false)
+                                        .setNegativeText("No")
+                                        .setPositiveTextColorResource(android.R.color.white)
+                                        //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                                        .onPositive(new BottomDialog.ButtonCallback() {
+                                            @Override
+                                            public void onClick(BottomDialog dialog) {
+                                                mDatabase.child("approved").setValue("true");
+                                                process = false;
 
-                                            Calendar calendar = Calendar.getInstance();
-                                            int year = calendar.get(Calendar.YEAR);
+                                                long serverTime = -1 * new Date().getTime();
 
-                                            int month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
-                                            int day = calendar.get(Calendar.DAY_OF_MONTH);
-                                            //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
-                                            final String currentDate = day + "/" + month + "/" + year;
+                                                Calendar calendar = Calendar.getInstance();
+                                                int year = calendar.get(Calendar.YEAR);
 
-                                            String label = dataSnapshot.child("label").getValue().toString().trim();
-                                            String title = dataSnapshot.child("title").getValue().toString().trim();
-                                            String desc = dataSnapshot.child("Desc").getValue().toString().trim();
-                                            String uid = dataSnapshot.child("UID").getValue().toString().trim();
-                                            String message = dataSnapshot.child("username").getValue().toString().trim();
-                                            String profileImg = dataSnapshot.child("profileImg").getValue().toString().trim();
-                                            String dept = dataSnapshot.child("department").getValue().toString().trim();
-                                            String link = dataSnapshot.child("link").getValue().toString().trim();
+                                                int month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
+                                                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                                                //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+                                                final String currentDate = day + "/" + month + "/" + year;
+
+                                                String label = dataSnapshot.child("label").getValue().toString().trim();
+                                                String title = dataSnapshot.child("title").getValue().toString().trim();
+                                                String desc = dataSnapshot.child("Desc").getValue().toString().trim();
+                                                String uid = dataSnapshot.child("UID").getValue().toString().trim();
+                                                String message = dataSnapshot.child("username").getValue().toString().trim();
+                                                String profileImg = dataSnapshot.child("profileImg").getValue().toString().trim();
+                                                String dept = dataSnapshot.child("department").getValue().toString().trim();
+                                                String link = dataSnapshot.child("link").getValue().toString().trim();
 
 
-                                            mDataApproved.child("type").setValue(1);
-                                            mDataApproved.child("label").setValue(label);
-                                            mDataApproved.child("title").setValue(title);
-                                            mDataApproved.child("Desc").setValue(desc);
-                                            mDataApproved.child("UID").setValue(uid);
-                                            //Missing email Attribute
-                                            mDataApproved.child("username").setValue(message);
-                                            mDataApproved.child("profileImg").setValue(profileImg);
-                                            //Passing Default PDF Image for Web App Viewing
-                                            mDataApproved.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/pdf-file-format-symbol.png?alt=media&token=b9661fd2-0644-4340-82e8-c96662db26dc");
-                                            mDataApproved.child("time").setValue(currentDate);
-                                            mDataApproved.child("servertime").setValue(serverTime);
-                                            mDataApproved.child("link").setValue(link);
-                                            mDataApproved.child("department").setValue(dept);
-                                            mDataApproved.child("approved").setValue("true");
+                                                mDataApproved.child("type").setValue(1);
+                                                mDataApproved.child("label").setValue(label);
+                                                mDataApproved.child("title").setValue(title);
+                                                mDataApproved.child("Desc").setValue(desc);
+                                                mDataApproved.child("UID").setValue(uid);
+                                                //Missing email Attribute
+                                                mDataApproved.child("username").setValue(message);
+                                                mDataApproved.child("profileImg").setValue(profileImg);
+                                                //Passing Default PDF Image for Web App Viewing
+                                                mDataApproved.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/pdf-file-format-symbol.png?alt=media&token=b9661fd2-0644-4340-82e8-c96662db26dc");
+                                                mDataApproved.child("time").setValue(currentDate);
+                                                mDataApproved.child("servertime").setValue(serverTime);
+                                                mDataApproved.child("link").setValue(link);
+                                                mDataApproved.child("department").setValue(dept);
+                                                mDataApproved.child("approved").setValue("true");
 
-                                            departmentPush(title,message,dept);
+                                                departmentPush(title, message, dept);
 
-                                            Toasty.custom(DocNoticeApproval.this, "Notice has been Approved", R.drawable.ok, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.unblocked), 100, true, true).show();
+                                                Toasty.custom(DocNoticeApproval.this, "Notice has been Approved", R.drawable.ok, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.unblocked), 100, true, true).show();
 
-                                            mDatabase1.addValueEventListener(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    final String string = dataSnapshot.child("level").getValue().toString().trim();
+                                                mDatabase1.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        final String string = dataSnapshot.child("level").getValue().toString().trim();
 
-                                                    if (string.equals("2")) {
-                                                        Intent intent = new Intent(DocNoticeApproval.this, AccountActivityAdmin.class);
-                                                        startActivity(intent);
-                                                        finish();
+                                                        if (string.equals("2")) {
+                                                            Intent intent = new Intent(DocNoticeApproval.this, AccountActivityAdmin.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        } else {
+                                                            Intent intent = new Intent(DocNoticeApproval.this, AccountActivityAuthority.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
                                                     }
-                                                    else {
-                                                        Intent intent = new Intent(DocNoticeApproval.this, AccountActivityAuthority.class);
-                                                        startActivity(intent);
-                                                        finish();
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
                                                     }
-                                                }
+                                                });
 
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
+                                            }
+                                        }).show();
 
-                                                }
-                                            });
-
-                                        }
-                                    }).show();
-
+                            }
                         }
                     }
 
@@ -300,57 +306,76 @@ public class DocNoticeApproval extends AppCompatActivity {
                 mDatabase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(final DataSnapshot dataSnapshot) {
-                        if(process) {
 
-                            new BottomDialog.Builder(DocNoticeApproval.this)
-                                    .setTitle("Reject Notice")
-                                    .setContent("Rejected Notices do not appear on the News Feed as well as on Notice Boards across your department. User who's notice has been rejected is also notified. Are you sure you want to Reject?")
-                                    .setPositiveText("Reject")
-                                    .setPositiveBackgroundColorResource(R.color.colorPrimary)
-                                    .setCancelable(false)
-                                    .setNegativeText("No")
-                                    .onNegative(new BottomDialog.ButtonCallback() {
-                                        @Override
-                                        public void onClick(@NonNull BottomDialog bottomDialog) {
+                        if (!DocNoticeApproval.this.isFinishing()) {
+                            if (process) {
 
-                                        }
-                                    })
-                                    .setPositiveTextColorResource(android.R.color.white)
-                                    //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
-                                    .onPositive(new BottomDialog.ButtonCallback() {
-                                        @Override
-                                        public void onClick(BottomDialog dialog) {
-                                            mDatabase.child("approved").setValue("false");
-                                            mDatabase.child("removed").setValue(1);
+                                process = false;
+                                new BottomDialog.Builder(DocNoticeApproval.this)
+                                        .setTitle("Reject Notice")
+                                        .setContent("Rejected Notices do not appear on the News Feed as well as on Notice Boards across your department. User who's notice has been rejected is also notified. Are you sure you want to Reject?")
+                                        .setPositiveText("Reject")
+                                        .setPositiveBackgroundColorResource(R.color.colorPrimary)
+                                        .setCancelable(false)
+                                        .setNegativeText("No")
+                                        .onNegative(new BottomDialog.ButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull BottomDialog bottomDialog) {
+                                                process = true;
+                                            }
+                                        })
+                                        .setPositiveTextColorResource(android.R.color.white)
+                                        //.setPositiveTextColor(ContextCompat.getColor(this, android.R.color.colorPrimary)
+                                        .onPositive(new BottomDialog.ButtonCallback() {
+                                            @Override
+                                            public void onClick(BottomDialog dialog) {
 
-                                            new MaterialDialog.Builder(DocNoticeApproval.this)
-                                                    .title("Feedback")
-                                                    .content("Notify reason for rejection")
-                                                    .cancelable(true)
-                                                    .positiveColor(getResources().getColor(R.color.colorBg))
-                                                    .positiveText("Send")
-                                                    .negativeText("Dismiss")
-                                                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
-                                                    .input("Reason", "", new MaterialDialog.InputCallback() {
-                                                        @Override
-                                                        public void onInput(MaterialDialog dialog, CharSequence input) {
+                                                new MaterialDialog.Builder(DocNoticeApproval.this)
+                                                        .title("Feedback")
+                                                        .content("Notify reason for rejection")
+                                                        .cancelable(true)
+                                                        .positiveColor(getResources().getColor(R.color.colorBg))
+                                                        .positiveText("Send")
+                                                        .negativeText("Dismiss")
+                                                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
+                                                        .input("Reason", "", new MaterialDialog.InputCallback() {
+                                                            @Override
+                                                            public void onInput(MaterialDialog dialog, CharSequence input) {
 
-                                                            process = false;
-                                                            feedback = input.toString();
-                                                            String title = dataSnapshot.child("title").getValue().toString().trim();
-                                                            String email = dataSnapshot.child("email").getValue().toString().trim();
-                                                            sendSinglePush(title,feedback,email);
+                                                                feedback = input.toString();
+                                                                String title = dataSnapshot.child("title").getValue().toString().trim();
+                                                                String email = dataSnapshot.child("email").getValue().toString().trim();
+                                                                sendSinglePush(title, feedback, email);
 
-                                                            Toasty.custom(DocNoticeApproval.this, "Notice has been Rejected", R.drawable.cancel, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.blocked), 100, true, true).show();
-                                                            Intent intent = new Intent(DocNoticeApproval.this, AccountActivityAdmin.class);
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-                                                    }).show();
+                                                                Toasty.custom(DocNoticeApproval.this, "Notice has been Rejected", R.drawable.cancel, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.blocked), 100, true, true).show();
+                                                                Intent intent = new Intent(DocNoticeApproval.this, AccountActivityAdmin.class);
+                                                                startActivity(intent);
+                                                                finish();
+                                                            }
+                                                        })
+                                                        .dismissListener(new DialogInterface.OnDismissListener() {
+                                                            @Override
+                                                            public void onDismiss(DialogInterface dialog) {
+                                                                process = true;
+                                                                Toasty.warning(DocNoticeApproval.this,"Notice Rejection Dismissed", 2500).show();
+                                                            }
+                                                        })
+                                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                            @Override
+                                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                                mDatabase.child("approved").setValue("false");
+                                                                Toasty.custom(DocNoticeApproval.this, "Notice has been Rejected", R.drawable.cancel, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.blocked), 100, true, true).show();
+                                                                Intent intent = new Intent(DocNoticeApproval.this, AccountActivityAdmin.class);
+                                                                startActivity(intent);
+                                                                finish();
+                                                            }
+                                                        })
+                                                        .show();
 
-                                        }
-                                    }).show();
+                                            }
+                                        }).show();
 
+                            }
                         }
                     }
                     @Override
