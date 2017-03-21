@@ -77,8 +77,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Intent it = new Intent(MyFirebaseMessagingService.this, MyFirebaseMessagingService.class);
-        getApplication().startService(it); // If service will destroy, Start the service again
+        //Intent it = new Intent(MyFirebaseMessagingService.this, MyFirebaseMessagingService.class);
+        //getApplication().startService(it); // If service will destroy, Start the service again
     }
 
 

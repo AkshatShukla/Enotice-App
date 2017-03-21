@@ -47,9 +47,6 @@
         <activity android:name=".LoginSignUpClasses.AwatingForApproval" />
         <activity android:name=".AuthorityClasses.AccountAdminPanel" />
         <activity android:name=".AuthorityClasses.AdminApprove" />
-        <activity
-            android:name=".AddNoticeClasses.PdfUpload"
-            android:label="Select a Document" />
         <activity android:name=".pdfview" />
         <activity android:name=".AdminClasses.BlockUserPlanel" />
         <activity android:name=".AdminClasses.CrossDept" />
@@ -85,7 +82,6 @@
 
         <activity android:name=".HighAuthorityClasses.AccountActivityAuthority" />
         <activity android:name=".HighAuthorityClasses.AddNoticeTabbedAuthority" />
-        <activity android:name=".HighAuthorityClasses.PdfUploadAuthority" />
         <activity android:name=".LoginSignUpClasses.PasswordResetActivity" />
         <activity android:name=".AuthorityClasses.AdminNotApproved" />
         <activity
