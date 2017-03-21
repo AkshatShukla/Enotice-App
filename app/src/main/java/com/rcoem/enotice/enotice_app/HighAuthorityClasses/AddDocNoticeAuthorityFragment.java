@@ -102,75 +102,79 @@ public class AddDocNoticeAuthorityFragment extends Fragment {
                 builder.append(path + "\n");
             }
             path = "file:///" + path;
-            uri = Uri.parse(path);
-            Toast.makeText(context,uri.toString(),Toast.LENGTH_LONG).show();
-            mStoarge = FirebaseStorage.getInstance().getReference();
-            final AlertDialog dialog1 = new SpotsDialog(context, R.style.CustomProgress);
-            dialog1.show();
-            StorageReference filepath = mStoarge.child("pdf").child(uri.getLastPathSegment());
-            filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(context,"Uploaded",Toast.LENGTH_LONG).show();
-                    final Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    calendar = Calendar.getInstance();
-                    year = calendar.get(Calendar.YEAR);
+            if (path.contains("null")) {
+                Toasty.warning(context, "No file chosen").show();
+            } else {
+                uri = Uri.parse(path);
+                Toast.makeText(context, uri.toString(), Toast.LENGTH_LONG).show();
+                mStoarge = FirebaseStorage.getInstance().getReference();
+                final AlertDialog dialog1 = new SpotsDialog(context, R.style.CustomProgress);
+                dialog1.show();
+                StorageReference filepath = mStoarge.child("pdf").child(uri.getLastPathSegment());
+                filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(context, "Uploaded", Toast.LENGTH_LONG).show();
+                        final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        calendar = Calendar.getInstance();
+                        year = calendar.get(Calendar.YEAR);
 
 
-                    month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
-                    day = calendar.get(Calendar.DAY_OF_MONTH);
-                    //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
-                    final String currentDate = day + "/" + month + "/" + year;
-                    final long currentLongTime = -1 * new Date().getTime();
-                    final String currentTime = "" + currentLongTime;
-                    mDataUser.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(final DataSnapshot dataSnapshot) {
-                            final String Dept = dataSnapshot.child("department").getValue().toString().trim();
-                            final String lvlCheck = dataSnapshot.child("level").getValue().toString().trim();
-                            Approved = "true";
-                            mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
-                            final DatabaseReference newPost = mData.push();
+                        month = calendar.get(Calendar.MONTH) + 1;    //Month in Calendar API start with 0.
+                        day = calendar.get(Calendar.DAY_OF_MONTH);
+                        //  Toast.makeText(AddNoticeActivityAdmin.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+                        final String currentDate = day + "/" + month + "/" + year;
+                        final long currentLongTime = -1 * new Date().getTime();
+                        final String currentTime = "" + currentLongTime;
+                        mDataUser.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(final DataSnapshot dataSnapshot) {
+                                final String Dept = dataSnapshot.child("department").getValue().toString().trim();
+                                final String lvlCheck = dataSnapshot.child("level").getValue().toString().trim();
+                                Approved = "true";
+                                mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
+                                final DatabaseReference newPost = mData.push();
 
-                            newPost.child("type").setValue(3);
-                            newPost.child("label").setValue(noticeType);
-                            newPost.child("title").setValue(titleDoc_value);
-                            newPost.child("Desc").setValue(descDoc_value);
-                            newPost.child("UID").setValue(mAuth.getCurrentUser().getUid());
-                            newPost.child("email").setValue(mAuth.getCurrentUser().getEmail());
-                            newPost.child("username").setValue(dataSnapshot.child("name").getValue());
-                            newPost.child("profileImg").setValue(dataSnapshot.child("images").getValue());
-                            //Passing Default PDF Image for Web App Viewing
-                            newPost.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/pdf-file-format-symbol.png?alt=media&token=b9661fd2-0644-4340-82e8-c96662db26dc");
-                            newPost.child("time").setValue(currentDate);
-                            newPost.child("servertime").setValue(currentLongTime);
-                            newPost.child("link").setValue(downloadUrl.toString());
-                            newPost.child("department").setValue(Dept);
-                            newPost.child("approved").setValue(Approved).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
+                                newPost.child("type").setValue(3);
+                                newPost.child("label").setValue(noticeType);
+                                newPost.child("title").setValue(titleDoc_value);
+                                newPost.child("Desc").setValue(descDoc_value);
+                                newPost.child("UID").setValue(mAuth.getCurrentUser().getUid());
+                                newPost.child("email").setValue(mAuth.getCurrentUser().getEmail());
+                                newPost.child("username").setValue(dataSnapshot.child("name").getValue());
+                                newPost.child("profileImg").setValue(dataSnapshot.child("images").getValue());
+                                //Passing Default PDF Image for Web App Viewing
+                                newPost.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/pdf-file-format-symbol.png?alt=media&token=b9661fd2-0644-4340-82e8-c96662db26dc");
+                                newPost.child("time").setValue(currentDate);
+                                newPost.child("servertime").setValue(currentLongTime);
+                                newPost.child("link").setValue(downloadUrl.toString());
+                                newPost.child("department").setValue(Dept);
+                                newPost.child("approved").setValue(Approved).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_LONG).show();
 
+                                        }
                                     }
-                                }
-                            });
+                                });
 
-                        }
+                            }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
+                            }
+                        });
 
-                    dialog1.dismiss();
-                    startActivity(new Intent(context, AddNoticeTabbed.class));
-                    context.finish();
+                        dialog1.dismiss();
+                        startActivity(new Intent(context, AddNoticeTabbed.class));
+                        context.finish();
 
-                }
-            });
+                    }
+                });
 
+            }
         }
 
     }
