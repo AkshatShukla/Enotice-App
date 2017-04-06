@@ -92,7 +92,7 @@ public class EditViewProfile extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Student");
         txt_desig = (TextView)findViewById(R.id.des_ok_input);
         dept_disp = (TextView)findViewById(R.id.dept_display);
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -114,15 +114,9 @@ public class EditViewProfile extends AppCompatActivity {
                     if(dataSnapshot.hasChildren()) {
                         TextView txt_name = (TextView) findViewById(R.id.name_input);
                         txt_name.setText(dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("name").getValue().toString().trim());
-                        String chk = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("level").getValue().toString().trim();
+                     //   String chk = dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("level").getValue().toString().trim();
                         dept_disp.setText(dataSnapshot.child(mAuth.getCurrentUser().getUid()).child("department").getValue().toString().trim());
-                        if (chk.equalsIgnoreCase("2")) {
-                            txt_desig.setText("Head of Dept.");
-
-                        } else if (chk.equalsIgnoreCase("1")) {
-                            txt_desig.setText("Assistant professor");
-
-                        }
+                        txt_desig.setText("Assistant professor");
                         try {
 
                             ImageView circularImageView = (ImageView) findViewById(R.id.imageView_imagggggggg);
@@ -382,7 +376,7 @@ dialog1.dismiss();
 
             Uri uri = data.getData();
             mAuth = FirebaseAuth.getInstance();
-            mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users");
+            mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Student");
          //   Toast.makeText(getApplicationContext(),uri.getLastPathSegment().toString(),Toast.LENGTH_LONG).show();
 
             StorageReference mStoarge = FirebaseStorage.getInstance().getReference();

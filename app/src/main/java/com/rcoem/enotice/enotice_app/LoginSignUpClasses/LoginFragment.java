@@ -102,32 +102,19 @@ public class LoginFragment extends SlideFragment {
                 if (firebaseAuth.getCurrentUser() != null) {
                     //User has logged-in already
                     //Move user directly to the Account Activity.
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Student").child(mAuth.getCurrentUser().getUid());
 
                     mDatabase.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                             final String string = dataSnapshot.child("level").getValue().toString().trim();
-                            if(string.equals("4")){
-                                Intent intent = new Intent(getActivity(), AccountAdminPanel.class);
+                            if(string.equals("5")){
+                                Intent intent = new Intent(getActivity(), AccountActivityUser.class);
                                 startActivity(intent);
                                // finish();
                             }
-                            else if(string.equals("99")){
-                                Intent intent = new Intent(getActivity(), AwatingForApproval.class);
-                                startActivity(intent);
-                                //finish();
-                            }
-                            else if (string.equals("2")) {
-                                Intent intent = new Intent(getActivity(), AccountActivityAdmin.class);
-                                startActivity(intent);
-                                //finish();
-                            } else {
-                                Intent intent = new Intent(getActivity(), AccountActivityUser.class);
-                                startActivity(intent);
-                                //finish();
-                            }
+
                         }
 
                         @Override
@@ -207,7 +194,7 @@ public class LoginFragment extends SlideFragment {
                         snackbar.show();
 
 
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Student").child(mAuth.getCurrentUser().getUid());
 
                         mDatabase.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -215,29 +202,13 @@ public class LoginFragment extends SlideFragment {
 
                                 final String string = dataSnapshot.child("level").getValue().toString().trim();
 
-                                if(string.equals("4")){
+                                if(string.equals("5")){
                                     //  mProgress.dismiss();
-                                    Intent intent = new Intent(getActivity(), AccountAdminPanel.class);
+                                    Intent intent = new Intent(getActivity().getApplicationContext(), AccountActivityUser.class);
                                     startActivity(intent);
                                     getActivity().finish();
                                 }
-                                else if(string.equals("99")){
-                                    // mProgress.dismiss();
-                                    Intent intent = new Intent(getActivity(), AwatingForApproval.class);
-                                    startActivity(intent);
-                                    getActivity().finish();
-                                }
-                                else if (string.equals("2")) {
-                                    //  mProgress.dismiss();
-                                    Intent intent = new Intent(getActivity(), AccountActivityAdmin.class);
-                                    startActivity(intent);
-                                    getActivity().finish();
-                                } else {
-                                    //mProgress.dismiss();
-                                    Intent intent = new Intent(getActivity(), AccountActivityUser.class);
-                                    startActivity(intent);
-                                    getActivity().finish();
-                                }
+
                                 progressDialog.dismiss();
                             }
 

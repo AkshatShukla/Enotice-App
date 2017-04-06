@@ -229,7 +229,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         repasswordtext = (EditText) findViewById(R.id.sign_up_repassword_text);
         li = (RelativeLayout) findViewById(R.id.sign_up_relative);
 
-        designation = (RadioGroup) findViewById(R.id.desg_rdio_btn);
+
         final String userdept;
         RadioButton userdesgrdiobuttn;
 
@@ -418,7 +418,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         Toast.makeText(SignUp.this,day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
         final String currentDate = day + "/" + month + "/" + year;
 
-        mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Student");
 
         final String Name = mName.getText().toString().trim();
         final String user_id = firebaseAuth.getCurrentUser().getUid();
@@ -431,18 +431,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
         //Validate designation
 
         //Toast.makeText(SignUp.this,userdept,Toast.LENGTH_LONG).show();
-        if(userdept.equals("HOD")) {
-            userdesg_firebase = 99;
-            mDatabase1.child(user_id).child("DEST").setValue("HOD");
-            //Toast.makeText(SignUp.this,userdesg_firebase,Toast.LENGTH_LONG).show();
-            mDatabase1.child(user_id).child("level").setValue(userdesg_firebase);
-        }
-        else{
-            userdesg_firebase = 99;
-            mDatabase1.child(user_id).child("DEST").setValue("AP");
-            //Toast.makeText(SignUp.this,userdesg_firebase,Toast.LENGTH_LONG).show();
-            mDatabase1.child(user_id).child("level").setValue(userdesg_firebase);
-        }
+        userdesg_firebase = 5;
+        mDatabase1.child(user_id).child("DEST").setValue("STUD");
+        //Toast.makeText(SignUp.this,userdesg_firebase,Toast.LENGTH_LONG).show();
+        mDatabase1.child(user_id).child("level").setValue(userdesg_firebase);
+
 
         departmentSelected = dept.getSelectedItem().toString();
         //Validate department

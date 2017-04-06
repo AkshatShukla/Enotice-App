@@ -126,7 +126,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
 
         di = (DrawerLayout) findViewById(R.id.drawer_layout_user);
 
-        mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        mDatabase1 = FirebaseDatabase.getInstance().getReference().child("Student").child(mAuth.getCurrentUser().getUid());
 
         //Code to send user token and details to hosted MySQL server
         //sendTokenToServer method called here
@@ -152,36 +152,11 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
 
-        currentUserStatus = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
-        fabplus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentUserStatus.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String status = dataSnapshot.child("block").getValue().toString().trim();
+        currentUserStatus = FirebaseDatabase.getInstance().getReference().child("Student").child(mAuth.getCurrentUser().getUid());
 
-                        if (status.equals("No")) {
-                            Intent intent = new Intent(AccountActivityUser.this, AddNoticeTabbed.class);
-                            startActivity(intent);
-                        }
-                        else {
-                            Snackbar snackbar = Snackbar
-                                    .make(di, "You are unauthorized to generate notices. Please contact your HOD.", Snackbar.LENGTH_LONG);
-                            snackbar.show();
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_user);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -206,33 +181,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         tabLayout.setupWithViewPager(viewPager);
 
         //Added for Seamless Floating Action Button Animation Transition between Tabs.
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 1:
-                        if (!fabplus.isShown()) {
-                            fabplus.show();
-                        }
-                        break;
-                    case 2:
-                        if (!fabplus.isShown()) {
-                            fabplus.show();
-                        }
-                        break;
-                }
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -332,7 +281,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
     private void loadNavHeader() {
         // name, website
         mAuth = FirebaseAuth.getInstance();
-        mCurrentUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        mCurrentUser = FirebaseDatabase.getInstance().getReference().child("Student").child(mAuth.getCurrentUser().getUid());
         mCurrentUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -399,10 +348,7 @@ public class AccountActivityUser extends AppCompatActivity implements  Navigatio
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(getApplicationContext(),EditViewProfile.class));
             //  Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
-        } else if(id == R.id.nav_checkstatus){
-            //Toast.makeText(this,"work in progress",Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getApplicationContext(),UserNoticeStatus.class));
-        } else if (id == R.id.nav_logout) {
+        }  else if (id == R.id.nav_logout) {
             mAuth.signOut();
             Snackbar snackbar = Snackbar
                     .make(di, R.string.sign_out, Snackbar.LENGTH_LONG);

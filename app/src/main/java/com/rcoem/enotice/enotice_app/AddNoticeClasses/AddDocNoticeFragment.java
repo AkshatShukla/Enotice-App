@@ -23,6 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.rcoem.enotice.enotice_app.R;
+import com.vincent.filepicker.Constant;
+import com.vincent.filepicker.activity.NormalFilePickActivity;
 
 import java.util.Calendar;
 
@@ -140,12 +142,17 @@ public class AddDocNoticeFragment extends Fragment {
                 descDoc_value = descDoc.getText().toString().trim();
 
                 if(!TextUtils.isEmpty(titleDoc_value) && !TextUtils.isEmpty(descDoc_value)) {
-                    Intent intent = new Intent(context , PdfUpload.class);
+                  /*  Intent intent = new Intent(context , PdfUpload.class);
                     intent.putExtra("title_value",titleDoc_value);
                     intent.putExtra("desc_value",descDoc_value);
                     intent.putExtra("noticeType",noticeType);
                     intent.putExtra("strdept",strdept);
-                    startActivity(intent);
+                    startActivity(intent);*/
+                    Intent intent4 = new Intent(context, PdfUpload.class);
+                    intent4.putExtra(Constant.MAX_NUMBER, 9);
+                    intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[] {"xlsx", "xls", "doc", "docx", "ppt", "pptx", "pdf"});
+                    startActivityForResult(intent4, Constant.REQUEST_CODE_PICK_FILE);
+
                 }
                 else if (TextUtils.isEmpty((titleDoc_value))) {
                     Toasty.warning(getActivity().getApplicationContext(),"Please Enter the Title").show();

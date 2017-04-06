@@ -104,57 +104,22 @@ public class MainActivity extends AppCompatActivity {
 
                     //mProgress.setMessage("Give Us A Moment...");
                     //mProgress.show();
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Student").child(mAuth.getCurrentUser().getUid());
                     mDatabase.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                             final String string = dataSnapshot.child("level").getValue().toString().trim();
                             switch (string) {
-                                case "4": {
-                                    mProgress.dismiss();
-                                    Intent intent = new Intent(MainActivity.this, AccountAdminPanel.class);
-                                    startActivity(intent);
-                                    finish();
-                                    break;
-                                }
-                                case "3": {
-                                    mProgress.dismiss();
-                                    Intent intent = new Intent(MainActivity.this, AccountActivityAuthority.class);
-                                    startActivity(intent);
-                                    finish();
-                                    break;
-                                }
-                                case "99": {
-                                    mProgress.dismiss();
-                                    Intent intent = new Intent(MainActivity.this, AwatingForApproval.class);
-                                    startActivity(intent);
-                                    finish();
-                                    break;
-                                }
-                                case "2": {
-                                    mProgress.dismiss();
-                                    Intent intent = new Intent(MainActivity.this, AccountActivityAdmin.class);
-                                    startActivity(intent);
-                                    finish();
-                                    break;
-                                }
-                                default: {
-                                    mProgress.dismiss();
-                                    Intent intent = getIntent();
-                                    final String fBack = intent.getStringExtra("fBack");
 
-                                    if (intent.getStringExtra("fBack") != null) {
-                                        Toasty.info(MainActivity.this, fBack, Toast.LENGTH_LONG, true).show();
-                                    } else {
-                                        //Do Nothing
-                                    }
-                                    intent = new Intent(MainActivity.this, AccountActivityUser.class);
+                                case "5": {
+                                    mProgress.dismiss();
+                                    Intent intent = new  Intent(MainActivity.this, AccountActivityUser.class);
                                     startActivity(intent);
                                     finish();
                                     break;
                                 }
+                                default:Toast.makeText(MainActivity.this,"Not allowed to login",Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -291,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                                 .make(li, R.string.auth_success, Snackbar.LENGTH_LONG);
                         snackbar.show();
 
-                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+                        mDatabase = FirebaseDatabase.getInstance().getReference().child("Student").child(mAuth.getCurrentUser().getUid());
 
                         mDatabase.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -299,28 +264,16 @@ public class MainActivity extends AppCompatActivity {
 
                                     final String string = dataSnapshot.child("level").getValue().toString().trim();
 
-                                    if(string.equals("4")){
+                                    if(string.equals("5")){
                                         //  mProgress.dismiss();
-                                        Intent intent = new Intent(MainActivity.this, AccountAdminPanel.class);
+                                        Intent intent =  new Intent(MainActivity.this, AccountActivityUser.class);
                                         startActivity(intent);
                                         finish();
                                     }
-                                    else if(string.equals("99")){
-                                        // mProgress.dismiss();
-                                        Intent intent = new Intent(MainActivity.this, AwatingForApproval.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                    else if (string.equals("2")) {
-                                        //  mProgress.dismiss();
-                                        Intent intent = new Intent(MainActivity.this, AccountActivityAdmin.class);
-                                        startActivity(intent);
-                                        finish();
-                                    } else {
+                                   else {
                                         //mProgress.dismiss();
-                                        Intent intent = new Intent(MainActivity.this, AccountActivityUser.class);
-                                        startActivity(intent);
-                                        finish();
+                                      Toasty.error(MainActivity.this,"User not existing").show();
+                                     //   finish();
                                     }
                                     progressDialog.dismiss();
                             }

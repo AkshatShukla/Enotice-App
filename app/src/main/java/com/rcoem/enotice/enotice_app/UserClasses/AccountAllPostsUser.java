@@ -81,26 +81,7 @@ public class AccountAllPostsUser extends Fragment {
         mBlogList = (RecyclerView) context.findViewById(R.id.blog_recylView_all_list);
 
         //FAB Animation, Hide when Scrolling Down, Scroll Up to Show.
-        fab = (FloatingActionButton)  context.findViewById(R.id.main_fab);
-        mBlogList.addOnScrollListener(new RecyclerView.OnScrollListener()
-        {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-            {
-                if (dy > 1) {
-                    // Scroll Down
-                    if (fab.isShown()) {
-                        fab.hide();
-                    }
-                }
-                else if (dy < 0) {
-                    // Scroll Up
-                    if (!fab.isShown()) {
-                        fab.show();
-                    }
-                }
-            }
-        });
+
 
 
         //SwipeRefresh Code
@@ -120,7 +101,7 @@ public class AccountAllPostsUser extends Fragment {
             }
         });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Student").child(mAuth.getCurrentUser().getUid());
 
         //Code to display notices according to current user department
         //viewNotices method is called here
@@ -165,7 +146,7 @@ public class AccountAllPostsUser extends Fragment {
         //  recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         // swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
-        currentUserStatus = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        currentUserStatus = FirebaseDatabase.getInstance().getReference().child("Student").child(mAuth.getCurrentUser().getUid());
 
         //Firebase Recycler Adapter inflating multiple view types.
         FirebaseRecyclerAdapter<BlogModel,RecyclerView.ViewHolder> firebaseRecyclerAdapter =new
