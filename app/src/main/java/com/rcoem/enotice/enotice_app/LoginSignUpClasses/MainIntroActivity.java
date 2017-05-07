@@ -24,6 +24,7 @@ import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 import com.heinrichreimersoftware.materialintro.slide.Slide;
 import com.rcoem.enotice.enotice_app.AdminClasses.AccountActivityAdmin;
+import com.rcoem.enotice.enotice_app.AuthorityClasses.AccountAdminPanel;
 import com.rcoem.enotice.enotice_app.HighAuthorityClasses.AccountActivityAuthority;
 import com.rcoem.enotice.enotice_app.R;
 import com.rcoem.enotice.enotice_app.UserClasses.AccountActivityUser;
@@ -233,6 +234,18 @@ public class MainIntroActivity extends IntroActivity {
                                 final String string = dataSnapshot.child("level").getValue().toString().trim();
 
                                 switch (string) {
+                                    case "4": {
+                                        Intent intent = new Intent(getApplicationContext(), AccountAdminPanel.class);
+                                        startActivity(intent);
+                                        finish();
+                                        break;
+                                    }
+                                    case "99": {
+                                        Intent intent = new Intent(getApplicationContext(), AwatingForApproval.class);
+                                        startActivity(intent);
+                                        finish();
+                                        break;
+                                    }
                                     case "2": {
                                         Intent intent1 = new Intent(getApplicationContext(), AccountActivityAdmin.class);
                                         startActivity(intent1);

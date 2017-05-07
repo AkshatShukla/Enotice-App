@@ -241,7 +241,7 @@ public class DocNoticeApproval extends AppCompatActivity {
                                                 String link = dataSnapshot.child("link").getValue().toString().trim();
 
 
-                                                mDataApproved.child("type").setValue(1);
+                                                mDataApproved.child("type").setValue(3);
                                                 mDataApproved.child("label").setValue(label);
                                                 mDataApproved.child("title").setValue(title);
                                                 mDataApproved.child("Desc").setValue(desc);

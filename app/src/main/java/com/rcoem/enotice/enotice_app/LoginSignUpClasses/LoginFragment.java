@@ -109,24 +109,31 @@ public class LoginFragment extends SlideFragment {
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                             final String string = dataSnapshot.child("level").getValue().toString().trim();
-                            if(string.equals("4")){
-                                Intent intent = new Intent(getActivity(), AccountAdminPanel.class);
-                                startActivity(intent);
-                               // finish();
-                            }
-                            else if(string.equals("99")){
-                                Intent intent = new Intent(getActivity(), AwatingForApproval.class);
-                                startActivity(intent);
-                                //finish();
-                            }
-                            else if (string.equals("2")) {
-                                Intent intent = new Intent(getActivity(), AccountActivityAdmin.class);
-                                startActivity(intent);
-                                //finish();
-                            } else {
-                                Intent intent = new Intent(getActivity(), AccountActivityUser.class);
-                                startActivity(intent);
-                                //finish();
+                            switch (string) {
+                                case "4": {
+                                    Intent intent = new Intent(getActivity(), AccountAdminPanel.class);
+                                    startActivity(intent);
+                                    // finish();
+                                    break;
+                                }
+                                case "99": {
+                                    Intent intent = new Intent(getActivity(), AwatingForApproval.class);
+                                    startActivity(intent);
+                                    //finish();
+                                    break;
+                                }
+                                case "2": {
+                                    Intent intent = new Intent(getActivity(), AccountActivityAdmin.class);
+                                    startActivity(intent);
+                                    //finish();
+                                    break;
+                                }
+                                default: {
+                                    Intent intent = new Intent(getActivity(), AccountActivityUser.class);
+                                    startActivity(intent);
+                                    //finish();
+                                    break;
+                                }
                             }
                         }
 
@@ -189,6 +196,7 @@ public class LoginFragment extends SlideFragment {
         } else {
 
             progressDialog.setMessage("Logging in...");
+            progressDialog.setCancelable(false);
             progressDialog.show();
 
             mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

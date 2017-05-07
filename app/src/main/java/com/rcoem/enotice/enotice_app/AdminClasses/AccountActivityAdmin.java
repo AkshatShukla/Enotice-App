@@ -1,7 +1,10 @@
 package com.rcoem.enotice.enotice_app.AdminClasses;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -33,6 +36,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,6 +51,7 @@ import com.rcoem.enotice.enotice_app.AdminApprovalClasses.RetriverData;
 import com.rcoem.enotice.enotice_app.CircleTransform;
 import com.rcoem.enotice.enotice_app.EditViewProfile;
 import com.rcoem.enotice.enotice_app.LoginSignUpClasses.MainActivity;
+import com.rcoem.enotice.enotice_app.LoginSignUpClasses.MainIntroActivity;
 import com.rcoem.enotice.enotice_app.NoticeCard;
 import com.rcoem.enotice.enotice_app.NoticeCardAdapter;
 import com.rcoem.enotice.enotice_app.NotificationClasses.ActivitySendPushNotification;
@@ -61,6 +67,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import es.dmoral.toasty.Toasty;
 
 public class AccountActivityAdmin extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener {
 
@@ -79,6 +87,8 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
     private DatabaseReference mDatabaseDepartment;
 
     private String dept;
+
+    private boolean isFirstTime;
 
     FloatingActionButton fabplus;
 
@@ -149,7 +159,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         fabplus = (FloatingActionButton)findViewById(R.id.main_fab);
@@ -184,6 +194,7 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+
         //Added for Seamless Floating Action Button Animation Transition between Tabs.
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -212,6 +223,77 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
 
             }
         });
+
+        // Checking for first time launch - before calling tutorial
+        // Declare a new thread to do a preference check
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //  Initialize SharedPreferences
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+
+                //  Create a new boolean and preference and set it to true
+                isFirstTime = getPrefs.getBoolean("firstTime", true);
+
+                //  If the activity has never started before...
+                if (isFirstTime) {
+
+                    new TapTargetSequence(AccountActivityAdmin.this)
+                            .targets(
+                                    TapTarget.forView(fabplus, "Generate Notices")
+                                            .dimColor(android.R.color.black)
+                                            .outerCircleColor(R.color.colorAccent)
+                                            .targetCircleColor(android.R.color.black)
+                                            .transparentTarget(true)
+                                            .textColor(android.R.color.white)
+                                            .cancelable(true)
+                                            .titleTextSize(18)
+                                            .id(1),
+                                    TapTarget.forToolbarNavigationIcon(toolbar,"Access Account Options from here")
+                                            .dimColor(android.R.color.black)
+                                            .outerCircleColor(R.color.colorAccent)
+                                            .targetCircleColor(android.R.color.black)
+                                            .transparentTarget(true)
+                                            .textColor(android.R.color.white)
+                                            .cancelable(false)
+                                            .id(2))
+
+                            .listener(new TapTargetSequence.Listener() {
+                                // This listener will tell us when interesting(tm) events happen in regards
+                                // to the sequence
+                                @Override
+                                public void onSequenceFinish() {
+                                    Toasty.success(AccountActivityAdmin.this,"Tutorial Completed").show();
+                                }
+
+                                @Override
+                                public void onSequenceStep(TapTarget lastTarget) {
+                                    // Perfom action for the current target
+                                }
+
+                                @Override
+                                public void onSequenceCanceled(TapTarget lastTarget) {
+                                    Toasty.success(AccountActivityAdmin.this,"Tutorial Completed").show();
+                                }
+                            })
+                            .start();
+
+                    //  Make a new preferences editor
+                    SharedPreferences.Editor e = getPrefs.edit();
+
+                    //  Edit preference to make it false because we don't want this to run again
+                    e.putBoolean("firstTime", false);
+
+                    //  Apply changes
+                    e.apply();
+                }
+            }
+        });
+
+        // Start the thread
+        t.start();
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -379,6 +461,10 @@ public class AccountActivityAdmin extends AppCompatActivity implements  Navigati
         } else if (id == R.id.nav_approval) {
             //goto Pending Approvals activity
             startActivity(new Intent(AccountActivityAdmin.this, RetriverData.class));
+
+        } else if (id == R.id.nav_archives) {
+            //goto Pending Approvals activity
+            startActivity(new Intent(AccountActivityAdmin.this, NoticeArchivesActivity.class));
 
         } else if (id == R.id.nav_logout) {
             //Log out from account
