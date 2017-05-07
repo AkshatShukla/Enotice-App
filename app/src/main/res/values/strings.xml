@@ -74,6 +74,7 @@
     <string name="nav_home">Home</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_approve">Pending Approval</string>
+    <string name="nav_archives">Notice Archive</string>
     <string name="nav_checkstatus">Check Notice Status</string>
     <string name="nav_documents">New Documents</string>
     <string name="nav_logout">Logout</string>

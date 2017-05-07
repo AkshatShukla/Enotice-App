@@ -6,19 +6,27 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/nav_home" />
+
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_account_circle_black_24dp"
             android:title="@string/nav_profile" />
+
         <item
             android:id="@+id/nav_approval"
             android:icon="@drawable/datapending48"
             android:title="@string/nav_approve" />
 
         <item
+            android:id="@+id/nav_archives"
+            android:icon="@drawable/archives"
+            android:title="@string/nav_archives" />
+
+        <item
             android:id="@+id/ViewUsers"
             android:icon="@drawable/usegroupmanman48"
             android:title="@string/nav_User" />
+
         <item
             android:id="@+id/nav_otherDept"
             android:icon="@drawable/department48"
