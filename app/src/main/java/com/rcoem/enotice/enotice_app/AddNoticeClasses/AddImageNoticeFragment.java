@@ -76,6 +76,7 @@ public class AddImageNoticeFragment extends Fragment  {
     private StorageReference mStoarge;
     private DatabaseReference mData;
     private DatabaseReference mDataUser;
+    private DatabaseReference mDatabase1;
     private DatabaseReference mDataBaseDepartment;
     private FirebaseAuth mAuth;
     private FirebaseUser mCurrentUser;
@@ -313,7 +314,27 @@ public class AddImageNoticeFragment extends Fragment  {
                                             } else if (lvlCheck.equals("2")) {
                                                 if (strdept == null) {
                                                     mData = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Approved");
+                                                    mDatabase1 = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending").push();
                                                     Approved = "true";
+
+                                                    //For Archival Activity
+
+                                                    mDatabase1.child("type").setValue(2);
+                                                    mDatabase1.child("label").setValue(noticeType);
+                                                    mDatabase1.child("title").setValue(titleText);
+                                                    mDatabase1.child("Desc").setValue(descText);
+                                                    mDatabase1.child("UID").setValue(mAuth.getCurrentUser().getUid());
+                                                    mDatabase1.child("email").setValue(mAuth.getCurrentUser().getEmail());
+                                                    mDatabase1.child("username").setValue(dataSnapshot.child("name").getValue());
+                                                    mDatabase1.child("profileImg").setValue(dataSnapshot.child("images").getValue());
+                                                    //Passing Default Text Image for Web App Viewing
+                                                    mDatabase1.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
+                                                    mDatabase1.child("time").setValue(currentDate);
+                                                    mDatabase1.child("servertime").setValue(currentLongTime);
+                                                    //Default Link
+                                                    mDatabase1.child("link").setValue("gs://e-notice-board-83d16.appspot.com/pdf/debug.txt");
+                                                    mDatabase1.child("department").setValue(dataSnapshot.child("department").getValue().toString().trim());
+                                                    mDatabase1.child("approved").setValue(Approved);
                                                 } else {
                                                     mData = FirebaseDatabase.getInstance().getReference().child("posts").child(strdept).child("Pending");
                                                     Approved = "pending";

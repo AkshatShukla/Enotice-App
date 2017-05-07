@@ -82,6 +82,7 @@
 
         <activity android:name=".HighAuthorityClasses.AccountActivityAuthority" />
         <activity android:name=".HighAuthorityClasses.AddNoticeTabbedAuthority" />
+        <activity android:name=".HighAuthorityClasses.BlockUserPanelAuthority" />
         <activity android:name=".LoginSignUpClasses.PasswordResetActivity" />
         <activity android:name=".AuthorityClasses.AdminNotApproved" />
         <activity
@@ -98,7 +99,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".Licenses" />
+        <activity android:name=".HighAuthorityClasses.BlockUserPanelAuthority" />
+        <activity android:name=".AdminClasses.NoticeArchivesActivity"></activity>
     </application>
 
 </manifest>

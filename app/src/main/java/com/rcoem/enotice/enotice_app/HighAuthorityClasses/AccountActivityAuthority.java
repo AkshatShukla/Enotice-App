@@ -519,7 +519,7 @@ public class AccountActivityAuthority extends AppCompatActivity implements Navig
 
         } else if (id == R.id.ViewUsers) {
             //goto Block User Panel activity
-            startActivity(new Intent(AccountActivityAuthority.this, BlockUserPlanel.class));
+            startActivity(new Intent(AccountActivityAuthority.this, BlockUserPanelAuthority.class));
 
         } else if (id == R.id.nav_otherDept) {
             //goto Cross-Dept Portal activity
