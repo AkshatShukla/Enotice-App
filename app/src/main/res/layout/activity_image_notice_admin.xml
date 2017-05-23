@@ -127,7 +127,7 @@
                 android:padding="15dp"
                 android:hint="Post Title"
                 android:textSize="15sp"
-
+                android:textStyle="bold"
                 android:layout_marginTop="0dp" />
             <RelativeLayout
                 android:layout_width="wrap_content"

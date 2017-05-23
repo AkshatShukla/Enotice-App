@@ -134,7 +134,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:id="@+id/Edit_description_field1"
                 android:text = "Post Description"

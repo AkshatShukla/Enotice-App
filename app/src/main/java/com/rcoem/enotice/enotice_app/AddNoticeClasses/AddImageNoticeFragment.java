@@ -321,8 +321,8 @@ public class AddImageNoticeFragment extends Fragment  {
 
                                                     mDatabase1.child("type").setValue(2);
                                                     mDatabase1.child("label").setValue(noticeType);
-                                                    mDatabase1.child("title").setValue(titleText);
-                                                    mDatabase1.child("Desc").setValue(descText);
+                                                    mDatabase1.child("title").setValue(title_value);
+                                                    mDatabase1.child("Desc").setValue(desc_value);
                                                     mDatabase1.child("UID").setValue(mAuth.getCurrentUser().getUid());
                                                     mDatabase1.child("email").setValue(mAuth.getCurrentUser().getEmail());
                                                     mDatabase1.child("username").setValue(dataSnapshot.child("name").getValue());
