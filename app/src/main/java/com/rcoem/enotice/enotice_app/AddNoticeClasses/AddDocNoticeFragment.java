@@ -183,8 +183,7 @@ public class AddDocNoticeFragment extends Fragment {
                                         mDatabase1.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
                                         mDatabase1.child("time").setValue(currentDate);
                                         mDatabase1.child("servertime").setValue(currentLongTime);
-                                        //Default Link
-                                        mDatabase1.child("link").setValue("gs://e-notice-board-83d16.appspot.com/pdf/debug.txt");
+                                        mDatabase1.child("link").setValue(downloadUrl.toString());
                                         mDatabase1.child("department").setValue(dataSnapshot.child("department").getValue().toString().trim());
                                         mDatabase1.child("approved").setValue(Approved);
                                     } else {
@@ -246,7 +245,7 @@ public class AddDocNoticeFragment extends Fragment {
     private void departmentPushDept(final String t, final String m, final String dept) {
         final String title = t;
         final String message = m;
-        final String email = "dhanajay@gmail.com";
+        final String email = "enotice.rcoem@gmail.com";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_DEPT,
                 new Response.Listener<String>() {
@@ -282,7 +281,7 @@ public class AddDocNoticeFragment extends Fragment {
     private void departmentPushHOD(final String t,final String m,final String dept) {
         final String title = t;
         final String message = m;
-        final String email = "dhanajay@gmail.com";
+        final String email = "enotice.rcoem@gmail.com";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_HOD,
                 new Response.Listener<String>() {
@@ -365,7 +364,10 @@ public class AddDocNoticeFragment extends Fragment {
 
                     Intent intent4 = new Intent(context, NormalFilePickActivity.class);
                     intent4.putExtra(Constant.MAX_NUMBER, 1);
-                    intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[] {"xlsx", "xls", "doc", "docx", "ppt", "pptx", "pdf"});
+                    //intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[] {"xlsx", "xls", "doc", "docx", "ppt", "pptx", "pdf"});
+
+                    //Currently only PDF supported by TV
+                    intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[] {"pdf"});
                     startActivityForResult(intent4, Constant.REQUEST_CODE_PICK_FILE);
                  /*  Intent intent = new Intent(context , PdfUpload.class);
                     intent.putExtra("title_value",titleDoc_value);

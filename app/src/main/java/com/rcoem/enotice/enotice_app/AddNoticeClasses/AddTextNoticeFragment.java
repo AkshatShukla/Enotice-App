@@ -265,7 +265,7 @@ public class AddTextNoticeFragment extends Fragment {
     private void departmentPushDept(final String t, final String m, final String dept) {
         final String title = t;
         final String message = m;
-        final String email = "dhanajay@gmail.com";
+        final String email = "enotice.rcoem@gmail.com";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_DEPT,
                 new Response.Listener<String>() {
@@ -301,7 +301,7 @@ public class AddTextNoticeFragment extends Fragment {
     private void departmentPushHOD(final String t,final String m,final String dept) {
         final String title = t;
         final String message = m;
-        final String email = "dhanajay@gmail.com";
+        final String email = "enotice.rcoem@gmail.com";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_HOD,
                 new Response.Listener<String>() {

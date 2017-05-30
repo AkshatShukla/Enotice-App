@@ -70,6 +70,7 @@ public class AddImageNoticeAuthorityFragment extends Fragment  {
 
     private StorageReference mStoarge;
     private DatabaseReference mData;
+    private DatabaseReference mDatabase1;
     private DatabaseReference mDataUser;
     private DatabaseReference mDataBaseDepartment;
     private FirebaseAuth mAuth;
@@ -315,13 +316,14 @@ public class AddImageNoticeAuthorityFragment extends Fragment  {
                                         newPost.child("images").setValue(downloadUrl.toString());
                                         newPost.child("time").setValue(currentDate);
                                         newPost.child("servertime").setValue(currentLongTime);
-                                        newPost.child("link").setValue(null);
+                                        //Default Link
+                                        newPost.child("link").setValue("gs://e-notice-board-83d16.appspot.com/pdf/debug.txt");
                                         newPost.child("department").setValue(Dept);
                                         newPost.child("approved").setValue(Approved).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if(task.isSuccessful()){
-                                                    Toasty.success(context,"Upload Successfull").show();
+                                                    Toasty.success(context,"Upload Successful").show();
                                                 }
                                                 else
                                                 {
@@ -331,6 +333,26 @@ public class AddImageNoticeAuthorityFragment extends Fragment  {
                                         });
 
                                         departmentPushAuthority(title_value, "Notice by HOD ".concat(dataSnapshot.child("name").getValue().toString()), Dept, downloadUrl.toString());
+
+                                        mDatabase1 = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending").push();
+
+                                        //For Archival Activity
+
+                                        mDatabase1.child("type").setValue(2);
+                                        mDatabase1.child("label").setValue(noticeType);
+                                        mDatabase1.child("title").setValue(title_value);
+                                        mDatabase1.child("Desc").setValue(desc_value);
+                                        mDatabase1.child("UID").setValue(mAuth.getCurrentUser().getUid());
+                                        mDatabase1.child("email").setValue(mAuth.getCurrentUser().getEmail());
+                                        mDatabase1.child("username").setValue(dataSnapshot.child("name").getValue());
+                                        mDatabase1.child("profileImg").setValue(dataSnapshot.child("images").getValue());
+                                        mDatabase1.child("images").setValue(downloadUrl.toString());
+                                        mDatabase1.child("time").setValue(currentDate);
+                                        mDatabase1.child("servertime").setValue(currentLongTime);
+                                        //Default Link
+                                        mDatabase1.child("link").setValue("gs://e-notice-board-83d16.appspot.com/pdf/debug.txt");
+                                        mDatabase1.child("department").setValue(dataSnapshot.child("department").getValue().toString().trim());
+                                        mDatabase1.child("approved").setValue(Approved);
 
 
                                     }
@@ -357,7 +379,7 @@ public class AddImageNoticeAuthorityFragment extends Fragment  {
         final String title = t;
         final String message = m;
         final String image = i;
-        final String email = "dhanajay@gmail.com";
+        final String email = "enotice.rcoem@gmail.com";
         //progressDialog.setMessage("Sending Dept Push");
         // progressDialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_AUTHORITY,

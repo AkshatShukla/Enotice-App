@@ -53,6 +53,7 @@ public class AddTextNoticeAuthorityFragment extends Fragment {
     private Spinner spinnerText;
 
     private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase1;
     private DatabaseReference mDataBaseDepartment;
     private FirebaseAuth mAuth;
 
@@ -187,12 +188,33 @@ public class AddTextNoticeAuthorityFragment extends Fragment {
                                             mDatabase.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
                                             mDatabase.child("time").setValue(currentDate);
                                             mDatabase.child("servertime").setValue(currentLongTime);
-                                            mDatabase.child("link").setValue(null);
+                                            //Default Link
+                                            mDatabase.child("link").setValue("gs://e-notice-board-83d16.appspot.com/pdf/debug.txt");
                                             mDatabase.child("department").setValue(dataSnapshot.child("department").getValue().toString().trim());
                                             mDatabase.child("approved").setValue(Approved);
 
                                             departmentPushAuthority(titleText, "Notice by Authority ".concat(dataSnapshot.child("name").getValue().toString()), Dept);
 
+                                            mDatabase1 = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending").push();
+
+                                            //For Archival Activity
+
+                                            mDatabase1.child("type").setValue(1);
+                                            mDatabase1.child("label").setValue(noticeType);
+                                            mDatabase1.child("title").setValue(titleText);
+                                            mDatabase1.child("Desc").setValue(descText);
+                                            mDatabase1.child("UID").setValue(mAuth.getCurrentUser().getUid());
+                                            mDatabase1.child("email").setValue(mAuth.getCurrentUser().getEmail());
+                                            mDatabase1.child("username").setValue(dataSnapshot.child("name").getValue());
+                                            mDatabase1.child("profileImg").setValue(dataSnapshot.child("images").getValue());
+                                            //Passing Default Text Image for Web App Viewing
+                                            mDatabase1.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
+                                            mDatabase1.child("time").setValue(currentDate);
+                                            mDatabase1.child("servertime").setValue(currentLongTime);
+                                            //Default Link
+                                            mDatabase1.child("link").setValue("gs://e-notice-board-83d16.appspot.com/pdf/debug.txt");
+                                            mDatabase1.child("department").setValue(dataSnapshot.child("department").getValue().toString().trim());
+                                            mDatabase1.child("approved").setValue(Approved);
 
                                         }
 
@@ -223,7 +245,7 @@ public class AddTextNoticeAuthorityFragment extends Fragment {
     private void departmentPushAuthority(final String t,final String m,final String dept) {
         final String title = t;
         final String message = m;
-        final String email = "dhanajay@gmail.com";
+        final String email = "enotice.rcoem@gmail.com";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_AUTHORITY,
                 new Response.Listener<String>() {

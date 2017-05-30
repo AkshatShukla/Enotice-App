@@ -24,6 +24,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +43,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.rcoem.enotice.enotice_app.AddNoticeClasses.AddNoticeTabbed;
+import com.rcoem.enotice.enotice_app.NotificationClasses.EndPoints;
+import com.rcoem.enotice.enotice_app.NotificationClasses.MyVolley;
 import com.rcoem.enotice.enotice_app.R;
 import com.vincent.filepicker.Constant;
 import com.vincent.filepicker.activity.NormalFilePickActivity;
@@ -46,6 +53,8 @@ import com.vincent.filepicker.filter.entity.NormalFile;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
 import es.dmoral.toasty.Toasty;
@@ -54,6 +63,7 @@ public class AddDocNoticeAuthorityFragment extends Fragment {
 
     private StorageReference mStoarge;
     private DatabaseReference mData;
+    private DatabaseReference mDatabase1;
     private DatabaseReference mDataUser;
     private DatabaseReference mDataBaseDepartment;
     private FirebaseAuth mAuth;
@@ -159,6 +169,28 @@ public class AddDocNoticeAuthorityFragment extends Fragment {
                                     }
                                 });
 
+                                departmentPushAuthority(titleDoc_value, "Notice by Authority ".concat(dataSnapshot.child("name").getValue().toString()), Dept);
+
+                                mDatabase1 = FirebaseDatabase.getInstance().getReference().child("posts").child(dataSnapshot.child("department").getValue().toString().trim()).child("Pending").push();
+
+                                //For Archival Activity
+
+                                mDatabase1.child("type").setValue(3);
+                                mDatabase1.child("label").setValue(noticeType);
+                                mDatabase1.child("title").setValue(titleDoc_value);
+                                mDatabase1.child("Desc").setValue(descDoc_value);
+                                mDatabase1.child("UID").setValue(mAuth.getCurrentUser().getUid());
+                                mDatabase1.child("email").setValue(mAuth.getCurrentUser().getEmail());
+                                mDatabase1.child("username").setValue(dataSnapshot.child("name").getValue());
+                                mDatabase1.child("profileImg").setValue(dataSnapshot.child("images").getValue());
+                                //Passing Default Text Image for Web App Viewing
+                                mDatabase1.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
+                                mDatabase1.child("time").setValue(currentDate);
+                                mDatabase1.child("servertime").setValue(currentLongTime);
+                                mDatabase1.child("link").setValue(downloadUrl.toString());
+                                mDatabase1.child("department").setValue(dataSnapshot.child("department").getValue().toString().trim());
+                                mDatabase1.child("approved").setValue(Approved);
+
                             }
 
                             @Override
@@ -247,7 +279,10 @@ public class AddDocNoticeAuthorityFragment extends Fragment {
                 if(!TextUtils.isEmpty(titleDoc_value) && !TextUtils.isEmpty(descDoc_value)) {
                     Intent intent4 = new Intent(context, NormalFilePickActivity.class);
                     intent4.putExtra(Constant.MAX_NUMBER, 1);
-                    intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[] {"xlsx", "xls", "doc", "docx", "ppt", "pptx", "pdf"});
+                    //intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[] {"xlsx", "xls", "doc", "docx", "ppt", "pptx", "pdf"});
+
+                    //Currently only PDF supported by TV
+                    intent4.putExtra(NormalFilePickActivity.SUFFIX, new String[] {"pdf"});
                     startActivityForResult(intent4, Constant.REQUEST_CODE_PICK_FILE);
                 }
                 else if (TextUtils.isEmpty((titleDoc_value))) {
@@ -260,6 +295,42 @@ public class AddDocNoticeAuthorityFragment extends Fragment {
             }
         });
 
+    }
+
+    private void departmentPushAuthority(final String t,final String m,final String dept) {
+        final String title = t;
+        final String message = m;
+        final String email = "enotice.rcoem@gmail.com";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_AUTHORITY,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // progressDialog.dismiss();
+
+                        //Toast.makeText(AddNoticeActivityUser.this, response, Toast.LENGTH_LONG).show();
+                        //Toasty.custom(getActivity().getApplicationContext(), "HOD will be notified of your Notice", R.mipmap.ic_launcher, getResources().getColor(R.color.colorWhite), getResources().getColor(R.color.colorBg), 100, false, true).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("title", title);
+                params.put("message", message);
+
+                params.put("email", email);
+                params.put("dept",dept);
+                return params;
+            }
+        };
+
+        MyVolley.getInstance(context).addToRequestQueue(stringRequest);
     }
 
 }

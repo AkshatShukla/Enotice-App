@@ -327,8 +327,7 @@ public class AddImageNoticeFragment extends Fragment  {
                                                     mDatabase1.child("email").setValue(mAuth.getCurrentUser().getEmail());
                                                     mDatabase1.child("username").setValue(dataSnapshot.child("name").getValue());
                                                     mDatabase1.child("profileImg").setValue(dataSnapshot.child("images").getValue());
-                                                    //Passing Default Text Image for Web App Viewing
-                                                    mDatabase1.child("images").setValue("https://firebasestorage.googleapis.com/v0/b/e-notice-board-83d16.appspot.com/o/txt-file-symbol.png?alt=media&token=3a8beb43-561f-4f69-a6ad-58d2683abe81");
+                                                    mDatabase1.child("images").setValue(downloadUrl.toString());
                                                     mDatabase1.child("time").setValue(currentDate);
                                                     mDatabase1.child("servertime").setValue(currentLongTime);
                                                     //Default Link
@@ -399,7 +398,7 @@ public class AddImageNoticeFragment extends Fragment  {
         final String title = t;
         final String message = m;
         final String image = i;
-        final String email = "dhanajay@gmail.com";
+        final String email = "enotice.rcoem@gmail.com";
         //progressDialog.setMessage("Sending Dept Push");
         // progressDialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_DEPT,
@@ -440,7 +439,7 @@ public class AddImageNoticeFragment extends Fragment  {
         final String title = t;
         final String message = m;
         final String image = i;
-        final String email = "dhanajay@gmail.com";
+        final String email = "enotice.rcoem@gmail.com";
         //progressDialog.setMessage("Sending Dept Push");
         // progressDialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, EndPoints.URL_SEND_SINGLE_PUSH_HOD,
