@@ -15,5 +15,4 @@ public class Utils {
     public static final int USER_VIEW = 97;
     public static final int USER_STATUS = 96;
 
-
 }
