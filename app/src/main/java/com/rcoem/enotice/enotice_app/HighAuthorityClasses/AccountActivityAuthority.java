@@ -2,7 +2,9 @@ package com.rcoem.enotice.enotice_app.HighAuthorityClasses;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -35,6 +37,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -105,6 +109,8 @@ public class AccountActivityAuthority extends AppCompatActivity implements Navig
     // private  String Dept;
     FloatingActionButton fabplus;
 
+    private boolean isFirstTime;
+
     FirebaseAuth mAuth;
     private DatabaseReference mDatabaseValidContent;
     Query mquery;
@@ -141,6 +147,26 @@ public class AccountActivityAuthority extends AppCompatActivity implements Navig
 
         startService(new Intent(this, MyFirebaseMessagingService.class));
 
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        //View of Navigation Bar
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        navHeader = navigationView.getHeaderView(0);
+        txtName = (TextView) navHeader.findViewById(R.id.name);
+        txtWebsite = (TextView) navHeader.findViewById(R.id.website);
+        imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
+        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
+        loadNavHeader();
 
         di = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
         mDatabase1 = FirebaseDatabase.getInstance().getReference().child("posts");
@@ -189,6 +215,76 @@ public class AccountActivityAuthority extends AppCompatActivity implements Navig
                 //Do nothing
             }
         });
+
+        // Checking for first time launch - before calling tutorial
+        // Declare a new thread to do a preference check
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //  Initialize SharedPreferences
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+
+                //  Create a new boolean and preference and set it to true
+                isFirstTime = getPrefs.getBoolean("firstTime", true);
+
+                //  If the activity has never started before...
+                if (isFirstTime) {
+
+                    new TapTargetSequence(AccountActivityAuthority.this)
+                            .targets(
+                                    TapTarget.forView(fabplus, "Generate Notices")
+                                            .dimColor(android.R.color.black)
+                                            .outerCircleColor(R.color.colorAccent)
+                                            .targetCircleColor(android.R.color.black)
+                                            .transparentTarget(true)
+                                            .textColor(android.R.color.white)
+                                            .cancelable(true)
+                                            .titleTextSize(18)
+                                            .id(1),
+                                    TapTarget.forToolbarNavigationIcon(toolbar,"Access Account Options from here")
+                                            .dimColor(android.R.color.black)
+                                            .outerCircleColor(R.color.colorAccent)
+                                            .targetCircleColor(android.R.color.black)
+                                            .transparentTarget(true)
+                                            .textColor(android.R.color.white)
+                                            .cancelable(false)
+                                            .id(2))
+
+                            .listener(new TapTargetSequence.Listener() {
+                                // This listener will tell us when interesting(tm) events happen in regards
+                                // to the sequence
+                                @Override
+                                public void onSequenceFinish() {
+                                    Toasty.success(AccountActivityAuthority.this,"Tutorial Completed").show();
+                                }
+
+                                @Override
+                                public void onSequenceStep(TapTarget lastTarget) {
+                                    // Perfom action for the current target
+                                }
+
+                                @Override
+                                public void onSequenceCanceled(TapTarget lastTarget) {
+                                    Toasty.success(AccountActivityAuthority.this,"Tutorial Completed").show();
+                                }
+                            })
+                            .start();
+
+                    //  Make a new preferences editor
+                    SharedPreferences.Editor e = getPrefs.edit();
+
+                    //  Edit preference to make it false because we don't want this to run again
+                    e.putBoolean("firstTime", false);
+
+                    //  Apply changes
+                    e.apply();
+                }
+            }
+        });
+
+        // Start the thread
+        t.start();
 
     }
 
@@ -269,10 +365,6 @@ public class AccountActivityAuthority extends AppCompatActivity implements Navig
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
 
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
         //Floating Action Button Functionality
         fabplus = (FloatingActionButton) findViewById(R.id.main_fab);
 
@@ -283,24 +375,6 @@ public class AccountActivityAuthority extends AppCompatActivity implements Navig
                 startActivity(intent);
             }
         });
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_admin);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        //View of Navigation Bar
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        navHeader = navigationView.getHeaderView(0);
-        txtName = (TextView) navHeader.findViewById(R.id.name);
-        txtWebsite = (TextView) navHeader.findViewById(R.id.website);
-        imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
-        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
-        loadNavHeader();
 
 
         //Firebase Recycler Adapter inflating multiple view types.
@@ -504,6 +578,10 @@ public class AccountActivityAuthority extends AppCompatActivity implements Navig
         } else if (id == R.id.nav_approval) {
             //goto Pending Approvals activity
             startActivity(new Intent(AccountActivityAuthority.this, RetriverData.class));
+
+        } else if (id == R.id.nav_archives) {
+            //goto Pending Approvals activity
+            startActivity(new Intent(AccountActivityAuthority.this, NoticeArchivesAuthorityActivity.class));
 
         } else if (id == R.id.nav_logout) {
             //Log out from account
