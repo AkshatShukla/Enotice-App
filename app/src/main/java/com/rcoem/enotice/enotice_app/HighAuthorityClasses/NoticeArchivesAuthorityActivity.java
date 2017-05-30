@@ -1,4 +1,4 @@
-package com.rcoem.enotice.enotice_app.AdminClasses;
+package com.rcoem.enotice.enotice_app.HighAuthorityClasses;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -31,7 +31,7 @@ import com.rcoem.enotice.enotice_app.ViewHolderClasses.TextNoticeViewHolder;
 
 import java.util.Date;
 
-public class NoticeArchivesActivity extends AppCompatActivity {
+public class NoticeArchivesAuthorityActivity extends AppCompatActivity {
 
     private RecyclerView mBlogList;
     private DatabaseReference mDatabase;
@@ -52,7 +52,7 @@ public class NoticeArchivesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notice_archives);
+        setContentView(R.layout.activity_notice_archives_authority);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -80,12 +80,12 @@ public class NoticeArchivesActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        getSupportActionBar().setTitle("Department Notice Archives");
+        getSupportActionBar().setTitle("University Notice Archives");
 
 
         mAuth = FirebaseAuth.getInstance();
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mActionBarToolbar.setTitle("Department Notice Archives");
+        mActionBarToolbar.setTitle("University Notice Archives");
         mDataBaseDepartment = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
 
         mDataBaseDepartment.addValueEventListener(new ValueEventListener() {
