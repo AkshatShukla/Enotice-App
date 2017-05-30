@@ -120,6 +120,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
                 dept = (Spinner) findViewById(R.id.spinner);
                 //dept.setOnItemSelectedListener(this);
 
+                //To add new departments, append this list using:
+                // categories.add("");
                 List<String> categories = new ArrayList<String>();
                 categories.add("Select a Department");
                 categories.add("Computer Science");
@@ -446,6 +448,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener, A
 
         departmentSelected = dept.getSelectedItem().toString();
         //Validate department
+        //Use if else to add more department
         if(departmentSelected.equals("Computer Science")) {
             userdept_firebase = "CSE";
             Toast.makeText(SignUp.this,userdept_firebase,Toast.LENGTH_LONG).show();

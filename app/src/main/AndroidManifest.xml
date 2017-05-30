@@ -99,8 +99,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".HighAuthorityClasses.BlockUserPanelAuthority" />
-        <activity android:name=".AdminClasses.NoticeArchivesActivity"></activity>
+        <activity android:name=".AdminClasses.NoticeArchivesActivity" />
+        <activity android:name=".HighAuthorityClasses.NoticeArchivesAuthorityActivity"></activity>
     </application>
 
 </manifest>

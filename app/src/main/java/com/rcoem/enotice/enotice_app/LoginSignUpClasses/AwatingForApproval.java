@@ -22,7 +22,7 @@ public class AwatingForApproval extends AppCompatActivity {
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(AwatingForApproval.this,"Not Approved yet, signing out.", Toast.LENGTH_LONG).show();
+                Toast.makeText(AwatingForApproval.this,"Account inactive, logging out.", Toast.LENGTH_LONG).show();
                 mAuth.signOut();
                 //Toast.makeText(AccountActivity.this, R.string.sign_out, Toast.LENGTH_LONG).show();
                 startActivity(new Intent(AwatingForApproval.this, MainActivity.class));
