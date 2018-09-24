@@ -1,3 +1,5 @@
+Play Store Link: https://play.google.com/store/apps/details?id=com.rcoem.enotice.enotice_app
+
 # Privacy Policy
 
 RUSA developed the Nagpur University E-Notice app as a Free app. This SERVICE is provided by RUSA at no cost and is intended for use as is.
